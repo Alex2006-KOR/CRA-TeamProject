@@ -2,6 +2,8 @@
 #include "gmock/gmock.h"
 
 #include "SSDDriver.cpp"
+#include "../TestShellApplication/SSDCommand.cpp"
+#include "../TestShellApplication/ReadCommand.cpp"
 #include "../TestShellApplication/Shell.cpp"
 
 using namespace testing;
@@ -45,7 +47,7 @@ TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
 TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
 	EXPECT_CALL(ssdMock, Write(10, 0xAA))
 		.Times(1);
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(ssdMock, Read(10))
 		.Times(1)
 		.WillRepeatedly(Return(0x000000AA));
 	std::string expected = "0x000000AA\n";
