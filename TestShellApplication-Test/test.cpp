@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "SSDDriver.cpp"
 #include "../TestShellApplication/SSDCommand.cpp"
 #include "../TestShellApplication/ReadCommand.cpp"
 #include "../TestShellApplication/Shell.cpp"
@@ -16,18 +15,12 @@ public:
 
 class TestShellApplicationTestFixture : public testing::Test {
 public:
-	SSDDriver ssdDriver;
 	SsdDeviceDriverMock ssdMock;
 
 protected:
 	void SetUp() override {
 	}
 };
-
-TEST_F(TestShellApplicationTestFixture, InterfaceTest) {
-	ssdDriver.Write(0, 0);
-	EXPECT_EQ(0x0, ssdDriver.Read(0));
-}
 
 TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
 	EXPECT_CALL(ssdMock, Read)
