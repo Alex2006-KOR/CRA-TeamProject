@@ -2,5 +2,10 @@
 
 BaseSSDCommand::BaseSSDCommand(vector<string> commandList) {
 	m_commandList = commandList;
-	parseCommand();
+}
+
+void BaseSSDCommand::Execute()
+{
+	_parseCommand();
+	_execute();
 }

@@ -17,8 +17,12 @@ public:
 	BaseSSDCommand(vector<string>commandList);
 	virtual ~BaseSSDCommand() = default;
 
+public:
+	void Execute() override;
+
 protected:
-	virtual void parseCommand() {}
+	virtual void _execute() = 0;
+	virtual void _parseCommand() = 0;
 
 protected:
 	vector<string> m_commandList;

@@ -1,9 +1,11 @@
 #include "ReadCommand.h"
 
-void ReadCommand::Execute() {
+void ReadCommand::_execute()
+{
 	// TODO
 }
 
-void ReadCommand::parseCommand() {
+void ReadCommand::_parseCommand()
+{
 	// TODO
 }

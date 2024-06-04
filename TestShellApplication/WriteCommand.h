@@ -8,9 +8,7 @@ public:
 	WriteCommand(vector<string>commandList)
 		: BaseSSDCommand(commandList) {}
 
-public:
-	void Execute() override;
-
 protected:
-	void parseCommand() override;
+	void _execute() override;
+	void _parseCommand() override;
 };
