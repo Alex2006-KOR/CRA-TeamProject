@@ -99,6 +99,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IOManager_test.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DeviceDriver_test.cpp" />
   </ItemGroup>
