@@ -5,10 +5,10 @@ DeviceDriver::DeviceDriver(SSDInterface* pstSSDInterface) : m_pstSSDInterface(ps
 
 void DeviceDriver::ReadData(int nLbaNumber)
 {
-    m_pstSSDInterface->read();
+    m_pstSSDInterface->read(nLbaNumber);
 }
 
-void DeviceDriver::WriteData(int nLbaNumber, string data)
+void DeviceDriver::WriteData(int nLbaNumber, string sData)
 {
-    m_pstSSDInterface->write();
+    m_pstSSDInterface->write(nLbaNumber, sData);
 }
