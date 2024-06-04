@@ -31,10 +31,10 @@ TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
 	EXPECT_CALL(ssdMock, Read)
 		.Times(1)
 		.WillRepeatedly(Return(0x00000000));
-	std::string expected = "0x00000000";
+	std::string expected = "0x00000000\n";
 
 	Shell shell(&ssdMock);
-	std::istringstream input("R 10\n");
+	std::istringstream input("read 10\n");
 	std::ostringstream output;
 
 	shell.Run(input, output);
@@ -48,10 +48,10 @@ TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
 	EXPECT_CALL(ssdMock, Read)
 		.Times(1)
 		.WillRepeatedly(Return(0x000000AA));
-	std::string expected = "0x000000AA";
+	std::string expected = "0x000000AA\n";
 
 	Shell shell(&ssdMock);
-	std::istringstream input("W 10 0x000000AA\nR 10\n");
+	std::istringstream input("write 10 0x000000AA\nread 10\n");
 	std::ostringstream output;
 
 	shell.Run(input, output);
