@@ -30,6 +30,9 @@
     <ClCompile Include="DriverInterface.h">
       <Filter>헤더 파일</Filter>
     </ClCompile>
+    <ClCompile Include="SSDDriver.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SSDCommand.h">
@@ -41,6 +44,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="WriteCommand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDDriver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
