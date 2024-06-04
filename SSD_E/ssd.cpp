@@ -8,15 +8,25 @@ class SSD: public SSDInterface {
 public:
 	const string RESULT = "result.txt";
 	const string NAND = "nand.txt";
-	const int LBA_NUM = 100;
 	const string INITIAL_VALUE = "0x00000000";
+	const int LBA_NUM = 100;
 
 	SSD() {
 		init();
 	}
 
 	void init() {
+		ifstream ifstreamRead(NAND);
+		
+		if (ifstreamRead.good()) {
+			ifstreamRead.close();
+			
+			return;
+		}
+		ifstreamRead.close();
+
 		ofstream ofstreamWrite(NAND);
+		
 		if (ofstreamWrite.is_open() == false) throw exception("Open output file fail");
 		for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
 			ofstreamWrite << INITIAL_VALUE << std::endl;
