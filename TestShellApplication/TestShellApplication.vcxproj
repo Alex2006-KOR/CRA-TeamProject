@@ -130,6 +130,7 @@
     <None Include="SSDCommand.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DriverInterface.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="SSDCommand.cpp" />
