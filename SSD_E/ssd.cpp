@@ -16,17 +16,9 @@ public:
 	}
 
 	void init() {
-		ifstream ifstreamRead(NAND);
-		
-		if (ifstreamRead.good()) {
-			ifstreamRead.close();
-			
-			return;
-		}
-		ifstreamRead.close();
+		if (_IsFileExist()) return;
 
 		ofstream ofstreamWrite(NAND);
-		
 		if (ofstreamWrite.is_open() == false) throw exception("Open output file fail");
 		for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
 			ofstreamWrite << INITIAL_VALUE << std::endl;
@@ -93,5 +85,18 @@ private:
 		ifstreamRead.close();
 
 		return vLines;
+	}
+
+	bool _IsFileExist(void) {
+		ifstream ifstreamRead(NAND);
+
+		if (ifstreamRead.good()) {
+			ifstreamRead.close();
+
+			return true;
+		}
+		ifstreamRead.close();
+
+		return false;
 	}
 };
