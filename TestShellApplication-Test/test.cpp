@@ -2,6 +2,7 @@
 #include "gmock/gmock.h"
 
 #include "SSDDriver.cpp"
+#include "../TestShellApplication/Shell.cpp"
 
 using namespace testing;
 
@@ -18,15 +19,42 @@ public:
 
 protected:
 	void SetUp() override {
-		EXPECT_CALL(ssdMock, Read(_))
-			.WillRepeatedly(Return(0x0));
-
-		EXPECT_CALL(ssdMock, Write(_, _))
-			.WillRepeatedly(Return());
 	}
 };
 
 TEST_F(TestShellApplicationTestFixture, InterfaceTest) {
 	ssdDriver.Write(0, 0);
 	EXPECT_EQ(0x0, ssdDriver.Read(0));
+}
+
+TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
+	EXPECT_CALL(ssdMock, Read)
+		.Times(1)
+		.WillRepeatedly(Return(0x00000000));
+	std::string expected = "0x00000000";
+
+	Shell shell(&ssdMock);
+	std::istringstream input("R 10\n");
+	std::ostringstream output;
+
+	shell.Run(input, output);
+
+	EXPECT_EQ(output.str(), expected);
+}
+
+TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
+	EXPECT_CALL(ssdMock, Write(10, 0xAA))
+		.Times(1);
+	EXPECT_CALL(ssdMock, Read)
+		.Times(1)
+		.WillRepeatedly(Return(0x000000AA));
+	std::string expected = "0x000000AA";
+
+	Shell shell(&ssdMock);
+	std::istringstream input("W 10 0x000000AA\nR 10\n");
+	std::ostringstream output;
+
+	shell.Run(input, output);
+
+	EXPECT_EQ(output.str(), expected);
 }
