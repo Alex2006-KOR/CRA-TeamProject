@@ -1,19 +1,16 @@
 #include "IOManager.h"
-#include "DeviceDriver.h"
-#include "ssd.cpp"
+
+IOManager::IOManager(DeviceDriver* pstDeviceDriver) : m_pstDeviceDriver(pstDeviceDriver)
+{}
 
 void IOManager::DoCommand(string strCommand, int nLbaNumber, string strData) {
-	SSDInterface* pstSSDInterface = new SSD();
-//	SSDInterface* pstSSDInterface = new SSDMock();
-	DeviceDriver stDeviceDriver{ pstSSDInterface };
-
 	if (strCommand == "W") {
 		if(_CheckInvalidArgument(nLbaNumber, strData)) return;
-		stDeviceDriver.WriteData(nLbaNumber, strData);
+		m_pstDeviceDriver->WriteData(nLbaNumber, strData);
 	}
 	if (strCommand == "R") {
 		if (_CheckInvalidArgument(nLbaNumber)) return;
-		stDeviceDriver.ReadData(nLbaNumber);
+		m_pstDeviceDriver->ReadData(nLbaNumber);
 	}
 }
 

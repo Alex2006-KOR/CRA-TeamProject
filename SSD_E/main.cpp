@@ -1,10 +1,13 @@
 #include <string>
 #include "IOManager.h"
+#include "ssd.cpp"
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
-	IOManager stIOManager;
+	SSDInterface* pstSSDInterface = new SSD();
+	DeviceDriver stDeviceDriver{ pstSSDInterface };
+	IOManager stIOManager{ &stDeviceDriver };
 
 	if (argc == 1) return 0; // param 없는 경우
 
