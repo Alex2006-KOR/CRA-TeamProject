@@ -1,3 +1,5 @@
+#pragma once
+
 #define Interface struct
 
 Interface DriverInterface{
