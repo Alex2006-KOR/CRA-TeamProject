@@ -24,14 +24,14 @@ protected:
 	virtual void SetUp() {
 		std::cout << "\tDeviceDriverTestFixture - SetUp" << std::endl;
 		pDeviceDriver = new DeviceDriver(&ssdMock);
-		//pStIOManager = new IOManager(pDeviceDriver);
+		pStIOManager = new IOManager(pDeviceDriver);
 	}
 
 	// Á¤¸®
 	virtual void TearDown() {
 		std::cout << "\tDeviceDriverTestFixture - TearDown" << std::endl;
 		delete pDeviceDriver;
-		//delete pStIOManager;
+		delete pStIOManager;
 	}
 };
 
