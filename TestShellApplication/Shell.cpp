@@ -39,8 +39,12 @@ bool Shell::handleCommand(string strCommandLine, ostream& output)
         WriteCommand cmd(vCommandList, m_pSSDDriver, output);
         cmd.Execute();
     }
+    else if (strCommand == "help") {}
     else if (strCommand == "exit") { 
         return true; 
+    }
+    else {
+        output << "INVALID COMMAND\n";
     }
     return false;
 }
