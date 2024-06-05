@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include "IOManager.h"
+#include "FileManager.cpp"
 
 IOManager::IOManager(DeviceDriver* pstDeviceDriver) : m_pstDeviceDriver(pstDeviceDriver)
 {
@@ -13,6 +14,20 @@ void IOManager::DoCommand(int argc, char* argv[]) {
 
 	if (m_strCommand == "W") m_pstDeviceDriver->WriteData(m_nLbaNumber, m_strData);
 	if (m_strCommand == "R") m_pstDeviceDriver->ReadData(m_nLbaNumber);
+
+	_AddLog();
+}
+
+void IOManager::_AddLog() {
+	FileManager stLogFile("CommandLog.txt");
+
+	string log = "Command: " + m_strCommand;
+	log += "\tLBA: " + to_string(m_nLbaNumber);
+	if (m_strCommand == "W") log += "\tData: " + m_strData;
+
+	stLogFile.OpenWriteStream("append");
+	stLogFile.Write(log);
+	stLogFile.CloseWriteStream();
 }
 
 void IOManager::_ProcessArgument(int argc, char* argv[]) {
