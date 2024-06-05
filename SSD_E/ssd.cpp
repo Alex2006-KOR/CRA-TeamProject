@@ -1,109 +1,90 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
+#include "SSD.h"
 
-#include "SSDInterface.h"
-#include "FileManager.cpp"
+SSD::SSD() : m_stNandFile(NAND), m_stResultFile(RESULT) {
+	Init();
+}
 
-using namespace std;
+void SSD::Init() {
+	if (m_stNandFile.IsFileExist()) return;
 
-class SSD: public SSDInterface {
-public:
-	const string RESULT = "result.txt";
-	const string NAND = "nand.txt";
-	const string INITIAL_VALUE = "0x00000000";
-	const int LBA_NUM = 100;
-
-	SSD(): m_stNandFile(NAND), m_stResultFile(RESULT) {
-		init();
+	try {
+		m_stNandFile.OpenWriteStream();
+	}
+	catch (exception e) {
+		cout << e.what() << endl;
 	}
 
-	void init() {
-		if (m_stNandFile.IsFileExist()) return;
-
-		try {
-			m_stNandFile.OpenWriteStream();
-		} catch (exception e) {
-			cout << e.what() << endl;
-		}
-
-		for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
-			m_stNandFile.Write(INITIAL_VALUE);
-		}
-
-		m_stNandFile.CloseWriteStream();
+	for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
+		m_stNandFile.Write(INITIAL_VALUE);
 	}
 
-	bool read(int nLba) {
-		try {
-			m_stNandFile.OpenReadStream();
-			m_stResultFile.OpenWriteStream();
-		}
-		catch (exception e) {
-			cout << e.what() << endl;
-		}
+	m_stNandFile.CloseWriteStream();
+}
 
-		int nLineIdx = 0;
-		string sData;
-
-		while (nLineIdx != nLba) {
-			m_stNandFile.Read();
-			++nLineIdx;
-		}
-		sData = m_stNandFile.Read();
-		m_stResultFile.Write(sData);
-
-		m_stNandFile.CloseReadStream();
-		m_stResultFile.CloseWriteStream();
-
-		return true;
+bool SSD::Read(int nLba) {
+	try {
+		m_stNandFile.OpenReadStream();
+		m_stResultFile.OpenWriteStream();
+	}
+	catch (exception e) {
+		cout << e.what() << endl;
 	}
 
-	bool write(int nLba, string sData) {
-		vector<string> vLines = _ExtractNandValue();
-		vLines[nLba] = sData;
-		_UpdateNandValues(vLines);
+	int nLineIdx = 0;
+	string sData;
 
-		return true;
+	while (nLineIdx != nLba) {
+		m_stNandFile.Read();
+		++nLineIdx;
+	}
+	sData = m_stNandFile.Read();
+	m_stResultFile.Write(sData);
+
+	m_stNandFile.CloseReadStream();
+	m_stResultFile.CloseWriteStream();
+
+	return true;
+}
+
+bool SSD::Write(int nLba, string sData) {
+	vector<string> vLines = _ExtractNandValue();
+	vLines[nLba] = sData;
+	_UpdateNandValues(vLines);
+
+	return true;
+}
+
+void SSD::_UpdateNandValues(vector<string>& vLines) {
+	try {
+		m_stNandFile.OpenWriteStream();
+	}
+	catch (exception e) {
+		cout << e.what() << endl;
 	}
 
-private:
-	FileManager m_stNandFile;
-	FileManager m_stResultFile;
-
-	void _UpdateNandValues(vector<string>& vLines)
-	{
-		try {
-			m_stNandFile.OpenWriteStream();
-		} catch (exception e) {
-			cout << e.what() << endl;
-		}
-
-		for (const auto& line : vLines) {
-			m_stNandFile.Write(line);
-		}
-
-		m_stNandFile.CloseWriteStream();
+	for (const auto& line : vLines) {
+		m_stNandFile.Write(line);
 	}
 
-	vector<string> _ExtractNandValue(void)
-	{
-		vector<string> vLines;
-		string sLine;
+	m_stNandFile.CloseWriteStream();
+}
 
-		try {
-			m_stNandFile.OpenReadStream();
-		}
-		catch (exception e) {
-			cout << e.what() << endl;
-		}
+vector<string> SSD::_ExtractNandValue(void) {
+	vector<string> vLines;
+	string sLine;
 
-		for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
-			vLines.push_back(m_stNandFile.Read());
-		}
-
-		m_stNandFile.CloseReadStream();
-
-		return vLines;
+	try {
+		m_stNandFile.OpenReadStream();
 	}
-};
+	catch (exception e) {
+		cout << e.what() << endl;
+	}
+
+	for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
+		vLines.push_back(m_stNandFile.Read());
+	}
+
+	m_stNandFile.CloseReadStream();
+
+	return vLines;
+}

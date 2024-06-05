@@ -8,8 +8,8 @@ using namespace testing;
 
 class SSDMock : public SSDInterface {
 public:
-	MOCK_METHOD(bool, read, (int nLba), (override));
-	MOCK_METHOD(bool, write, (int nLba, string sData), (override));
+	MOCK_METHOD(bool, Read, (int nLba), (override));
+	MOCK_METHOD(bool, Write, (int nLba, string sData), (override));
 };
 
 class DeviceDriverTestFixture : public testing::Test {
@@ -32,19 +32,19 @@ protected:
 };
 
 TEST_F(DeviceDriverTestFixture, SimpleRead) {
-	EXPECT_CALL(ssdMock, read)
+	EXPECT_CALL(ssdMock, Read)
 		.Times(1)
 		.WillOnce(Return(true));
-	EXPECT_CALL(ssdMock, write)
+	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
 	pDeviceDriver->ReadData(0);
 }
 
 TEST_F(DeviceDriverTestFixture, SimpleWrite) {
-	EXPECT_CALL(ssdMock, read)
+	EXPECT_CALL(ssdMock, Read)
 		.Times(0);
-	EXPECT_CALL(ssdMock, write)
+	EXPECT_CALL(ssdMock, Write)
 		.Times(1)
 		.WillOnce(Return(true));
 

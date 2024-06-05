@@ -137,7 +137,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceDriver.h" />
+    <ClInclude Include="FileManager.h" />
     <ClInclude Include="IOManager.h" />
+    <ClInclude Include="SSD.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
