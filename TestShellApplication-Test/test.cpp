@@ -33,6 +33,9 @@ protected:
 	}
 };
 
+// Read Command
+// Read	Success Case
+
 TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
 	std::string strCommandLine = "read 10\n";
 	std::string strExpectedResult = "0x00000000\n";
@@ -43,6 +46,23 @@ TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
 
 	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
+
+TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
+	std::string strCommandLine = "read 10\n";
+	std::string strExpectedResult_prefix = "0x";
+	std::string strExpectedResult_postfix = "\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(1)
+		.WillRepeatedly(Return(0x00000000));
+
+	string strOutput = RunCommand(strCommandLine);
+
+	EXPECT_EQ(strOutput.substr(0, 2), strExpectedResult_prefix);
+	EXPECT_EQ(strOutput.substr(strOutput.size() - 1), strExpectedResult_postfix);
+}
+
+// Read	Exception Case
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase1) {
 	std::string strCommandLine = "read ABC\n";
@@ -95,20 +115,46 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
 	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
 
-TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
-	std::string strCommandLine = "read 10\n";
-	std::string strExpectedResult_prefix = "0x";
-	std::string strExpectedResult_postfix = "\n";
+TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
+	std::string strCommandLine = "fullread\n";
+	std::string strExpectedResult = "0x00000000\n";
+	std::string strExpectedResultFull;
+
+	const int LBA_CNT = 100;
+	for (int i = 0; i < LBA_CNT; ++i) {
+		strExpectedResultFull += strExpectedResult;
+	}
 
 	EXPECT_CALL(ssdMock, Read)
-		.Times(1)
+		.Times(LBA_CNT)
 		.WillRepeatedly(Return(0x00000000));
 
-	string strOutput = RunCommand(strCommandLine);
-
-	EXPECT_EQ(strOutput.substr(0, 2), strExpectedResult_prefix);
-	EXPECT_EQ(strOutput.substr(strOutput.size()-1), strExpectedResult_postfix);
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResultFull);
 }
+
+TEST_F(TestShellApplicationTestFixture, FullReadSomeValidData) {
+	std::string strCommandLine = "fullread\n";
+	std::string strExpectedResult = "0x00000000\n";
+	std::string strExpectedResultFull;
+
+	const int LBA_CNT = 100;
+	strExpectedResultFull += "0x00000001\n";
+	strExpectedResultFull += "0x00000011\n";
+
+	for (int i = 0; i < LBA_CNT - 2; ++i) {
+		strExpectedResultFull += strExpectedResult;
+	}
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(LBA_CNT)
+		.WillOnce(Return(0x00000001))
+		.WillOnce(Return(0x00000011))
+		.WillRepeatedly(Return(0x00000000));
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResultFull);
+}
+
+
 
 TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
 	std::string strCommandLine = "write 10 0x000000AA\nread 10\n";
