@@ -21,5 +21,6 @@ private:
 	DriverInterface* m_pSSDDriver;
 
 	vector<string> SplitLine(string& strCommandLine);
+	string trim(const string& str);
 };
 

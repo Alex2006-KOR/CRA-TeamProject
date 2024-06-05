@@ -22,8 +22,9 @@ bool Shell::handleCommand(string strCommandLine, ostream& output)
 {
     vector<string> vCommandList = SplitLine(strCommandLine);
     
-    string strCommand = vCommandList[0];
+    string strCommand = trim(vCommandList[0]);
     vCommandList.erase(vCommandList.begin());
+    if (strCommand == "") { return false; }
 
     if (strCommand == "read") {
         ReadCommand read(vCommandList, m_pSSDDriver, output);
@@ -60,4 +61,13 @@ vector<string> Shell::SplitLine(string& strCommandLine)
         nPos = strCommandLine.find(" ");
     }
     return vCommandList;
+}
+
+string Shell::trim(const string& str) {
+    size_t first = str.find_first_not_of(' ');
+    if (first == string::npos) {
+        return "";
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, last - first + 1);
 }

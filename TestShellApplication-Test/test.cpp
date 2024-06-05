@@ -287,3 +287,16 @@ TEST_F(TestShellApplicationTestFixture, EmptyCommand) {
 
 	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
+
+TEST_F(TestShellApplicationTestFixture, EmptyCommandWithSpace) {
+	std::string strCommandLine = " ";
+	std::string strExpectedResult = "";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+}
