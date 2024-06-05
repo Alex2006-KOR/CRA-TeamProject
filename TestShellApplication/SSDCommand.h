@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 using namespace std;
@@ -29,4 +30,7 @@ protected:
 protected:
 	vector<string> m_vCommandList;
 	std::ostream& m_out;
+};
+
+class ExitShellException : public std::exception {
 };
