@@ -261,3 +261,16 @@ TEST_F(TestShellApplicationTestFixture, ExitIgnoreFollowingCommands) {
 }
 
  // invalid command
+
+TEST_F(TestShellApplicationTestFixture, InvalidCommand) {
+	std::string strCommandLine = "Read 10";
+	std::string strExpectedResult = "INVALID COMMAND\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
