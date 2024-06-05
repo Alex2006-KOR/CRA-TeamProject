@@ -13,24 +13,43 @@ ReadCommand::ReadCommand(vector<string> vCommandList, DriverInterface* pSSDDrive
 {
 }
 
-bool ReadCommand::_parseCommand()
+bool ReadCommand::_parseCommand() {
+	if (_checkValidityLBA() == false) return false;
+	return true;
+}
+
+bool ReadCommand::_checkValidityLBA()
 {
-	if (m_vCommandList.size() != 1) {
+	if (_hasEnoughArgs() == false) return false;
+	if (_isDecimalFormat() == false) return false;
+	if (_isValidCharacter() == false) return false;
+	_updateLBA();
+	if (_isLBAInRange() == false) return false;
+	return true;
+}
+
+bool ReadCommand::_hasEnoughArgs()
+{
+	if (m_vCommandList.size() != m_nExpectedArgCnt) {
 		m_out << "Invalid usage.\nCheck help message.\n";
 		return false;
 	}
+	return true;
+}
 
+bool ReadCommand::_isDecimalFormat()
+{
 	if (m_vCommandList[0].substr(0, 2) == "0x") {
 		m_out << "INVALID LBA\n";
 		return false;
 	}
+	return true;
+}
 
+bool ReadCommand::_isValidCharacter()
+{
 	try {
-		m_nLBA = stoi(m_vCommandList[0]);
-		if (m_nLBA < 0 || m_nLBA > 99) {
-			m_out << "INVALID LBA\n";
-			return false;
-		}
+		stoi(m_vCommandList[0]);
 		return true;
 	}
 	catch (const invalid_argument& e) {
@@ -38,11 +57,25 @@ bool ReadCommand::_parseCommand()
 		m_out << "INVALID LBA\n";
 		return false;
 	}
+}
+
+void ReadCommand::_updateLBA()
+{
+	try {
+		m_nLBA = stoi(m_vCommandList[0]);
+	}
 	catch (const out_of_range& e) {
-		//m_out << "Out of range: " << e.what() << endl;
+		m_nLBA = -1;
+	}
+}
+
+bool ReadCommand::_isLBAInRange()
+{
+	if (m_nLBA < 0 || m_nLBA > 99) {
 		m_out << "INVALID LBA\n";
 		return false;
 	}
+	return true;
 }
 
 void ReadCommand::_execute()
