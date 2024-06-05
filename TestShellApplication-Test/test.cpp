@@ -232,7 +232,30 @@ TEST_F(TestShellApplicationTestFixture, WriteNot8CharacterDataTest) {
 // Other Commands
 
  // help
+TEST_F(TestShellApplicationTestFixture, HelpWithoutNoError) {
+	std::string strCommandLine = "help";
 
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_NO_THROW(RunSingleCommand(strCommandLine));
+}
+
+TEST_F(TestShellApplicationTestFixture, HelpNoErrorReturn) {
+	std::string strCommandLine = "help";
+	std::string strExpectedResult = "INVALID COMMAND\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_NE(RunSingleCommand(strCommandLine), strExpectedResult);
+}
 
  // exit 
 TEST_F(TestShellApplicationTestFixture, ExitWithNoError) {
