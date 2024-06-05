@@ -13,6 +13,10 @@ protected:
 	void _execute() override;
 
 private:
+	int _checkAndGetLBA(string paramString);
+	int _checkAndGetData(string paramString);
+
+private:
 	DriverInterface* m_pstSSDDriver;
 	std::ostream& m_out;
 
