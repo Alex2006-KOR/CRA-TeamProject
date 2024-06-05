@@ -14,16 +14,16 @@ class BaseSSDCommand
 	: public SSDComamnd
 {
 public:
-	BaseSSDCommand(vector<string>commandList);
+	BaseSSDCommand(vector<string>vCommandList);
 	virtual ~BaseSSDCommand() = default;
 
 public:
 	void Execute() override;
 
 protected:
+	virtual bool _parseCommand() = 0;
 	virtual void _execute() = 0;
-	virtual void _parseCommand() = 0;
 
 protected:
-	vector<string> m_commandList;
+	vector<string> m_vCommandList;
 };

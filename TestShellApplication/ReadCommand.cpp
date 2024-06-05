@@ -2,30 +2,26 @@
 
 #include <iostream>
 #include <iomanip>
+#include <stdexcept>
 
-using std::string;
 
-ReadCommand::ReadCommand(vector<string> commandList, DriverInterface* pSSDDriver, std::ostream& output)
-	: BaseSSDCommand(commandList)
-	, m_pSSDDriver(pSSDDriver)
+ReadCommand::ReadCommand(vector<string> vCommandList, DriverInterface* pSSDDriver, ostream& output)
+	: BaseSSDCommand(vCommandList)
+	, m_pstSSDDriver(pSSDDriver)
 	, m_nLBA(-1)
 	, m_out(output)
 {
 }
 
-void ReadCommand::_execute()
+bool ReadCommand::_parseCommand()
 {
-	int nData = m_pSSDDriver->Read(m_nLBA);
-	m_out << "0x";
-	m_out << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << nData;
-	m_out << std::endl;
+	return true;
 }
 
-void ReadCommand::_parseCommand()
+void ReadCommand::_execute()
 {
-	if (m_commandList.size() != 1) {
-		throw std::exception();
-	}
-
-	m_nLBA = atoi(m_commandList[0].c_str());
+	int nData = m_pstSSDDriver->Read(m_nLBA);
+	m_out << "0x";
+	m_out << hex << uppercase << setw(8) << setfill('0') << nData;
+	m_out << endl;
 }

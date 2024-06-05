@@ -9,6 +9,6 @@ public:
 		: BaseSSDCommand(commandList) {}
 
 protected:
+	bool _parseCommand() override;
 	void _execute() override;
-	void _parseCommand() override;
 };
