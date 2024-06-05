@@ -134,6 +134,8 @@
     <ClCompile Include="ExitCommand.cpp" />
     <ClCompile Include="FullReadCommand.cpp" />
     <ClCompile Include="FullWriteCommand.cpp" />
+    <ClCompile Include="HelpCommand.cpp" />
+    <ClCompile Include="InvalidCommand.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Shell.cpp" />
@@ -146,6 +148,8 @@
     <ClInclude Include="ExitCommand.h" />
     <ClInclude Include="FullReadCommand.h" />
     <ClInclude Include="FullWriteCommand.h" />
+    <ClInclude Include="HelpCommand.h" />
+    <ClInclude Include="InvalidCommand.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDCommandInvoker.h" />

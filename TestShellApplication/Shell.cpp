@@ -34,21 +34,14 @@ bool Shell::handleCommand(string strCommandLine, ostream& output)
     if (strCommand == "") { return false; }
 
     SSDComamnd* pCommand = _getCommandInvoker(output)->GetCommand(strCommand);
-    if (pCommand) {
+    try {
         pCommand->SetCommandList(vCommandList);
-        try {
-            pCommand->Execute();
-        }
-        catch (ExitShellException& e) {
-            return true;
-        }
+        pCommand->Execute();
     }
-    else if (strCommand == "help") {
-        output << strHelp;
+    catch (ExitShellException& e) {
+        return true;
     }
-    else {
-        output << "INVALID COMMAND\n";
-    }
+    
     return false;
 }
 

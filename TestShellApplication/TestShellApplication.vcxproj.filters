@@ -48,6 +48,12 @@
     <ClCompile Include="ExitCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="HelpCommand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InvalidCommand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SSDCommand.h">
@@ -77,6 +83,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ExitCommand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HelpCommand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="InvalidCommand.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

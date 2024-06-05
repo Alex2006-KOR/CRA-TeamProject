@@ -20,5 +20,6 @@ private:
 
 private:
 	map<string, SSDComamnd*> m_mapCommand;
+	SSDComamnd* m_pInvalidCommand;
 };
 
