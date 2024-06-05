@@ -9,7 +9,7 @@ interface IOManager
 {
 public:
 	IOManager(DeviceDriver* pstDeviceDriver);
-	void DoCommand(string strCommand, int nLbaNumber, string strData);
+	void DoCommand(string strCommand, int nLbaNumber, string strData = "NoData");
 private:
 	DeviceDriver* m_pstDeviceDriver;
 

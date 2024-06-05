@@ -41,25 +41,43 @@ TEST_F(IOManagerTestFixture, InvalidCommand) {
 
 	try {
 		pStIOManager->DoCommand(string("Q"), 12, string("0x0000ABCD"));
+		FAIL();
 	}
 	catch (exception& e) {
-		FAIL();
+		// PASS
 	}
 }
 
-TEST_F(IOManagerTestFixture, WriteInvalidData) {
+TEST_F(IOManagerTestFixture, WriteInvalidData00) {
 	EXPECT_CALL(deviceDriverMock, ReadData)
 		.Times(0);
 	EXPECT_CALL(deviceDriverMock, WriteData)
 		.Times(0);
 
 	try {
-		pStIOManager->DoCommand("W", 0, "0xQWERZXCV");
-	}
-	catch (exception& e) {
+		pStIOManager->DoCommand(string("W"), 0, string("0xQWERZXCV"));
 		FAIL();
 	}
+	catch (exception& e) {
+		// PASS
+	}
 }
+
+TEST_F(IOManagerTestFixture, WriteInvalidData01) {
+	EXPECT_CALL(deviceDriverMock, ReadData)
+		.Times(0);
+	EXPECT_CALL(deviceDriverMock, WriteData)
+		.Times(0);
+
+	try {
+		pStIOManager->DoCommand(string("W"), -5, string("0x00001111"));
+		FAIL();
+	}
+	catch (exception& e) {
+		// PASS
+	}
+}
+
 
 TEST_F(IOManagerTestFixture, ReadInvalidData) {
 	EXPECT_CALL(deviceDriverMock, ReadData)
@@ -68,9 +86,10 @@ TEST_F(IOManagerTestFixture, ReadInvalidData) {
 		.Times(0);
 
 	try {
-		pStIOManager->DoCommand("R", 0, "0xQWERZXCV");
+		pStIOManager->DoCommand(string("R"), -5);
+		FAIL();
 	}
 	catch (exception& e) {
-		FAIL();
+		// PASS
 	}
 }

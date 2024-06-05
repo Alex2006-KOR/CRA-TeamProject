@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "IOManager.h"
 #include "ssd.cpp"
 
@@ -16,7 +17,12 @@ int main(int argc, char* argv[]) {
 	string strData = "";
 	if (strCommand == "W") strData = string(argv[3]);
 
-	stIOManager.DoCommand(strCommand, nLbaNumber, strData);
+	try {
+		stIOManager.DoCommand(strCommand, nLbaNumber, strData);
+	}
+	catch (exception e){
+		std::cout << e.what() << std::endl;
+	}
 
 	return 0;
 }
