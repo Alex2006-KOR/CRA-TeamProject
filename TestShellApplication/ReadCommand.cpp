@@ -6,10 +6,9 @@
 
 
 ReadCommand::ReadCommand(vector<string> vCommandList, DriverInterface* pSSDDriver, ostream& output)
-	: BaseSSDCommand(vCommandList)
+	: BaseSSDCommand(vCommandList, output)
 	, m_pstSSDDriver(pSSDDriver)
 	, m_nLBA(-1)
-	, m_out(output)
 {
 }
 

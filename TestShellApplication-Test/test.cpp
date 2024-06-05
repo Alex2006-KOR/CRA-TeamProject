@@ -4,6 +4,7 @@
 #include "SSDCommand.cpp"
 #include "ReadCommand.cpp"
 #include "WriteCommand.cpp"
+#include "FullReadCommand.cpp"
 #include "FullWriteCommand.cpp"
 #include "Shell.cpp"
 

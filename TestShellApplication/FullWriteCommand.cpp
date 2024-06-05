@@ -5,8 +5,7 @@
 #include <vector>
 
 FullWriteCommand::FullWriteCommand(vector<string> commandList, DriverInterface* pSSDDriver, std::ostream& output)
-	: BaseSSDCommand(commandList)
-	, m_out(output)
+	: BaseSSDCommand(commandList, output)
 	, m_pstSSDDriver(pSSDDriver)
 {
 }

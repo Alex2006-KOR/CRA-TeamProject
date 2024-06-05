@@ -14,7 +14,7 @@ class BaseSSDCommand
 	: public SSDComamnd
 {
 public:
-	BaseSSDCommand(vector<string>vCommandList);
+	BaseSSDCommand(vector<string>vCommandList, std::ostream& output);
 	virtual ~BaseSSDCommand() = default;
 
 public:
@@ -26,4 +26,5 @@ protected:
 
 protected:
 	vector<string> m_vCommandList;
+	std::ostream& m_out;
 };

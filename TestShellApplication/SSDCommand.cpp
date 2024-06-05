@@ -1,9 +1,9 @@
 #include "SSDCommand.h"
 
-#include <stdexcept>
-
-BaseSSDCommand::BaseSSDCommand(vector<string> commandList) {
-	m_vCommandList = commandList;
+BaseSSDCommand::BaseSSDCommand(vector<string> vCommandList, std::ostream& output)
+	: m_vCommandList(vCommandList)
+	, m_out(output)
+{
 }
 
 bool BaseSSDCommand::Execute()

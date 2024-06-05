@@ -19,7 +19,6 @@ protected:
 
 private:
 	DriverInterface* m_pstSSDDriver;
-	std::ostream& m_out;
 
 	const int m_nExpectedArgCnt = 1;
 	

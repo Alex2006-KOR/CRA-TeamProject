@@ -18,7 +18,6 @@ private:
 
 private:
 	DriverInterface* m_pstSSDDriver;
-	std::ostream& m_out;
 
 	int m_nLBA;
 	int m_nData;
