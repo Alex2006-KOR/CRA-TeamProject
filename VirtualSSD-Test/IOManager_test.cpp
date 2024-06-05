@@ -20,13 +20,13 @@ public:
 	IOManager* pStIOManager = nullptr;
 
 protected:
-	// 초기화
+	// setup
 	virtual void SetUp() {
 		std::cout << "\IOManagerTestFixture - SetUp" << std::endl;
 		pStIOManager = new IOManager(&deviceDriverMock);
 	}
 
-	// 정리
+	// teardown
 	virtual void TearDown() {
 		std::cout << "\IOManagerTestFixture - TearDown" << std::endl;
 		delete pStIOManager;

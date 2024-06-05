@@ -18,13 +18,13 @@ public:
 	DeviceDriver* pDeviceDriver = nullptr;
 
 protected:
-	// 초기화
+	// setup
 	virtual void SetUp() {
 		std::cout << "\tDeviceDriverTestFixture - SetUp" << std::endl;
 		pDeviceDriver = new DeviceDriver(&ssdMock);
 	}
 
-	// 정리
+	// teardown
 	virtual void TearDown() {
 		std::cout << "\tDeviceDriverTestFixture - TearDown" << std::endl;
 		delete pDeviceDriver;
