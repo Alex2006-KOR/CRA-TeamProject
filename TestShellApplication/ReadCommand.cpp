@@ -15,7 +15,34 @@ ReadCommand::ReadCommand(vector<string> vCommandList, DriverInterface* pSSDDrive
 
 bool ReadCommand::_parseCommand()
 {
-	return true;
+	if (m_vCommandList.size() != 1) {
+		m_out << "Invalid usage.\nCheck help message.\n";
+		return false;
+	}
+
+	if (m_vCommandList[0].substr(0, 2) == "0x") {
+		m_out << "INVALID LBA\n";
+		return false;
+	}
+
+	try {
+		m_nLBA = stoi(m_vCommandList[0]);
+		if (m_nLBA < 0 || m_nLBA > 99) {
+			m_out << "INVALID LBA\n";
+			return false;
+		}
+		return true;
+	}
+	catch (const invalid_argument& e) {
+		//m_out << "Invalid argument: " << e.what() << endl;
+		m_out << "INVALID LBA\n";
+		return false;
+	}
+	catch (const out_of_range& e) {
+		//m_out << "Out of range: " << e.what() << endl;
+		m_out << "INVALID LBA\n";
+		return false;
+	}
 }
 
 void ReadCommand::_execute()
