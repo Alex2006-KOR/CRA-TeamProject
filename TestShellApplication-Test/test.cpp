@@ -43,41 +43,55 @@ TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
 	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
 
-TEST_F(TestShellApplicationTestFixture, ReadExceptionTestInvalidCharCase1) {
+TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase1) {
 	std::string strCommandLine = "read ABC\n";
+	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
-		.Times(1);
+		.Times(0);
 
-	EXPECT_THROW(RunCommand(strCommandLine), invalid_argument);
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
 
 
-TEST_F(TestShellApplicationTestFixture, ReadExceptionTestInvalidCharCase2) {
+TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase2) {
 	std::string strCommandLine = "read ABC\n";
+	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
-		.Times(1);
+		.Times(0);
 
-	EXPECT_THROW(RunCommand(strCommandLine), invalid_argument);
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
 
-TEST_F(TestShellApplicationTestFixture, ReadExceptionTestLBAOverMaxLBA) {
+TEST_F(TestShellApplicationTestFixture, ExceptionTestLBANonInDecimal) {
+	std::string strCommandLine = "read 0x100\n";
+	std::string strExpectedResult = "INVALID LBA\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAOverMaxLBA) {
 	std::string strCommandLine = "read -10\n";
+	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
-		.Times(1);
+		.Times(0);
 
-	EXPECT_THROW(RunCommand(strCommandLine), invalid_argument);
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
 
-TEST_F(TestShellApplicationTestFixture, ReadExceptionTestLBAUnderMinLBA) {
+TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
 	std::string strCommandLine = "read 100\n";
+	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
-		.Times(1);
+		.Times(0);
 
-	EXPECT_THROW(RunCommand(strCommandLine), invalid_argument);
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
