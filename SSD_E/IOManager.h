@@ -10,15 +10,26 @@ using namespace std;
 interface IOManager
 {
 public:
+	static const int MAX_CMD_ARGUMENT_NUM = 4;
+	static const int THERE_IS_NO_ARGUMENT = 1;
+	static const int WRITE_CMD_ARGUMENT_NUM = 4;
+	static const int READ_CMD_ARGUMENT_NUM = 3;
+
 	IOManager(DeviceDriver* pstDeviceDriver);
-	void DoCommand(string strCommand, int nLbaNumber, string strData = "NoData");
+	void DoCommand(int argc, char* argv[]);
 
 private:
 	DeviceDriver* m_pstDeviceDriver;
+	string m_strCommand;
+	int m_nLbaNumber;
+	string m_strData;
 
-	bool _CheckInvalidArgument(string strCommand, int nLbaNumber, string strData);
-	bool _CheckReadCmdInvalidArgument(int nLbaNumber);
-	bool _CheckWriteCmdInvalidArgument(int nLbaNumber, string strData);
-	bool _IsInvalidSubString(string strData);
-	bool _IsInvalidCmd(string strCommand);
+	void _ProcessArgument(int argc, char* argv[]);
+	void _ExtractArgument(char* argv[]);
+	bool _CheckInvalidArgumentNumber(int argc, char* argv[]);
+	bool _CheckInvalidArgumentValue();
+	bool _CheckReadCmdInvalidArgument();
+	bool _CheckWriteCmdInvalidArgument();
+	bool _IsInvalidSubString();
+	bool _IsInvalidCmd();
 };

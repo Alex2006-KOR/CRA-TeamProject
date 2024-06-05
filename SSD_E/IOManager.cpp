@@ -1,38 +1,62 @@
 #include <stdexcept>
-
 #include "IOManager.h"
 
 IOManager::IOManager(DeviceDriver* pstDeviceDriver) : m_pstDeviceDriver(pstDeviceDriver)
-{}
-
-void IOManager::DoCommand(string strCommand, int nLbaNumber, string strData) {
-	if (_CheckInvalidArgument(strCommand, nLbaNumber, strData)) throw std::invalid_argument("Invalid Argument.");;
-	if (strCommand == "W") m_pstDeviceDriver->WriteData(nLbaNumber, strData);
-	if (strCommand == "R") m_pstDeviceDriver->ReadData(nLbaNumber);
+{
+	string m_strCommand = "";
+	int m_nLbaNumber = 0;
+	string m_strData = "";
 }
 
-bool IOManager::_CheckInvalidArgument(string strCommand, int nLbaNumber, string strData) {
-	if (_IsInvalidCmd(strCommand)) return true;
-	if (strCommand == "W" && _CheckWriteCmdInvalidArgument(nLbaNumber, strData)) return true;
-	if (strCommand == "R" && _CheckReadCmdInvalidArgument(nLbaNumber)) return true;
+void IOManager::DoCommand(int argc, char* argv[]) {
+	_ProcessArgument(argc, argv);
+
+	if (m_strCommand == "W") m_pstDeviceDriver->WriteData(m_nLbaNumber, m_strData);
+	if (m_strCommand == "R") m_pstDeviceDriver->ReadData(m_nLbaNumber);
+}
+
+void IOManager::_ProcessArgument(int argc, char* argv[]) {
+	if (_CheckInvalidArgumentNumber(argc, argv)) throw std::invalid_argument("Invalid Argument.");
+	_ExtractArgument(argv);
+	if (_CheckInvalidArgumentValue()) throw std::invalid_argument("Invalid Argument.");
+}
+
+bool IOManager::_CheckInvalidArgumentNumber(int argc, char* argv[]) {
+	if (argc == THERE_IS_NO_ARGUMENT) return true;
+	if (string(argv[1]) == "W" && argc != WRITE_CMD_ARGUMENT_NUM) return true;
+	if (string(argv[1]) == "R" && argc != READ_CMD_ARGUMENT_NUM) return true;
+
 	return false;
 }
 
-bool IOManager::_CheckReadCmdInvalidArgument(int nLbaNumber) {
-	if (nLbaNumber < 0 || nLbaNumber >= 100) return true;
+void IOManager::_ExtractArgument(char* argv[]) {
+	m_strCommand = string(argv[1]);
+	m_nLbaNumber = stoi(string(argv[2]));
+	if (m_strCommand == "W") m_strData = string(argv[3]);
+}
+
+bool IOManager::_CheckInvalidArgumentValue() {
+	if (_IsInvalidCmd()) return true;
+	if (m_strCommand == "W" && _CheckWriteCmdInvalidArgument()) return true;
+	if (m_strCommand == "R" && _CheckReadCmdInvalidArgument()) return true;
 	return false;
 }
 
-bool IOManager::_CheckWriteCmdInvalidArgument(int nLbaNumber, string strData) {
-	if (nLbaNumber < 0 || nLbaNumber >= 100) return true;
-	if (strData.size() != 10) return true;
-	if (strData.rfind("0x", 0) != 0) return true;
-	if (_IsInvalidSubString(strData)) return true;
+bool IOManager::_CheckReadCmdInvalidArgument() {
+	if (m_nLbaNumber < 0 || m_nLbaNumber >= 100) return true;
 	return false;
 }
 
-bool IOManager::_IsInvalidSubString(string strData) {
-	string strSubstring = strData.substr(2, 10 - 2);
+bool IOManager::_CheckWriteCmdInvalidArgument() {
+	if (m_nLbaNumber < 0 || m_nLbaNumber >= 100) return true;
+	if (m_strData.size() != 10) return true;
+	if (m_strData.rfind("0x", 0) != 0) return true;
+	if (_IsInvalidSubString()) return true;
+	return false;
+}
+
+bool IOManager::_IsInvalidSubString() {
+	string strSubstring = m_strData.substr(2, 10 - 2);
 	for (const auto& cChar : strSubstring) {
 		if (cChar >= '0' && cChar <= '9') continue;
 		if (cChar >= 'A' && cChar <= 'F') continue;
@@ -41,6 +65,6 @@ bool IOManager::_IsInvalidSubString(string strData) {
 	return false;
 }
 
-bool IOManager::_IsInvalidCmd(string strCommand) {
-	return strCommand != "W" && strCommand != "R";
+bool IOManager::_IsInvalidCmd() {
+	return m_strCommand != "W" && m_strCommand != "R";
 }
