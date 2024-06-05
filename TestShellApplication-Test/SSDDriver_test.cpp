@@ -21,7 +21,7 @@ public:
 	}
 
 protected:
-	int ExecuteCommand(string command) override {
+	int _executeCommand(string command) override {
 		if (expectedCommand != "")
 			EXPECT_EQ(expectedCommand, command);
 		return 1;

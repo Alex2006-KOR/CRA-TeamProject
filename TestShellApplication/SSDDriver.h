@@ -7,5 +7,6 @@ public:
 	void Write(int lba, int data) override;
 
 protected:
-	virtual int ExecuteCommand(std::string command);
+	virtual int _executeCommand(std::string command);
+
 };

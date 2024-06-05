@@ -7,15 +7,15 @@ using namespace std;
 
 int SSDDriver::Read(int lba)
 {
-    return ExecuteCommand("VirtualSSD.exe R " + to_string(lba));
+    return _executeCommand("VirtualSSD.exe R " + to_string(lba));
 }
 
 void SSDDriver::Write(int lba, int data)
 {
-    ExecuteCommand("VirtualSSD.exe W " + to_string(lba) + " " + to_string(data));
+    _executeCommand("VirtualSSD.exe W " + to_string(lba) + " " + to_string(data));
 }
 
-int SSDDriver::ExecuteCommand(string command)
+int SSDDriver::_executeCommand(string command)
 {
     int result = system(command.c_str());
     return result;
