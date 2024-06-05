@@ -137,6 +137,7 @@
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDCommand.cpp" />
+    <ClCompile Include="SSDCommandInvoker.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="FullWriteCommand.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Shell.h" />
+    <ClInclude Include="SSDCommandInvoker.h" />
     <ClInclude Include="SSDDriver.h" />
     <ClInclude Include="WriteCommand.h" />
   </ItemGroup>
