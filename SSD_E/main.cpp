@@ -1,16 +1,16 @@
 #include <string>
 #include <iostream>
+
 #include "IOManager.h"
 #include "ssd.cpp"
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+void DoCommand(char* argv[])
+{
 	SSDInterface* pstSSDInterface = new SSD();
 	DeviceDriver stDeviceDriver{ pstSSDInterface };
 	IOManager stIOManager{ &stDeviceDriver };
-
-	if (argc == 1) return 0; // param 없는 경우
 
 	string strCommand = string(argv[1]);
 	int nLbaNumber = stoi(string(argv[2]));
@@ -20,9 +20,26 @@ int main(int argc, char* argv[]) {
 	try {
 		stIOManager.DoCommand(strCommand, nLbaNumber, strData);
 	}
-	catch (exception e){
+	catch (exception e) {
+		// This Program must not cause runtime err!
 		std::cout << e.what() << std::endl;
 	}
+}
 
+bool CheckInvalidArgument(int argc)
+{
+	const int THERE_IS_NO_ARGUMENT = 1;
+
+	if (argc == THERE_IS_NO_ARGUMENT) {
+		cout << "There is no argument." << endl;
+		return true;
+	}
+	return false;
+}
+
+int main(int argc, char* argv[]) {
+	if (CheckInvalidArgument(argc)) return 0;
+	
+	DoCommand(argv);
 	return 0;
 }
