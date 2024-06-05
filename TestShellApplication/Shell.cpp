@@ -1,46 +1,56 @@
 #include "Shell.h"
-#include "ReadCommand.h"
-#include "WriteCommand.h"
-#include "FullWriteCommand.h"
 
 Shell::Shell(DriverInterface* pSSDDriver)
 	: m_pSSDDriver(pSSDDriver)
+    , m_pCommandInvoker(nullptr)
 {
+}
+
+Shell::~Shell()
+{
+    if (m_pCommandInvoker != nullptr) {
+        delete m_pCommandInvoker;
+        m_pCommandInvoker = nullptr;
+    }
 }
 
 void Shell::Run(istream& input, ostream& output)
 {
-    string line;
-    while (getline(input, line)) {
-        handleCommand(line, output);
+    while (true) {
+        string line;
+        while (getline(input, line)) {
+            bool bExit = handleCommand(line, output);
+            if (bExit) return;
+        }
     }
 }
 
-void Shell::handleCommand(string strCommandLine, ostream& output)
+bool Shell::handleCommand(string strCommandLine, ostream& output)
 {
     vector<string> vCommandList = SplitLine(strCommandLine);
     
-    string strCommand = vCommandList[0];
+    string strCommand = trim(vCommandList[0]);
     vCommandList.erase(vCommandList.begin());
+    if (strCommand == "") { return false; }
 
-    if (strCommand == "read") {
-        ReadCommand read(vCommandList, m_pSSDDriver, output);
-        read.Execute();
+    SSDComamnd* pCommand = _getCommandInvoker(output)->GetCommand(strCommand);
+    try {
+        pCommand->SetCommandList(vCommandList);
+        pCommand->Execute();
     }
-    else if (strCommand == "fullread") {
-        for (int nLba = 0; nLba < 100; nLba++) {
-            ReadCommand read({ to_string(nLba) }, m_pSSDDriver, output);
-            read.Execute();
-        }
+    catch (ExitShellException& e) {
+        return true;
     }
-    else if (strCommand == "write") {
-        WriteCommand cmd(vCommandList, m_pSSDDriver, output);
-        cmd.Execute();
+    
+    return false;
+}
+
+SSDCommandInvoker* Shell::_getCommandInvoker(ostream& output)
+{
+    if (m_pCommandInvoker == nullptr) {
+        m_pCommandInvoker = new SSDCommandInvoker(m_pSSDDriver, output);
     }
-    else if (strCommand == "fullwrite") {
-        FullWriteCommand cmd(vCommandList, m_pSSDDriver, output);
-        cmd.Execute();
-    }
+    return m_pCommandInvoker;
 }
 
 vector<string> Shell::SplitLine(string& strCommandLine)
@@ -54,4 +64,13 @@ vector<string> Shell::SplitLine(string& strCommandLine)
         nPos = strCommandLine.find(" ");
     }
     return vCommandList;
+}
+
+string Shell::trim(const string& str) {
+    size_t first = str.find_first_not_of(' ');
+    if (first == string::npos) {
+        return "";
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, last - first + 1);
 }

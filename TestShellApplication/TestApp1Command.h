@@ -6,7 +6,7 @@ class TestApp1Command
 	: public BaseSSDCommand
 {
 public:
-	TestApp1Command(vector<string>commandList, DriverInterface* pSSDDriver, std::ostream& output);
+	TestApp1Command(DriverInterface* pSSDDriver, std::ostream& output);
 
 protected:
 	bool _parseCommand() override;
@@ -16,5 +16,4 @@ protected:
 
 private:
 	DriverInterface* m_pstSSDDriver;
-	std::ostream& m_out;
 };

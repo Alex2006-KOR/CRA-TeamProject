@@ -2,6 +2,7 @@
 #include "gmock/gmock.h"
 
 #include "SSDDriver.h"
+#include "SSDCommandInvoker.h"
 #include "TestApp1Command.cpp"
 
 using namespace testing;
@@ -15,15 +16,15 @@ public:
 class TestApp1CommandTestFixture : public testing::Test {
 public:
 	SsdDeviceDriverMock ssd;
-	TestApp1Command* testApp1Command;
+	SSDComamnd* testApp1Command;
 
 protected:
 	void SetUp() override {
-		testApp1Command = new TestApp1Command({}, &ssd, std::cout);
+		SSDCommandInvoker pCommandInvoker(&ssd, std::cout);
+		testApp1Command = pCommandInvoker.GetCommand("testapp1");
 	}
 
 	void TearDown() override {
-		delete testApp1Command;
 	}
 };
 

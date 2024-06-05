@@ -16,10 +16,9 @@ private:
 	string _msg;
 };
 
-TestApp1Command::TestApp1Command(vector<string> vCommandList, DriverInterface* pSSDDriver, ostream& output)
-	: BaseSSDCommand(vCommandList)
+TestApp1Command::TestApp1Command(DriverInterface* pSSDDriver, ostream& output)
+	: BaseSSDCommand(output)
 	, m_pstSSDDriver(pSSDDriver)
-	, m_out(output)
 {
 }
 

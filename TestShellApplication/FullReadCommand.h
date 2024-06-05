@@ -2,11 +2,11 @@
 #include "SSDCommand.h"
 #include "DriverInterface.h"
 
-class FullWriteCommand
+class FullReadCommand
 	: public BaseSSDCommand
 {
 public:
-	FullWriteCommand(DriverInterface* pSSDDriver, std::ostream& output);
+	FullReadCommand(DriverInterface* pSSDDriver, std::ostream& output);
 
 protected:
 	bool _parseCommand() override;
