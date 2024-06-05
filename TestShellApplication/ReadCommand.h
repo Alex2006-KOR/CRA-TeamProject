@@ -10,11 +10,19 @@ public:
 
 protected:
 	bool _parseCommand() override;
+	bool _checkValidityLBA();
+	bool _hasEnoughArgs();
+	bool _isDecimalFormat();
+	bool _isValidCharacter();
+	void _updateLBA();
+	bool _isLBAInRange();
 	void _execute() override;
 
 private:
 	DriverInterface* m_pstSSDDriver;
 	std::ostream& m_out;
 
+	const int m_nExpectedArgCnt = 1;
+	
 	int m_nLBA;
 };
