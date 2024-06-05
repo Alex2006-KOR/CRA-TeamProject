@@ -70,5 +70,5 @@ int WriteCommand::_checkAndGetData(string paramString)
 		throw std::exception("INVALID DATA\n");
 	}
 
-	return std::stoi(paramString, nullptr, 16);
+	return std::stoll(paramString, nullptr, 16);
 }
