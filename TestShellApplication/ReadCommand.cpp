@@ -48,15 +48,12 @@ bool ReadCommand::_isDecimalFormat()
 
 bool ReadCommand::_isValidCharacter()
 {
-	try {
-		stoi(m_vCommandList[0]);
-		return true;
-	}
-	catch (const invalid_argument& e) {
-		//m_out << "Invalid argument: " << e.what() << endl;
+	for (const char ch : m_vCommandList[0]) {
+		if ((ch >= '0') && (ch <= '9')) continue;
 		m_out << "INVALID LBA\n";
 		return false;
 	}
+	return true;
 }
 
 void ReadCommand::_updateLBA()

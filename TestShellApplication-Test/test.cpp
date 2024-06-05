@@ -56,7 +56,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase1) {
 
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase2) {
-	std::string strCommandLine = "read ABC\n";
+	std::string strCommandLine = "read 0ABD\n";
 	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
