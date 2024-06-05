@@ -3,6 +3,7 @@
 
 #include "ssd_interface.h"
 #include "DeviceDriver.cpp"
+#include "ssd.cpp"
 
 using namespace testing;
 
@@ -49,4 +50,27 @@ TEST_F(DeviceDriverTestFixture, SimpleWrite) {
 		.WillOnce(Return(true));
 
 	pDeviceDriver->WriteData(0, "0x00000000");
+}
+
+TEST(RealSSDTestSuite, SimpleRead) {
+	SSD stSSD;
+	DeviceDriver* pDeviceDriver = new DeviceDriver(&stSSD);
+
+	pDeviceDriver->WriteData(0, "0x0000ABCD");
+	pDeviceDriver->ReadData(0);
+
+	FileManager stResultFile("Result.txt");
+	stResultFile.OpenReadStream();
+	EXPECT_EQ(stResultFile.Read(), "0x0000ABCD");
+}
+
+TEST(RealSSDTestSuite, SimpleWrite) {
+	SSD stSSD;
+	DeviceDriver* pDeviceDriver = new DeviceDriver(&stSSD);
+
+	pDeviceDriver->WriteData(0, "0xDEADDEAD");
+
+	FileManager stNandFile("Nand.txt");
+	stNandFile.OpenReadStream();
+	EXPECT_EQ(stNandFile.Read(), "0xDEADDEAD");
 }
