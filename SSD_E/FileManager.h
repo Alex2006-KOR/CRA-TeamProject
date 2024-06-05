@@ -9,7 +9,7 @@ public:
 	FileManager(string sFileName);
 
 	void OpenReadStream();
-	void OpenWriteStream();
+	void OpenWriteStream(string mode = "");
 	void CloseReadStream();
 	void CloseWriteStream();
 	bool IsFileExist();

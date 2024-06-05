@@ -12,9 +12,9 @@ void FileManager::OpenReadStream() {
 	}
 }
 
-	void OpenWriteStream(string mode = "") {
-		if(mode == "append") m_ofstreamWrite.open(m_sFileName, fstream::app);
-		else m_ofstreamWrite.open(m_sFileName);
+void FileManager::OpenWriteStream(string mode) {
+	if (mode == "append") m_ofstreamWrite.open(m_sFileName, fstream::app);
+	else m_ofstreamWrite.open(m_sFileName);
 
 	if (m_ofstreamWrite.is_open() == false) {
 		throw exception("Open input file fail");

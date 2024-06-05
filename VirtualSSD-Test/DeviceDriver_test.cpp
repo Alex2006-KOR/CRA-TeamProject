@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "SSDInterface.h"
+#include "SSD.cpp"
 #include "DeviceDriver.cpp"
-#include "ssd.cpp"
+#include "FileManager.cpp"
 
 using namespace testing;
 
