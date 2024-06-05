@@ -6,6 +6,7 @@
 #include "WriteCommand.cpp"
 #include "FullReadCommand.cpp"
 #include "FullWriteCommand.cpp"
+#include "ExitCommand.cpp"
 #include "SSDCommandInvoker.cpp"
 #include "Shell.cpp"
 

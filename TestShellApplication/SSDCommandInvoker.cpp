@@ -4,6 +4,7 @@
 #include "WriteCommand.h"
 #include "FullReadCommand.h"
 #include "FullWriteCommand.h"
+#include "ExitCommand.h"
 
 SSDCommandInvoker::SSDCommandInvoker(DriverInterface* pSSDDriver, ostream& output)
 {
@@ -25,4 +26,5 @@ void SSDCommandInvoker::_initCommands(DriverInterface* pSSDDriver, ostream& outp
 	m_mapCommand["write"] = new WriteCommand(pSSDDriver, output);
 	m_mapCommand["fullread"] = new FullReadCommand(pSSDDriver, output);
 	m_mapCommand["fullwrite"] = new FullWriteCommand(pSSDDriver, output);
+	m_mapCommand["exit"] = new ExitCommand(pSSDDriver, output);
 }

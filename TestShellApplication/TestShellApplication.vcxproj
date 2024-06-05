@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DriverInterface.h" />
+    <ClCompile Include="ExitCommand.cpp" />
     <ClCompile Include="FullReadCommand.cpp" />
     <ClCompile Include="FullWriteCommand.cpp" />
     <ClCompile Include="main.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ExitCommand.h" />
     <ClInclude Include="FullReadCommand.h" />
     <ClInclude Include="FullWriteCommand.h" />
     <ClInclude Include="ReadCommand.h" />
