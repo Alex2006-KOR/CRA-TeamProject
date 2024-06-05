@@ -2,7 +2,6 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <Windows.h>
 #include "SSDDriver.h"
 
 using namespace std;
