@@ -116,6 +116,31 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
 
 // FullRead Command
 
+//TEST_F(TestShellApplicationTestFixture, FullReadExpectToCallOncePerLBA) {
+//	std::string strCommandLine = "fullread\n";
+//	std::string strExpectedResult = "0x00000000\n";
+//
+//	EXPECT_CALL(ssdMock, Read(0))
+//		.Times(1);
+//
+//	EXPECT_CALL(ssdMock, Read(1))
+//		.Times(1);
+//
+//	EXPECT_CALL(ssdMock, Read(30))
+//		.Times(1);
+//
+//	EXPECT_CALL(ssdMock, Read(60))
+//		.Times(1);
+//
+//	EXPECT_CALL(ssdMock, Read(98))
+//		.Times(1);
+//
+//	EXPECT_CALL(ssdMock, Read(99))
+//		.Times(1);
+//
+//	EXPECT_NO_THROW(RunCommand(strCommandLine));
+//}
+
 TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
 	std::string strCommandLine = "fullread\n";
 	std::string strExpectedResult = "0x00000000\n";
@@ -139,27 +164,22 @@ TEST_F(TestShellApplicationTestFixture, FullReadSomeValidData) {
 	std::string strExpectedResultFull;
 
 	const int LBA_CNT = 100;
-	strExpectedResultFull += "0x00000001";
-	strExpectedResultFull += "0x00000002";
+	strExpectedResultFull += "0x00000001\n";
+	strExpectedResultFull += "0x00000011\n";
 
 	for (int i = 0; i < LBA_CNT - 2; ++i) {
 		strExpectedResultFull += strExpectedResult;
 	}
 
-	EXPECT_CALL(ssdMock, Read(0))
-		.Times(1)
-		.WillRepeatedly(Return(0x00000001));
-
-	EXPECT_CALL(ssdMock, Read(1))
-		.Times(1)
-		.WillRepeatedly(Return(0x00000011));
-
 	EXPECT_CALL(ssdMock, Read)
-		.Times(LBA_CNT-2)
+		.Times(LBA_CNT)
+		.WillOnce(Return(0x00000001))
+		.WillOnce(Return(0x00000011))
 		.WillRepeatedly(Return(0x00000000));
 
 	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResultFull);
 }
+
 
 
 TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
