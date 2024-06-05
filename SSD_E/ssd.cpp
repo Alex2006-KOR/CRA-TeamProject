@@ -1,6 +1,9 @@
+#include <iostream>
 #include <fstream>
 #include <vector>
+
 #include "ssd_interface.h"
+#include "FileManager.cpp"
 
 using namespace std;
 
@@ -11,44 +14,49 @@ public:
 	const string INITIAL_VALUE = "0x00000000";
 	const int LBA_NUM = 100;
 
-	SSD() {
+	SSD(): m_stNandFile(NAND), m_stResultFile(RESULT) {
 		init();
 	}
 
 	void init() {
-		if (_IsFileExist()) return;
+		if (m_stNandFile.IsFileExist()) return;
 
-		ofstream ofstreamWrite(NAND);
-		if (ofstreamWrite.is_open() == false) throw exception("Open output file fail");
-		for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
-			ofstreamWrite << INITIAL_VALUE << std::endl;
+		try {
+			m_stNandFile.OpenWriteStream();
+		} catch (exception e) {
+			cout << e.what() << endl;
 		}
-		ofstreamWrite.close();
+
+		for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
+			m_stNandFile.Write(INITIAL_VALUE);
+		}
+
+		m_stNandFile.CloseWriteStream();
 	}
 
 	bool read(int nLba) {
-		ifstream ifstreamRead(NAND);
-		ofstream ofstreamWrite(RESULT);
-
-		if (ifstreamRead.is_open() == false) throw exception("Open input file fail");
-		if (ofstreamWrite.is_open() == false) throw exception("Open output file fail");
+		try {
+			m_stNandFile.OpenReadStream();
+			m_stResultFile.OpenWriteStream();
+		}
+		catch (exception e) {
+			cout << e.what() << endl;
+		}
 
 		int nLineIdx = 0;
 		string sData;
 
-		while (getline(ifstreamRead, sData)) {
-			if (nLineIdx == nLba) {
-				ofstreamWrite << sData << std::endl;
-				ifstreamRead.close();
-				ofstreamWrite.close();
-				return true;
-			}
+		while (nLineIdx != nLba) {
+			m_stNandFile.Read();
 			++nLineIdx;
 		}
+		sData = m_stNandFile.Read();
+		m_stResultFile.Write(sData);
 
-		ifstreamRead.close();
-		ofstreamWrite.close();
-		return false;
+		m_stNandFile.CloseReadStream();
+		m_stResultFile.CloseWriteStream();
+
+		return true;
 	}
 
 	bool write(int nLba, string sData) {
@@ -60,14 +68,22 @@ public:
 	}
 
 private:
+	FileManager m_stNandFile;
+	FileManager m_stResultFile;
+
 	void _UpdateNandValues(vector<string>& vLines)
 	{
-		ofstream ofstreamWrite(NAND);
-		if (ofstreamWrite.is_open() == false) throw exception("Open output file fail");
-		for (const auto& line : vLines) {
-			ofstreamWrite << line << std::endl;
+		try {
+			m_stNandFile.OpenWriteStream();
+		} catch (exception e) {
+			cout << e.what() << endl;
 		}
-		ofstreamWrite.close();
+
+		for (const auto& line : vLines) {
+			m_stNandFile.Write(line);
+		}
+
+		m_stNandFile.CloseWriteStream();
 	}
 
 	vector<string> _ExtractNandValue(void)
@@ -75,28 +91,19 @@ private:
 		vector<string> vLines;
 		string sLine;
 
-		ifstream ifstreamRead(NAND);
-		if (ifstreamRead.is_open() == false) throw exception("Open input file fail");
-
-		while (getline(ifstreamRead, sLine)) {
-			vLines.push_back(sLine);
+		try {
+			m_stNandFile.OpenReadStream();
+		}
+		catch (exception e) {
+			cout << e.what() << endl;
 		}
 
-		ifstreamRead.close();
+		for (int lineNum = 0; lineNum < LBA_NUM; lineNum++) {
+			vLines.push_back(m_stNandFile.Read());
+		}
+
+		m_stNandFile.CloseReadStream();
 
 		return vLines;
-	}
-
-	bool _IsFileExist(void) {
-		ifstream ifstreamRead(NAND);
-
-		if (ifstreamRead.good()) {
-			ifstreamRead.close();
-
-			return true;
-		}
-		ifstreamRead.close();
-
-		return false;
 	}
 };
