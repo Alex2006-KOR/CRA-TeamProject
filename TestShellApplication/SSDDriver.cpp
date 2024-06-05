@@ -39,7 +39,8 @@ int SSDDriver::_executeCommand(string command)
         int retCode = system(command.c_str());
         return retCode;
     }
-    catch (exception& e){
+    catch (exception& e) {
+        cout << e.what() << endl;
         return -1;
     }
 }

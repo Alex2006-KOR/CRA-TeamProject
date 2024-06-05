@@ -8,7 +8,7 @@ public:
 
 protected:
 	virtual int _executeCommand(std::string command);
-	bool _getSsdExisted(void);
-	int _getSsdResult(void);
-	int _getReadResult(void);
+	virtual bool _getSsdExisted(void);
+	virtual int _getSsdResult(void);
+	virtual int _getReadResult(void);
 };
