@@ -39,6 +39,9 @@
     <ClCompile Include="FullWriteCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+	  <ClCompile Include="TestApp1Command.cpp">
+		  <Filter>소스 파일</Filter>
+	  </ClCompile>
     <ClCompile Include="FullReadCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -74,6 +77,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="FullWriteCommand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+	<ClInclude Include="TestApp1Command.h">
+		<Filter>헤더 파일</Filter>
+	</ClInclude>
+    <ClInclude Include="FullReadCommand.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="FullReadCommand.h">

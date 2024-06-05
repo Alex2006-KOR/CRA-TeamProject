@@ -142,6 +142,7 @@
     <ClCompile Include="SSDCommand.cpp" />
     <ClCompile Include="SSDCommandInvoker.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
+    <ClCompile Include="TestApp1Command.cpp" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +155,7 @@
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDCommandInvoker.h" />
     <ClInclude Include="SSDDriver.h" />
+    <ClInclude Include="TestApp1Command.h" />
     <ClInclude Include="WriteCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
