@@ -114,33 +114,6 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
 	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
 
-// FullRead Command
-
-//TEST_F(TestShellApplicationTestFixture, FullReadExpectToCallOncePerLBA) {
-//	std::string strCommandLine = "fullread\n";
-//	std::string strExpectedResult = "0x00000000\n";
-//
-//	EXPECT_CALL(ssdMock, Read(0))
-//		.Times(1);
-//
-//	EXPECT_CALL(ssdMock, Read(1))
-//		.Times(1);
-//
-//	EXPECT_CALL(ssdMock, Read(30))
-//		.Times(1);
-//
-//	EXPECT_CALL(ssdMock, Read(60))
-//		.Times(1);
-//
-//	EXPECT_CALL(ssdMock, Read(98))
-//		.Times(1);
-//
-//	EXPECT_CALL(ssdMock, Read(99))
-//		.Times(1);
-//
-//	EXPECT_NO_THROW(RunCommand(strCommandLine));
-//}
-
 TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
 	std::string strCommandLine = "fullread\n";
 	std::string strExpectedResult = "0x00000000\n";
