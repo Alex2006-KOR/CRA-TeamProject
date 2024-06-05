@@ -132,12 +132,14 @@
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="IOManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ssd.cpp" />
-    <ClCompile Include="ssd_interface.h" />
+    <ClCompile Include="SSD.cpp" />
+    <ClCompile Include="SSDInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceDriver.h" />
+    <ClInclude Include="FileManager.h" />
     <ClInclude Include="IOManager.h" />
+    <ClInclude Include="SSD.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "IOManager.h"
-#include "ssd.cpp"
+#include "SSD.h"
 
 using namespace std;
 

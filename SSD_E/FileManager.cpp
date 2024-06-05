@@ -1,64 +1,53 @@
-#pragma once
-#include <string>
-#include <fstream>
-
+#include "FileManager.h"
 using namespace std;
 
-class FileManager {
-public:
-	FileManager(string sFileName) :
-		m_sFileName(sFileName) {}
+FileManager::FileManager(string sFileName) :
+	m_sFileName(sFileName) {}
 
-	void OpenReadStream() {
-		m_ifstreamRead.open(m_sFileName);
+void FileManager::OpenReadStream() {
+	m_ifstreamRead.open(m_sFileName);
 
-		if (m_ifstreamRead.is_open() == false) {
-			throw exception("Open input file fail");
-		}
+	if (m_ifstreamRead.is_open() == false) {
+		throw exception("Open input file fail");
 	}
+}
 
-	void OpenWriteStream() {
-		m_ofstreamWrite.open(m_sFileName);
+void FileManager::OpenWriteStream() {
+	m_ofstreamWrite.open(m_sFileName);
 
-		if (m_ofstreamWrite.is_open() == false) {
-			throw exception("Open input file fail");
-		}
+	if (m_ofstreamWrite.is_open() == false) {
+		throw exception("Open input file fail");
 	}
+}
 
-	void CloseReadStream() {
-		m_ifstreamRead.close();
-	}
+void FileManager::CloseReadStream() {
+	m_ifstreamRead.close();
+}
 
-	void CloseWriteStream() {
-		m_ofstreamWrite.close();
-	}
+void FileManager::CloseWriteStream() {
+	m_ofstreamWrite.close();
+}
 
-	bool IsFileExist() {
-		m_ifstreamRead.open(m_sFileName);
+bool FileManager::IsFileExist() {
+	m_ifstreamRead.open(m_sFileName);
 
-		if (m_ifstreamRead.good()) {
-			m_ifstreamRead.close();
-
-			return true;
-		}
+	if (m_ifstreamRead.good()) {
 		m_ifstreamRead.close();
 
-		return false;
+		return true;
 	}
+	m_ifstreamRead.close();
 
-	string Read() {
-		string sData;
-		getline(m_ifstreamRead, sData);
-		
-		return sData;
-	}
+	return false;
+}
 
-	void Write(string sData) {
-		m_ofstreamWrite << sData << std::endl;
-	}
+string FileManager::Read() {
+	string sData;
+	getline(m_ifstreamRead, sData);
 
-private:
-	string m_sFileName;
-	ifstream m_ifstreamRead;
-	ofstream m_ofstreamWrite;
-};
+	return sData;
+}
+
+void FileManager::Write(string sData) {
+	m_ofstreamWrite << sData << std::endl;
+}
