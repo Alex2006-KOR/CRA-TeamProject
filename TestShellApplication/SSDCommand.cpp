@@ -6,8 +6,11 @@ BaseSSDCommand::BaseSSDCommand(vector<string> commandList) {
 	m_vCommandList = commandList;
 }
 
-void BaseSSDCommand::Execute()
+bool BaseSSDCommand::Execute()
 {
-	bool bSuccess = _parseCommand();
-	if (bSuccess) _execute();
+	if (_parseCommand() == false) {
+		return false;
+	}
+	_execute();
+	return true;
 }
