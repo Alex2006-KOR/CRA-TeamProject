@@ -1,11 +1,13 @@
 #include "SSDCommand.h"
 
+#include <stdexcept>
+
 BaseSSDCommand::BaseSSDCommand(vector<string> commandList) {
-	m_commandList = commandList;
+	m_vCommandList = commandList;
 }
 
 void BaseSSDCommand::Execute()
 {
-	_parseCommand();
-	_execute();
+	bool bSuccess = _parseCommand();
+	if (bSuccess) _execute();
 }

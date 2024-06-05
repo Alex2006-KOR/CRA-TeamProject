@@ -1,4 +1,4 @@
-#include "./DriverInterface.h"
+#include "DriverInterface.h"
 
 class SSDDriver : public DriverInterface {
 public:

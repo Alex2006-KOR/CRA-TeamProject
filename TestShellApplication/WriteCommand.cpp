@@ -1,11 +1,12 @@
 #include "WriteCommand.h"
 
-void WriteCommand::_execute()
+bool WriteCommand::_parseCommand()
 {
 	// TODO
+	return true;
 }
 
-void WriteCommand::_parseCommand()
+void WriteCommand::_execute()
 {
 	// TODO
 }

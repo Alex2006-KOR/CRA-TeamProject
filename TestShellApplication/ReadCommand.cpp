@@ -2,30 +2,53 @@
 
 #include <iostream>
 #include <iomanip>
+#include <stdexcept>
 
-using std::string;
 
-ReadCommand::ReadCommand(vector<string> commandList, DriverInterface* pSSDDriver, std::ostream& output)
-	: BaseSSDCommand(commandList)
-	, m_pSSDDriver(pSSDDriver)
+ReadCommand::ReadCommand(vector<string> vCommandList, DriverInterface* pSSDDriver, ostream& output)
+	: BaseSSDCommand(vCommandList)
+	, m_pstSSDDriver(pSSDDriver)
 	, m_nLBA(-1)
 	, m_out(output)
 {
 }
 
-void ReadCommand::_execute()
+bool ReadCommand::_parseCommand()
 {
-	int nData = m_pSSDDriver->Read(m_nLBA);
-	m_out << "0x";
-	m_out << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << nData;
-	m_out << std::endl;
-}
-
-void ReadCommand::_parseCommand()
-{
-	if (m_commandList.size() != 1) {
-		throw std::exception();
+	if (m_vCommandList.size() != 1) {
+		m_out << "Invalid usage.\nCheck help message.\n";
+		return false;
 	}
 
-	m_nLBA = atoi(m_commandList[0].c_str());
+	if (m_vCommandList[0].substr(0, 2) == "0x") {
+		m_out << "INVALID LBA\n";
+		return false;
+	}
+
+	try {
+		m_nLBA = stoi(m_vCommandList[0]);
+		if (m_nLBA < 0 || m_nLBA > 99) {
+			m_out << "INVALID LBA\n";
+			return false;
+		}
+		return true;
+	}
+	catch (const invalid_argument& e) {
+		//m_out << "Invalid argument: " << e.what() << endl;
+		m_out << "INVALID LBA\n";
+		return false;
+	}
+	catch (const out_of_range& e) {
+		//m_out << "Out of range: " << e.what() << endl;
+		m_out << "INVALID LBA\n";
+		return false;
+	}
+}
+
+void ReadCommand::_execute()
+{
+	int nData = m_pstSSDDriver->Read(m_nLBA);
+	m_out << "0x";
+	m_out << hex << uppercase << setw(8) << setfill('0') << nData;
+	m_out << endl;
 }

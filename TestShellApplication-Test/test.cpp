@@ -16,6 +16,16 @@ public:
 class TestShellApplicationTestFixture : public testing::Test {
 public:
 	SsdDeviceDriverMock ssdMock;
+	Shell shell{ &ssdMock };
+
+	std::string RunCommand(string strCommandLine) {
+		std::istringstream input(strCommandLine);
+		std::ostringstream output;
+
+		shell.Run(input, output);
+
+		return output.str();
+	}
 
 protected:
 	void SetUp() override {
@@ -23,33 +33,92 @@ protected:
 };
 
 TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
+	std::string strCommandLine = "read 10\n";
+	std::string strExpectedResult = "0x00000000\n";
+
 	EXPECT_CALL(ssdMock, Read)
 		.Times(1)
 		.WillRepeatedly(Return(0x00000000));
-	std::string expected = "0x00000000\n";
 
-	Shell shell(&ssdMock);
-	std::istringstream input("read 10\n");
-	std::ostringstream output;
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
 
-	shell.Run(input, output);
+TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase1) {
+	std::string strCommandLine = "read ABC\n";
+	std::string strExpectedResult = "INVALID LBA\n";
 
-	EXPECT_EQ(output.str(), expected);
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+
+TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase2) {
+	std::string strCommandLine = "read ABC\n";
+	std::string strExpectedResult = "INVALID LBA\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, ExceptionTestLBANonInDecimal) {
+	std::string strCommandLine = "read 0x100\n";
+	std::string strExpectedResult = "INVALID LBA\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAOverMaxLBA) {
+	std::string strCommandLine = "read -10\n";
+	std::string strExpectedResult = "INVALID LBA\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
+	std::string strCommandLine = "read 100\n";
+	std::string strExpectedResult = "INVALID LBA\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
+	std::string strCommandLine = "read 10\n";
+	std::string strExpectedResult_prefix = "0x";
+	std::string strExpectedResult_postfix = "\n";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(1)
+		.WillRepeatedly(Return(0x00000000));
+
+	string strOutput = RunCommand(strCommandLine);
+
+	EXPECT_EQ(strOutput.substr(0, 2), strExpectedResult_prefix);
+	EXPECT_EQ(strOutput.substr(strOutput.size()-1), strExpectedResult_postfix);
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
+	std::string strCommandLine = "write 10 0x000000AA\nread 10\n";
+	std::string strExpectedResult = "0x000000AA\n";
+
 	EXPECT_CALL(ssdMock, Write(10, 0xAA))
 		.Times(1);
+	
 	EXPECT_CALL(ssdMock, Read(10))
 		.Times(1)
 		.WillRepeatedly(Return(0x000000AA));
-	std::string expected = "0x000000AA\n";
 
-	Shell shell(&ssdMock);
-	std::istringstream input("write 10 0x000000AA\nread 10\n");
-	std::ostringstream output;
-
-	shell.Run(input, output);
-
-	EXPECT_EQ(output.str(), expected);
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }

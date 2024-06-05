@@ -1,42 +1,41 @@
 #include "Shell.h"
-
 #include "ReadCommand.h"
-
-#include <sstream>
-#include <vector>
-
-using std::vector;
-using std::string;
 
 Shell::Shell(DriverInterface* pSSDDriver)
 	: m_pSSDDriver(pSSDDriver)
 {
 }
 
-void Shell::Run(std::istream& input, std::ostream& output)
+void Shell::Run(istream& input, ostream& output)
 {
     string line;
-    while (std::getline(input, line)) {
+    while (getline(input, line)) {
         handleCommand(line, output);
     }
 }
 
-void Shell::handleCommand(string lineString, std::ostream& output)
+void Shell::handleCommand(string strCommandLine, ostream& output)
 {
-    vector<string> commandList;
-    lineString += " ";
-    auto nPos = lineString.find(" ");
-    while (nPos != string::npos) {
-        commandList.push_back(lineString.substr(0, nPos));
-        lineString = lineString.substr(nPos + 1);
-        nPos = lineString.find(" ");
-    }
+    vector<string> vCommandList = SplitLine(strCommandLine);
     
-    string command = commandList[0];
-    commandList.erase(commandList.begin());
+    string strCommand = vCommandList[0];
+    vCommandList.erase(vCommandList.begin());
 
-    if (command == "read") {
-        ReadCommand cmd(commandList, m_pSSDDriver, output);
+    if (strCommand == "read") {
+        ReadCommand cmd(vCommandList, m_pSSDDriver, output);
         cmd.Execute();
     }
+}
+
+vector<string> Shell::SplitLine(string& strCommandLine)
+{
+    vector<string> vCommandList;
+    strCommandLine += " ";
+    auto nPos = strCommandLine.find(" ");
+    while (nPos != string::npos) {
+        vCommandList.push_back(strCommandLine.substr(0, nPos));
+        strCommandLine = strCommandLine.substr(nPos + 1);
+        nPos = strCommandLine.find(" ");
+    }
+    return vCommandList;
 }

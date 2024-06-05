@@ -9,11 +9,11 @@ public:
 	ReadCommand(vector<string>commandList, DriverInterface* pSSDDriver, std::ostream& output);
 
 protected:
+	bool _parseCommand() override;
 	void _execute() override;
-	void _parseCommand() override;
 
 private:
-	DriverInterface* m_pSSDDriver;
+	DriverInterface* m_pstSSDDriver;
 	std::ostream& m_out;
 
 	int m_nLBA;
