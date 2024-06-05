@@ -6,7 +6,7 @@ class WriteCommand
 	: public BaseSSDCommand
 {
 public:
-	WriteCommand(vector<string>commandList, DriverInterface* pSSDDriver, std::ostream& output);
+	WriteCommand(DriverInterface* pSSDDriver, std::ostream& output);
 
 protected:
 	bool _parseCommand() override;

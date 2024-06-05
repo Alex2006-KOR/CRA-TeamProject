@@ -28,20 +28,24 @@ bool Shell::handleCommand(string strCommandLine, ostream& output)
     vCommandList.erase(vCommandList.begin());
     if (strCommand == "") { return false; }
 
-    if (strCommand == "write") {
-        WriteCommand cmd(vCommandList, m_pSSDDriver, output);
-        cmd.Execute();
-    }
-    else if (strCommand == "read") {
-        ReadCommand read(vCommandList, m_pSSDDriver, output);
+    if (strCommand == "read") {
+        ReadCommand read(m_pSSDDriver, output);
+        read.SetCommandList(vCommandList);
         read.Execute();
     }
-    else if (strCommand == "fullwrite") {
-        FullWriteCommand cmd(vCommandList, m_pSSDDriver, output);
+    else if (strCommand == "fullread") {
+        FullReadCommand cmd(m_pSSDDriver, output);
+        cmd.SetCommandList(vCommandList);
         cmd.Execute();
     }
-    else if (strCommand == "fullread") {
-        FullReadCommand cmd(vCommandList, m_pSSDDriver, output);
+    else if (strCommand == "write") {
+        WriteCommand cmd(m_pSSDDriver, output);
+        cmd.SetCommandList(vCommandList);
+        cmd.Execute();
+    }
+    else if (strCommand == "fullwrite") {
+        FullWriteCommand cmd(m_pSSDDriver, output);
+        cmd.SetCommandList(vCommandList);
         cmd.Execute();
     }
     else if (strCommand == "help") {

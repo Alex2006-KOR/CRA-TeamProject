@@ -5,8 +5,8 @@
 #include <stdexcept>
 
 
-ReadCommand::ReadCommand(vector<string> vCommandList, DriverInterface* pSSDDriver, ostream& output)
-	: BaseSSDCommand(vCommandList, output)
+ReadCommand::ReadCommand(DriverInterface* pSSDDriver, ostream& output)
+	: BaseSSDCommand(output)
 	, m_pstSSDDriver(pSSDDriver)
 	, m_nLBA(-1)
 {

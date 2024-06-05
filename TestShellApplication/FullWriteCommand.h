@@ -6,7 +6,7 @@ class FullWriteCommand
 	: public BaseSSDCommand
 {
 public:
-	FullWriteCommand(vector<string>commandList, DriverInterface* pSSDDriver, std::ostream& output);
+	FullWriteCommand(DriverInterface* pSSDDriver, std::ostream& output);
 
 protected:
 	bool _parseCommand() override;

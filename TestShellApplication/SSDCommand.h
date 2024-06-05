@@ -7,6 +7,7 @@ using namespace std;
 #define interface struct
 
 interface SSDComamnd {
+	virtual void SetCommandList(vector<string> vCommandList) = 0;
 	virtual bool Execute() = 0;
 };
 
@@ -14,10 +15,11 @@ class BaseSSDCommand
 	: public SSDComamnd
 {
 public:
-	BaseSSDCommand(vector<string>vCommandList, std::ostream& output);
+	BaseSSDCommand(std::ostream& output);
 	virtual ~BaseSSDCommand() = default;
 
 public:
+	void SetCommandList(vector<string> vCommandList) override;
 	bool Execute() override;
 
 protected:
