@@ -34,7 +34,7 @@ protected:
 
 TEST_F(SSDDriverTestFixture, InterfaceTest) {
 	Write(0, 0);
-	EXPECT_EQ(1, Read(0));
+	EXPECT_EQ(0, Read(0));
 }
 
 TEST_F(SSDDriverTestFixture, CommandTest) {
