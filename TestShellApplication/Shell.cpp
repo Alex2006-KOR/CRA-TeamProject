@@ -22,8 +22,14 @@ void Shell::handleCommand(string strCommandLine, ostream& output)
     vCommandList.erase(vCommandList.begin());
 
     if (strCommand == "read") {
-        ReadCommand cmd(vCommandList, m_pSSDDriver, output);
-        cmd.Execute();
+        ReadCommand read(vCommandList, m_pSSDDriver, output);
+        read.Execute();
+    }
+    else if (strCommand == "fullread") {
+        for (int nLba = 0; nLba < 100; nLba++) {
+            ReadCommand read({ to_string(nLba) }, m_pSSDDriver, output);
+            read.Execute();
+        }
     }
 }
 
