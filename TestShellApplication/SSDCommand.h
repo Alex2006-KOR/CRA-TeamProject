@@ -7,7 +7,7 @@ using namespace std;
 #define interface struct
 
 interface SSDComamnd {
-	virtual void Execute() = 0;
+	virtual bool Execute() = 0;
 };
 
 class BaseSSDCommand
@@ -18,7 +18,7 @@ public:
 	virtual ~BaseSSDCommand() = default;
 
 public:
-	void Execute() override;
+	bool Execute() override;
 
 protected:
 	virtual bool _parseCommand() = 0;
