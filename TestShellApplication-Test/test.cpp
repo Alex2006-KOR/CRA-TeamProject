@@ -28,7 +28,7 @@ public:
 		return output.str();
 	}
 
-	std::string RunCommand(string strCommandLine) {
+	std::string RunSingleCommand(string strCommandLine) {
 		std::ostringstream output;
 
 		shell.handleCommand(strCommandLine, output);
@@ -52,7 +52,7 @@ TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
 		.Times(1)
 		.WillRepeatedly(Return(0x00000000));
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
@@ -64,7 +64,7 @@ TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
 		.Times(1)
 		.WillRepeatedly(Return(0x00000000));
 
-	string strOutput = RunCommand(strCommandLine);
+	string strOutput = RunSingleCommand(strCommandLine);
 
 	EXPECT_EQ(strOutput.substr(0, 2), strExpectedResult_prefix);
 	EXPECT_EQ(strOutput.substr(strOutput.size() - 1), strExpectedResult_postfix);
@@ -79,7 +79,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase1) {
 	EXPECT_CALL(ssdMock, Read)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 
@@ -90,7 +90,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase2) {
 	EXPECT_CALL(ssdMock, Read)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestLBANonInDecimal) {
@@ -100,7 +100,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBANonInDecimal) {
 	EXPECT_CALL(ssdMock, Read)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAOverMaxLBA) {
@@ -110,7 +110,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAOverMaxLBA) {
 	EXPECT_CALL(ssdMock, Read)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
@@ -120,7 +120,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
 	EXPECT_CALL(ssdMock, Read)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
@@ -137,7 +137,7 @@ TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
 		.Times(LBA_CNT)
 		.WillRepeatedly(Return(0x00000000));
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResultFull);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResultFull);
 }
 
 TEST_F(TestShellApplicationTestFixture, FullReadSomeValidData) {
@@ -159,7 +159,7 @@ TEST_F(TestShellApplicationTestFixture, FullReadSomeValidData) {
 		.WillOnce(Return(0x00000011))
 		.WillRepeatedly(Return(0x00000000));
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResultFull);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResultFull);
 }
 
 
@@ -185,7 +185,7 @@ TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterLBATest) {
 	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteInvalidRangeLBATest) {
@@ -195,7 +195,7 @@ TEST_F(TestShellApplicationTestFixture, WriteInvalidRangeLBATest) {
 	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterDataTest) {
@@ -205,7 +205,7 @@ TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterDataTest) {
 	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteNotStart0xDataTest) {
@@ -215,7 +215,7 @@ TEST_F(TestShellApplicationTestFixture, WriteNotStart0xDataTest) {
 	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteNot8CharacterDataTest) {
@@ -225,7 +225,7 @@ TEST_F(TestShellApplicationTestFixture, WriteNot8CharacterDataTest) {
 	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
 
@@ -244,7 +244,7 @@ TEST_F(TestShellApplicationTestFixture, ExitWithNoError) {
 	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
-	EXPECT_NO_THROW(RunCommand(strCommandLine));
+	EXPECT_NO_THROW(RunSingleCommand(strCommandLine));
 }
 
 TEST_F(TestShellApplicationTestFixture, ExitIgnoreFollowingCommands) {
@@ -272,5 +272,5 @@ TEST_F(TestShellApplicationTestFixture, InvalidCommand) {
 	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
