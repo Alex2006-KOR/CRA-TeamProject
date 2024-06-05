@@ -64,7 +64,13 @@ TEST_F(SSDDriverExecuteTestFixture, BasicReadWriteTest) {
 TEST_F(SSDDriverExecuteTestFixture, ReadExecutionExceptionTest) {
 	EXPECT_CALL(*this, _executeCommand)
 		.WillRepeatedly(Return(-1));
-	EXPECT_EQ(0, Read(0));
+
+	try {
+		EXPECT_EQ(0, Read(0));
+	}
+	catch (exception& e) {
+		FAIL();
+	}
 }
 
 TEST_F(SSDDriverExecuteTestFixture, WriteExecutionExceptionTest) {
