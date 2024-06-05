@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include "IOManager.h"
-#include "FileManager.cpp"
+#include "FileManager.h"
 
 IOManager::IOManager(DeviceDriver* pstDeviceDriver) : m_pstDeviceDriver(pstDeviceDriver)
 {
