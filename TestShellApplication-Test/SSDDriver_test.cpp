@@ -11,12 +11,14 @@ public:
 	string expectedCommand;
 
 	void doWriteCommandTest(int lba, int data) {
-		expectedCommand = "VirtualSSD.exe W " + to_string(lba) + " " + to_string(data);
+		expectedCommand = "VirtualSSD.exe W " + 
+			to_string(lba) + " " + to_string(data);
 		Write(lba, data);
 	}
 
 	void doReadCommandTest(int lba) {
-		expectedCommand = "VirtualSSD.exe R " + to_string(lba);
+		expectedCommand = "VirtualSSD.exe R " + 
+			to_string(lba);
 		Read(lba);
 	}
 
@@ -69,6 +71,7 @@ TEST_F(SSDDriverExecuteTestFixture, ReadExecutionExceptionTest) {
 		EXPECT_EQ(0, Read(0));
 	}
 	catch (exception& e) {
+		cout << e.what() << endl;
 		FAIL();
 	}
 }
@@ -81,6 +84,7 @@ TEST_F(SSDDriverExecuteTestFixture, WriteExecutionExceptionTest) {
 		Write(0, 0x1234FFFF);
 	}
 	catch (exception& e) {
+		cout << e.what() << endl;
 		FAIL();
 	}
 }

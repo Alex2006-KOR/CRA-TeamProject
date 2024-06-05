@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-
+#include <Windows.h>
 #include "SSDDriver.h"
 
 using namespace std;
@@ -12,7 +12,8 @@ const string SSD_FILE = "result.txt";
 int SSDDriver::Read(int lba)
 {
     int retCode = _executeCommand(
-        "VirtualSSD.exe R " + to_string(lba)
+        "VirtualSSD.exe R " +
+        to_string(lba)
     );
 
     if (retCode == -1)
@@ -23,7 +24,8 @@ int SSDDriver::Read(int lba)
 void SSDDriver::Write(int lba, int data)
 {
     int retCode = _executeCommand(
-        "VirtualSSD.exe W " + to_string(lba) + " " + to_string(data)
+        "VirtualSSD.exe W " +
+        to_string(lba) + " " + to_string(data)
     );
 }
 
@@ -48,6 +50,7 @@ int SSDDriver::_getReadResult(void)
         return 0;
     }
     catch (exception& e) {
+        cout << e.what() << endl;
         return 0;
     }
 }
@@ -72,7 +75,7 @@ int SSDDriver::_getSsdResult(void)
     int ret = 0;
     string readData;
     getline(ifstreamRead, readData);
-    ret = stoi(readData);
+    ret = stoi(readData, nullptr, 16);
 
     ifstreamRead.close();
 
