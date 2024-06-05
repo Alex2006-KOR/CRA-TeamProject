@@ -19,11 +19,19 @@ public:
 	SsdDeviceDriverMock ssdMock;
 	Shell shell{ &ssdMock };
 
-	std::string RunCommand(string strCommandLine) {
-		std::istringstream input(strCommandLine);
+	std::string RunCommands(string strCommandLines) {
+		std::istringstream input(strCommandLines);
 		std::ostringstream output;
 
 		shell.Run(input, output);
+
+		return output.str();
+	}
+
+	std::string RunCommand(string strCommandLine) {
+		std::ostringstream output;
+
+		shell.handleCommand(strCommandLine, output);
 
 		return output.str();
 	}
@@ -37,7 +45,7 @@ protected:
 // Read	Success Case
 
 TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
-	std::string strCommandLine = "read 10\n";
+	std::string strCommandLine = "read 10";
 	std::string strExpectedResult = "0x00000000\n";
 
 	EXPECT_CALL(ssdMock, Read)
@@ -48,7 +56,7 @@ TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
 }
 
 TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
-	std::string strCommandLine = "read 10\n";
+	std::string strCommandLine = "read 10";
 	std::string strExpectedResult_prefix = "0x";
 	std::string strExpectedResult_postfix = "\n";
 
@@ -65,7 +73,7 @@ TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
 // Read	Exception Case
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase1) {
-	std::string strCommandLine = "read ABC\n";
+	std::string strCommandLine = "read ABC";
 	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
@@ -76,7 +84,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase1) {
 
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase2) {
-	std::string strCommandLine = "read 0ABD\n";
+	std::string strCommandLine = "read 0ABD";
 	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
@@ -86,7 +94,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase2) {
 }
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestLBANonInDecimal) {
-	std::string strCommandLine = "read 0x100\n";
+	std::string strCommandLine = "read 0x100";
 	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
@@ -96,7 +104,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBANonInDecimal) {
 }
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAOverMaxLBA) {
-	std::string strCommandLine = "read -10\n";
+	std::string strCommandLine = "read -10";
 	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
@@ -106,7 +114,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAOverMaxLBA) {
 }
 
 TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
-	std::string strCommandLine = "read 100\n";
+	std::string strCommandLine = "read 100";
 	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Read)
@@ -116,7 +124,7 @@ TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
 }
 
 TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
-	std::string strCommandLine = "fullread\n";
+	std::string strCommandLine = "fullread";
 	std::string strExpectedResult = "0x00000000\n";
 	std::string strExpectedResultFull;
 
@@ -133,7 +141,7 @@ TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
 }
 
 TEST_F(TestShellApplicationTestFixture, FullReadSomeValidData) {
-	std::string strCommandLine = "fullread\n";
+	std::string strCommandLine = "fullread";
 	std::string strExpectedResult = "0x00000000\n";
 	std::string strExpectedResultFull;
 
@@ -157,7 +165,7 @@ TEST_F(TestShellApplicationTestFixture, FullReadSomeValidData) {
 
 
 TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
-	std::string strCommandLine = "write 10 0x000000AA\nread 10\n";
+	std::string strCommandLines = "write 10 0x000000AA\nread 10\nexit\n";
 	std::string strExpectedResult = "0x000000AA\n";
 
 	EXPECT_CALL(ssdMock, Write(10, 0xAA))
@@ -167,11 +175,11 @@ TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
 		.Times(1)
 		.WillRepeatedly(Return(0x000000AA));
 
-	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+	EXPECT_EQ(RunCommands(strCommandLines), strExpectedResult);
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterLBATest) {
-	std::string strCommandLine = "write 0A 0x000000AA\n";
+	std::string strCommandLine = "write 0A 0x000000AA";
 	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Write)
@@ -181,7 +189,7 @@ TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterLBATest) {
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteInvalidRangeLBATest) {
-	std::string strCommandLine = "write 101 0x000000AA\n";
+	std::string strCommandLine = "write 101 0x000000AA";
 	std::string strExpectedResult = "INVALID LBA\n";
 
 	EXPECT_CALL(ssdMock, Write)
@@ -191,7 +199,7 @@ TEST_F(TestShellApplicationTestFixture, WriteInvalidRangeLBATest) {
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterDataTest) {
-	std::string strCommandLine = "write 10 0x0000GED0\n";
+	std::string strCommandLine = "write 10 0x0000GED0";
 	std::string strExpectedResult = "INVALID DATA\n";
 
 	EXPECT_CALL(ssdMock, Write)
@@ -201,7 +209,7 @@ TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterDataTest) {
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteNotStart0xDataTest) {
-	std::string strCommandLine = "write 10 000000AA\n";
+	std::string strCommandLine = "write 10 000000AA";
 	std::string strExpectedResult = "INVALID DATA\n";
 
 	EXPECT_CALL(ssdMock, Write)
@@ -211,7 +219,7 @@ TEST_F(TestShellApplicationTestFixture, WriteNotStart0xDataTest) {
 }
 
 TEST_F(TestShellApplicationTestFixture, WriteNot8CharacterDataTest) {
-	std::string strCommandLine = "write 10 0x123456\n";
+	std::string strCommandLine = "write 10 0x123456";
 	std::string strExpectedResult = "INVALID DATA\n";
 
 	EXPECT_CALL(ssdMock, Write)
@@ -219,3 +227,37 @@ TEST_F(TestShellApplicationTestFixture, WriteNot8CharacterDataTest) {
 
 	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
+
+
+// Other Commands
+
+ // help
+
+
+ // exit 
+TEST_F(TestShellApplicationTestFixture, ExitWithNoError) {
+	std::string strCommandLine = "exit";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_NO_THROW(RunCommand(strCommandLine));
+}
+
+TEST_F(TestShellApplicationTestFixture, ExitIgnoreFollowingCommands) {
+	std::string strCommandLines = "exit\nread 10\n";
+	std::string strExpectedResult = "";
+
+	EXPECT_CALL(ssdMock, Read)
+		.Times(0);
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommands(strCommandLines), strExpectedResult);
+}
+
+ // invalid command
