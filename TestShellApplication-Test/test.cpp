@@ -1,11 +1,11 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "../TestShellApplication/SSDCommand.cpp"
-#include "../TestShellApplication/ReadCommand.cpp"
-#include "../TestShellApplication/WriteCommand.cpp"
-#include "../TestShellApplication/FullWriteCommand.cpp"
-#include "../TestShellApplication/Shell.cpp"
+#include "SSDCommand.cpp"
+#include "ReadCommand.cpp"
+#include "WriteCommand.cpp"
+#include "FullWriteCommand.cpp"
+#include "Shell.cpp"
 
 using namespace testing;
 
