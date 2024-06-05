@@ -15,11 +15,8 @@ int SSDDriver::Read(int lba)
         "VirtualSSD.exe R " + to_string(lba)
     );
 
-    if (retCode == -1) {
-        cout << "Virtual SSD execution failed" << endl;
+    if (retCode == -1)
         return 0;
-    }
-
     return _getReadResult();
 }
 
@@ -28,9 +25,6 @@ void SSDDriver::Write(int lba, int data)
     int retCode = _executeCommand(
         "VirtualSSD.exe W " + to_string(lba) + " " + to_string(data)
     );
-
-    if (retCode == -1)
-        cout << "Virtual SSD execution failed" << endl;
 }
 
 int SSDDriver::_executeCommand(string command)
@@ -40,6 +34,7 @@ int SSDDriver::_executeCommand(string command)
         return retCode;
     }
     catch (exception& e) {
+        cout << "Virtual SSD execution failed" << endl;
         cout << e.what() << endl;
         return -1;
     }
@@ -47,9 +42,14 @@ int SSDDriver::_executeCommand(string command)
 
 int SSDDriver::_getReadResult(void)
 {
-    if (_getSsdExisted())
-        return _getSsdResult();
-    return 0;
+    try {
+        if (_getSsdExisted())
+            return _getSsdResult();
+        return 0;
+    }
+    catch (exception& e) {
+        return 0;
+    }
 }
 
 bool SSDDriver::_getSsdExisted(void)
@@ -60,7 +60,6 @@ bool SSDDriver::_getSsdExisted(void)
 	if (ifstreamRead.good())
         ret = true;
 	ifstreamRead.close();
-
 	return ret;
 }
 
