@@ -128,6 +128,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DeviceDriver.cpp" />
+    <ClCompile Include="IOManager.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ssd.cpp" />
+    <ClCompile Include="ssd_interface.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DeviceDriver.h" />
+    <ClInclude Include="IOManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
