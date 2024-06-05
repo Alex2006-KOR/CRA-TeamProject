@@ -123,3 +123,53 @@ TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
 
 	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
 }
+
+TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterLBATest) {
+	std::string strCommandLine = "write 0A 0x000000AA\n";
+	std::string strExpectedResult = "INVALID LBA\n";
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, WriteInvalidRangeLBATest) {
+	std::string strCommandLine = "write 101 0x000000AA\n";
+	std::string strExpectedResult = "INVALID LBA\n";
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterDataTest) {
+	std::string strCommandLine = "write 10 0x0000GED0\n";
+	std::string strExpectedResult = "INVALID DATA\n";
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, WriteNotStart0xDataTest) {
+	std::string strCommandLine = "write 10 000000AA\n";
+	std::string strExpectedResult = "INVALID DATA\n";
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, WriteNot8CharacterDataTest) {
+	std::string strCommandLine = "write 10 0x123456\n";
+	std::string strExpectedResult = "INVALID DATA\n";
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}

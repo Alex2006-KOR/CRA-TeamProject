@@ -21,8 +21,39 @@ bool WriteCommand::_parseCommand()
 		return false;
 	}
 
-	m_nLBA = std::stoi(m_vCommandList[0], nullptr, 10);
-	m_nData = std::stol(m_vCommandList[1], nullptr, 16);
+	string lbaString = m_vCommandList[0];
+	for (const char ch : lbaString) {
+		if ((ch >= '0') && (ch <= '9')) continue;
+		m_out << "INVALID LBA\n";
+		return false;
+	}
+	int lba = std::stoi(lbaString, nullptr, 10);
+	if (lba < 0 || lba > 99) {
+		m_out << "INVALID LBA\n";
+		return false;
+	}
+	m_nLBA = lba;
+
+	string dataString = m_vCommandList[1];
+	if (dataString.substr(0, 2).compare("0x") != 0) {
+		m_out << "INVALID DATA\n";
+		return false;
+	}
+	dataString = dataString.substr(2);
+
+	if (dataString.size() != 8) {
+		m_out << "INVALID DATA\n";
+		return false;
+	}
+
+	for (const char ch : dataString) {
+		if ((ch >= '0') && (ch <= '9')) continue;
+		if ((ch >= 'a') && (ch <= 'f')) continue;
+		if ((ch >= 'A') && (ch <= 'F')) continue;
+		m_out << "INVALID DATA\n";
+		return false;
+	}
+	m_nData = std::stoi(dataString, nullptr, 16);
 }
 
 void WriteCommand::_execute()
