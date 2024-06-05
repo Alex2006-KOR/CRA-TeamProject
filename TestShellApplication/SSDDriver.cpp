@@ -11,42 +11,48 @@ const string SSD_FILE = "result.txt";
 
 int SSDDriver::Read(int lba)
 {
-    int retCode = _executeCommand("VirtualSSD.exe R " + to_string(lba));
-    int ret = 0;
+    int retCode = _executeCommand(
+        "VirtualSSD.exe R " + to_string(lba)
+    );
 
-    if (retCode != -1) {
-        if (_getSsdExisted()) {
-            ifstream ifstreamRead(SSD_FILE);
-            if (ifstreamRead.is_open() == false)
-                throw exception("Open SSD Result file fail");
-    
-            string readData;
-            getline(ifstreamRead, readData);
-            ret = stoi(readData);
-            ifstreamRead.close();
-        }
-    }
-    else {
+    if (retCode == -1) {
         cout << "Virtual SSD execution failed" << endl;
+        return 0;
     }
 
-    return ret;
+    return _getReadResult();
 }
 
 void SSDDriver::Write(int lba, int data)
 {
-    int retCode = _executeCommand("VirtualSSD.exe W " + to_string(lba) + " " + to_string(data));
+    int retCode = _executeCommand(
+        "VirtualSSD.exe W " + to_string(lba) + " " + to_string(data)
+    );
+
     if (retCode == -1)
         cout << "Virtual SSD execution failed" << endl;
 }
 
 int SSDDriver::_executeCommand(string command)
 {
-    int retCode = system(command.c_str());
-    return retCode;
+    try {
+        int retCode = system(command.c_str());
+        return retCode;
+    }
+    catch (exception& e){
+        return -1;
+    }
 }
 
-bool SSDDriver::_getSsdExisted(void) {
+int SSDDriver::_getReadResult(void)
+{
+    if (_getSsdExisted())
+        return _getSsdResult();
+    return 0;
+}
+
+bool SSDDriver::_getSsdExisted(void)
+{
     bool ret = false;
 	ifstream ifstreamRead(SSD_FILE);
 
@@ -57,12 +63,17 @@ bool SSDDriver::_getSsdExisted(void) {
 	return ret;
 }
 
-int SSDDriver::_getSsdResult(void) {
-    bool ret = false;
+int SSDDriver::_getSsdResult(void)
+{
     ifstream ifstreamRead(SSD_FILE);
+    if (ifstreamRead.is_open() == false)
+        throw exception("Open SSD Result file fail");
 
-    if (ifstreamRead.good())
-        ret = true;
+    int ret = 0;
+    string readData;
+    getline(ifstreamRead, readData);
+    ret = stoi(readData);
+
     ifstreamRead.close();
 
     return ret;
