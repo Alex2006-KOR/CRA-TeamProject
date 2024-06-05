@@ -62,6 +62,7 @@ TEST(RealSSDTestSuite, SimpleRead) {
 	FileManager stResultFile("Result.txt");
 	stResultFile.OpenReadStream();
 	EXPECT_EQ(stResultFile.Read(), "0x0000ABCD");
+	stResultFile.CloseReadStream();
 }
 
 TEST(RealSSDTestSuite, SimpleWrite) {
@@ -73,4 +74,5 @@ TEST(RealSSDTestSuite, SimpleWrite) {
 	FileManager stNandFile("Nand.txt");
 	stNandFile.OpenReadStream();
 	EXPECT_EQ(stNandFile.Read(), "0xDEADDEAD");
+	stNandFile.CloseReadStream();
 }
