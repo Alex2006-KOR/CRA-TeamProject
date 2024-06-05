@@ -74,8 +74,7 @@ int SSDDriver::_getSsdResult(void)
     int ret = 0;
     string readData;
     getline(ifstreamRead, readData);
-    ret = stoi(readData, nullptr, 16);
-
+    ret = stoll(readData, nullptr, 16);
     ifstreamRead.close();
 
     return ret;
