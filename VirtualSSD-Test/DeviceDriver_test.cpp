@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "ssd_interface.h"
+#include "SSDInterface.h"
 #include "DeviceDriver.cpp"
 
 using namespace testing;

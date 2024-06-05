@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 
-#include "ssd_interface.h"
+#include "SSDInterface.h"
 #include "FileManager.cpp"
 
 using namespace std;

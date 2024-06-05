@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "ssd_interface.h"
+#include "SSDInterface.h"
 
 using namespace std;
 
