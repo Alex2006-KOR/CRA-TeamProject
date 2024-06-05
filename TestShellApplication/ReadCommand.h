@@ -12,8 +12,7 @@ protected:
 	bool _parseCommand() override;
 	bool _checkValidityLBA();
 	bool _hasEnoughArgs();
-	bool _isDecimalFormat();
-	bool _isValidCharacter();
+	bool _isValidFormat();
 	void _updateLBA();
 	bool _isLBAInRange();
 	void _execute() override;
