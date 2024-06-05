@@ -1,10 +1,11 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "../TestShellApplication/SSDCommand.cpp"
-#include "../TestShellApplication/ReadCommand.cpp"
-#include "../TestShellApplication/WriteCommand.cpp"
-#include "../TestShellApplication/Shell.cpp"
+#include "SSDCommand.cpp"
+#include "ReadCommand.cpp"
+#include "WriteCommand.cpp"
+#include "FullWriteCommand.cpp"
+#include "Shell.cpp"
 
 using namespace testing;
 
@@ -212,6 +213,45 @@ TEST_F(TestShellApplicationTestFixture, WriteNotStart0xDataTest) {
 
 TEST_F(TestShellApplicationTestFixture, WriteNot8CharacterDataTest) {
 	std::string strCommandLine = "write 10 0x123456\n";
+	std::string strExpectedResult = "INVALID DATA\n";
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, FullWriteTest) {
+	std::string strCommandLine = "fullwrite 0xABCDFFFF\n";
+
+	EXPECT_CALL(ssdMock, Write(_, 0xABCDFFFF))
+		.Times(100);
+
+	EXPECT_NO_THROW(RunCommand(strCommandLine));
+}
+
+TEST_F(TestShellApplicationTestFixture, FullWriteInvalidCharacterDataTest) {
+	std::string strCommandLine = "fullwrite 0x0000GED0\n";
+	std::string strExpectedResult = "INVALID DATA\n";
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, FullWriteNotStart0xDataTest) {
+	std::string strCommandLine = "fullwrite 000000AA\n";
+	std::string strExpectedResult = "INVALID DATA\n";
+
+	EXPECT_CALL(ssdMock, Write)
+		.Times(0);
+
+	EXPECT_EQ(RunCommand(strCommandLine), strExpectedResult);
+}
+
+TEST_F(TestShellApplicationTestFixture, FullWriteNot8CharacterDataTest) {
+	std::string strCommandLine = "fullwrite 0x123456\n";
 	std::string strExpectedResult = "INVALID DATA\n";
 
 	EXPECT_CALL(ssdMock, Write)

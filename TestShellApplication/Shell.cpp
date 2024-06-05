@@ -1,6 +1,7 @@
 #include "Shell.h"
 #include "ReadCommand.h"
 #include "WriteCommand.h"
+#include "FullWriteCommand.h"
 
 Shell::Shell(DriverInterface* pSSDDriver)
 	: m_pSSDDriver(pSSDDriver)
@@ -34,6 +35,10 @@ void Shell::handleCommand(string strCommandLine, ostream& output)
     }
     else if (strCommand == "write") {
         WriteCommand cmd(vCommandList, m_pSSDDriver, output);
+        cmd.Execute();
+    }
+    else if (strCommand == "fullwrite") {
+        FullWriteCommand cmd(vCommandList, m_pSSDDriver, output);
         cmd.Execute();
     }
 }
