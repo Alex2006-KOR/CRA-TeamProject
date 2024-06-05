@@ -3,6 +3,7 @@
 
 #include "../TestShellApplication/SSDCommand.cpp"
 #include "../TestShellApplication/ReadCommand.cpp"
+#include "../TestShellApplication/WriteCommand.cpp"
 #include "../TestShellApplication/Shell.cpp"
 
 using namespace testing;
