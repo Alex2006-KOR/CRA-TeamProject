@@ -1,5 +1,6 @@
 #include "Shell.h"
 #include "ReadCommand.h"
+#include "WriteCommand.h"
 
 Shell::Shell(DriverInterface* pSSDDriver)
 	: m_pSSDDriver(pSSDDriver)
@@ -23,6 +24,10 @@ void Shell::handleCommand(string strCommandLine, ostream& output)
 
     if (strCommand == "read") {
         ReadCommand cmd(vCommandList, m_pSSDDriver, output);
+        cmd.Execute();
+    }
+    else if (strCommand == "write") {
+        WriteCommand cmd(vCommandList, m_pSSDDriver, output);
         cmd.Execute();
     }
 }
