@@ -227,7 +227,7 @@ TEST_F(TestShellApplicationTestFixture, FullWriteTest) {
 	EXPECT_CALL(ssdMock, Write(_, 0xABCDFFFF))
 		.Times(100);
 
-	RunCommand(strCommandLine);
+	EXPECT_NO_THROW(RunCommand(strCommandLine));
 }
 
 TEST_F(TestShellApplicationTestFixture, FullWriteInvalidCharacterDataTest) {
