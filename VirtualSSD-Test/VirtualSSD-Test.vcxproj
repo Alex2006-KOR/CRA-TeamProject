@@ -59,6 +59,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeaderOutputFile />
+      <AdditionalIncludeDirectories>$(SolutionDir)SSD_E;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -98,8 +99,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IOManager_test.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="DeviceDriver_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SSD_E\SSD_E.vcxproj">
