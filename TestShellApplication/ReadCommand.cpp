@@ -21,8 +21,7 @@ bool ReadCommand::_parseCommand() {
 bool ReadCommand::_checkValidityLBA()
 {
 	if (_hasEnoughArgs() == false) return false;
-	if (_isDecimalFormat() == false) return false;
-	if (_isValidCharacter() == false) return false;
+	if (_isValidFormat() == false) return false;
 	_updateLBA();
 	if (_isLBAInRange() == false) return false;
 	return true;
@@ -37,17 +36,12 @@ bool ReadCommand::_hasEnoughArgs()
 	return true;
 }
 
-bool ReadCommand::_isDecimalFormat()
+bool ReadCommand::_isValidFormat()
 {
 	if (m_vCommandList[0].substr(0, 2) == "0x") {
 		m_out << "INVALID LBA\n";
 		return false;
 	}
-	return true;
-}
-
-bool ReadCommand::_isValidCharacter()
-{
 	for (const char ch : m_vCommandList[0]) {
 		if ((ch >= '0') && (ch <= '9')) continue;
 		m_out << "INVALID LBA\n";
