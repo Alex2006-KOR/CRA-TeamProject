@@ -8,6 +8,7 @@
 #include "HelpCommand.h"
 #include "InvalidCommand.h"
 #include "TestApp1Command.h"
+#include "TestApp2Command.h"
 
 SSDCommandInvoker::SSDCommandInvoker(DriverInterface* pSSDDriver, ostream& output)
 	: m_pInvalidCommand(nullptr)
@@ -33,6 +34,7 @@ void SSDCommandInvoker::_initCommands(DriverInterface* pSSDDriver, ostream& outp
 	m_mapCommand["exit"] = new ExitCommand(pSSDDriver, output);
 	m_mapCommand["help"] = new HelpCommand(pSSDDriver, output);
 	m_mapCommand["testapp1"] = new TestApp1Command(pSSDDriver, output);
+	m_mapCommand["testapp2"] = new TestApp2Command(pSSDDriver, output);
 
 	m_pInvalidCommand = new InvalidCommand(pSSDDriver, output);
 }

@@ -4,6 +4,7 @@
 #include "SSDDriver.h"
 #include "SSDCommandInvoker.h"
 #include "TestApp1Command.cpp"
+#include "TestApp2Command.cpp"
 
 using namespace testing;
 
@@ -13,22 +14,21 @@ public:
 	MOCK_METHOD(void, Write, (int lba, int dat), (override));
 };
 
-class TestApp1CommandTestFixture : public testing::Test {
+class TestAppCommandTestFixture : public testing::Test {
 public:
 	SsdDeviceDriverMock ssd;
-	SSDComamnd* testApp1Command;
+	SSDComamnd* testApp1Command = nullptr;
+	SSDComamnd* testApp2Command = nullptr;
 
 protected:
 	void SetUp() override {
 		SSDCommandInvoker pCommandInvoker(&ssd, std::cout);
 		testApp1Command = pCommandInvoker.GetCommand("testapp1");
-	}
-
-	void TearDown() override {
+		testApp2Command = pCommandInvoker.GetCommand("testapp2");
 	}
 };
 
-TEST_F(TestApp1CommandTestFixture, CommandExecuteMatchCase) {
+TEST_F(TestAppCommandTestFixture, TestApp1ExecuteMatchCase) {
 	EXPECT_CALL(ssd, Read)
 		.Times(100)
 		.WillRepeatedly(Return(0xABCD1234));
@@ -39,7 +39,7 @@ TEST_F(TestApp1CommandTestFixture, CommandExecuteMatchCase) {
 	EXPECT_NO_THROW(testApp1Command->Execute());
 }
 
-TEST_F(TestApp1CommandTestFixture, CommandExecuteMisMatchCase) {
+TEST_F(TestAppCommandTestFixture, TestApp1ExecuteMisMatchCase) {
 	EXPECT_CALL(ssd, Read)
 		.Times(1)
 		.WillRepeatedly(Return(0xABCDFFFF));
@@ -48,4 +48,27 @@ TEST_F(TestApp1CommandTestFixture, CommandExecuteMisMatchCase) {
 		.Times(100);
 
 	EXPECT_NO_THROW(testApp1Command->Execute());
+}
+
+
+TEST_F(TestAppCommandTestFixture, TestApp2ExecuteMatchCase) {
+	EXPECT_CALL(ssd, Read)
+		.Times(6)
+		.WillRepeatedly(Return(0x12345678));
+
+	EXPECT_CALL(ssd, Write)
+		.Times(6 * 30 + 6);
+
+	EXPECT_NO_THROW(testApp2Command->Execute());
+}
+
+TEST_F(TestAppCommandTestFixture, TestApp2ExecuteMisMatchCase) {
+	EXPECT_CALL(ssd, Read)
+		.Times(1)
+		.WillRepeatedly(Return(0xAAAABBBB));
+
+	EXPECT_CALL(ssd, Write)
+		.Times(6*30 + 6);
+
+	EXPECT_NO_THROW(testApp2Command->Execute());
 }
