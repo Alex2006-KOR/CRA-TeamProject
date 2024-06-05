@@ -24,6 +24,7 @@ private:
 	int m_nLbaNumber;
 	string m_strData;
 
+	void _AddLog();
 	void _ProcessArgument(int argc, char* argv[]);
 	void _ExtractArgument(char* argv[]);
 	bool _CheckInvalidArgumentNumber(int argc, char* argv[]);
