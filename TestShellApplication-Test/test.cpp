@@ -10,7 +10,7 @@ using namespace testing;
 class SsdDeviceDriverMock : public DriverInterface {
 public:
 	MOCK_METHOD(int, Read, (int lba), (override));
-	MOCK_METHOD(void, Write, (int lba, int dat), (override));
+	MOCK_METHOD(void, Write, (int lba, int data), (override));
 };
 
 class TestShellApplicationTestFixture : public testing::Test {
