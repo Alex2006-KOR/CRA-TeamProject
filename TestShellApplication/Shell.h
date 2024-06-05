@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DriverInterface.h"
+#include "SSDCommandInvoker.h"
 
 #include <iostream>
 #include <vector>
@@ -11,6 +12,7 @@ class Shell
 {
 public:
 	Shell(DriverInterface* pSSDDriver);
+	virtual ~Shell();
 
 	void Run(istream& input, ostream& output);
 
@@ -18,9 +20,13 @@ public:
 	bool handleCommand(string lineString, ostream& output); 
 
 private:
-	DriverInterface* m_pSSDDriver;
-
+	SSDCommandInvoker* _getCommandInvoker(ostream& output);
 	vector<string> SplitLine(string& strCommandLine);
+	string trim(const string& str);
+
+private:
+	DriverInterface* m_pSSDDriver;
+	SSDCommandInvoker* m_pCommandInvoker;
 
 	string strHelp = "\n\
 [[Shell Test Application]]\n\
@@ -35,6 +41,5 @@ private:
 [lba] : decimal only, range = [0, 99]\n\
 [data] : hexadecimal only, range = [0x00000000, 0xFFFFFFFF]\n\
 ";
-	string trim(const string& str);
 };
 

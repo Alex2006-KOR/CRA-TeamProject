@@ -4,9 +4,8 @@
 #include <sstream>
 #include <vector>
 
-FullWriteCommand::FullWriteCommand(vector<string> commandList, DriverInterface* pSSDDriver, std::ostream& output)
-	: BaseSSDCommand(commandList)
-	, m_out(output)
+FullWriteCommand::FullWriteCommand(DriverInterface* pSSDDriver, std::ostream& output)
+	: BaseSSDCommand(output)
 	, m_pstSSDDriver(pSSDDriver)
 {
 }
@@ -34,7 +33,8 @@ void FullWriteCommand::_execute()
 		commandList.push_back(lbaStringStream.str());
 		commandList.push_back(m_sData);
 
-		WriteCommand command(commandList, m_pstSSDDriver, m_out);
+		WriteCommand command(m_pstSSDDriver, m_out);
+		command.SetCommandList(commandList);
 		if (command.Execute() == false) {
 			return;
 		}
