@@ -8,11 +8,40 @@ using namespace std;
 
 const string SSD_FILE = "result.txt";
 
+class ExecutionCommandBuilder {
+public:
+    ExecutionCommandBuilder() : command("VirtualSSD.exe") {}
+
+    ExecutionCommandBuilder& setAccessType(std::string accessType) {
+        command += (" " + accessType);
+        return *this;
+    }
+
+    ExecutionCommandBuilder& setLbaIndex(int lbaIdx) {
+        command += (" " + std::to_string(lbaIdx));
+        return *this;
+    }
+
+    ExecutionCommandBuilder& setWriteData(int data) {
+        command += (" " + std::to_string(data));
+        return *this;
+    }
+
+    string build() {
+        return command;
+    }
+
+private:
+    string command;
+};
+
 int SSDDriver::Read(int lba)
 {
     int retCode = _executeCommand(
-        "VirtualSSD.exe R " +
-        to_string(lba)
+        ExecutionCommandBuilder()
+        .setAccessType("R")
+        .setLbaIndex(lba)
+        .build()
     );
 
     if (retCode == -1)
@@ -23,8 +52,11 @@ int SSDDriver::Read(int lba)
 void SSDDriver::Write(int lba, int data)
 {
     int retCode = _executeCommand(
-        "VirtualSSD.exe W " +
-        to_string(lba) + " " + to_string(data)
+        ExecutionCommandBuilder()
+        .setAccessType("W")
+        .setLbaIndex(lba)
+        .setWriteData(data)
+        .build()
     );
 }
 
@@ -57,12 +89,12 @@ int SSDDriver::_getReadResult(void)
 bool SSDDriver::_getSsdExisted(void)
 {
     bool ret = false;
-	ifstream ifstreamRead(SSD_FILE);
+    ifstream ifstreamRead(SSD_FILE);
 
-	if (ifstreamRead.good())
+    if (ifstreamRead.good())
         ret = true;
-	ifstreamRead.close();
-	return ret;
+    ifstreamRead.close();
+    return ret;
 }
 
 int SSDDriver::_getSsdResult(void)
