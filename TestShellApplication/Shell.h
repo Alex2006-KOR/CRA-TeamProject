@@ -14,10 +14,11 @@ public:
 
 	void Run(istream& input, ostream& output);
 
+	// FIXME: move to private fuction ? use as public ?
+	bool handleCommand(string lineString, ostream& output); 
+
 private:
 	DriverInterface* m_pSSDDriver;
-
-	void handleCommand(string lineString, ostream& output);
 
 	vector<string> SplitLine(string& strCommandLine);
 };

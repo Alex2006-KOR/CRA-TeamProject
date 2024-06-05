@@ -9,13 +9,16 @@ Shell::Shell(DriverInterface* pSSDDriver)
 
 void Shell::Run(istream& input, ostream& output)
 {
-    string line;
-    while (getline(input, line)) {
-        handleCommand(line, output);
+    while (true) {
+        string line;
+        while (getline(input, line)) {
+            bool bExit = handleCommand(line, output);
+            if (bExit) return;
+        }
     }
 }
 
-void Shell::handleCommand(string strCommandLine, ostream& output)
+bool Shell::handleCommand(string strCommandLine, ostream& output)
 {
     vector<string> vCommandList = SplitLine(strCommandLine);
     
@@ -36,6 +39,10 @@ void Shell::handleCommand(string strCommandLine, ostream& output)
         WriteCommand cmd(vCommandList, m_pSSDDriver, output);
         cmd.Execute();
     }
+    else if (strCommand == "exit") { 
+        return true; 
+    }
+    return false;
 }
 
 vector<string> Shell::SplitLine(string& strCommandLine)
