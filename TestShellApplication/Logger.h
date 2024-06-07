@@ -1,7 +1,10 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
 using std::string;
+using std::vector;
 
 class Logger
 {
@@ -19,6 +22,8 @@ private:
 	string _getDateString();
 	string _getFormatMessage(string strCallerName, const string& msg);
 	long long _getLogFileSize();
+	vector<string> _getOldLogFiles(const string& strNewFileName);
+	void _compressLogFile(const string& strFileName);
 
 private:
 	const string LOG_FILE_NAME = "latest.log";

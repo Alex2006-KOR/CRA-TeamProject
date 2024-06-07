@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <windows.h>
+#include <regex>
 
 
 void Logger::Print(string strMessage, string strCallerName)
@@ -42,6 +43,11 @@ void Logger::_printMessageToLogFile(const string& strMessage, const string& strC
 
         if (MoveFileA(LOG_FILE_NAME.c_str(), strNewFileName.c_str()) == FALSE) {
             throw std::exception("Failed to make old log file");
+        }
+
+        vector<string> vOldLogFiles = _getOldLogFiles(strNewFileName);
+        for (string oldLogFile : vOldLogFiles) {
+            _compressLogFile(oldLogFile);
         }
     }
 }
@@ -81,4 +87,35 @@ long long Logger::_getLogFileSize()
         throw std::exception("Failed to open log file.");
     }
     return file.tellg();
+}
+
+vector<string> Logger::_getOldLogFiles(const string& strNewFileName) {
+    WIN32_FIND_DATAA findData;
+    HANDLE hFind = FindFirstFileA(".\\*.log", &findData);
+    if (hFind == INVALID_HANDLE_VALUE) {
+        return vector<string>();
+    }
+
+    vector<string> fileList;
+    std::regex regexFilter("until_\\d{6}_\\d{2}h_\\d{2}m_\\d{2}s\\.log");
+    do {
+        std::string strFileName = findData.cFileName;
+        if (std::regex_match(strFileName, regexFilter)) {
+            if (strFileName == strNewFileName) continue;
+            fileList.push_back(strFileName);
+        }
+    } while (FindNextFileA(hFind, &findData) != 0);
+    FindClose(hFind);
+
+    return fileList;
+}
+
+void Logger::_compressLogFile(const string& strFileName)
+{
+    auto nPos = strFileName.find_last_of('.');
+    string strCompressedName = strFileName.substr(0, nPos) + ".zip";
+
+    if (MoveFileA(strFileName.c_str(), strCompressedName.c_str()) == FALSE) {
+        throw std::exception("Failed to compress old log file");
+    }
 }
