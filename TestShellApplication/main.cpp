@@ -3,9 +3,9 @@
 #include "SSDDriver.h"
 #include "Shell.h"
 
-int main() {
-	SSDDriver ssd;
-	Shell shell{ &ssd };
-	shell.Run(std::cin, std::cout);
+int main(int argc, char* argv[]) {
+	SSDDriver ssdDriver;
+	Shell shell{ &ssdDriver, std::cout };
+	shell.Run(std::cin);
 	return 0;
 }
