@@ -15,6 +15,7 @@ public:
 	static const int WRITE_CMD_ARGUMENT_NUM = 4;
 	static const int READ_CMD_ARGUMENT_NUM = 3;
 	static const int ERASE_CMD_ARGUMENT_NUM = 4;
+	static const int FLUSH_CMD_ARGUMENT_NUM = 2;
 
 	IOManager(DeviceDriver* pstDeviceDriver);
 	void DoCommand(int argc, char* argv[]);

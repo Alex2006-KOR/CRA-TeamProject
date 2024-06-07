@@ -8,4 +8,5 @@ public:
 	virtual bool Read(int nLba) = 0;
 	virtual bool Write(int nLba, string sData) = 0;
 	virtual bool Erase(int nLba, int nSize) = 0;
+	virtual bool Flush() = 0;
 };

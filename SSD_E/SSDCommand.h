@@ -34,3 +34,11 @@ private:
 	int m_nLba;
 	int m_nSize;
 };
+
+class FlushCommand : public Command {
+public:
+	FlushCommand();
+	bool ExecuteCmd(SSDInterface* pstSSDInterface) override;
+
+private:
+};
