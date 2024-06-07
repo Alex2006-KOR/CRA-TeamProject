@@ -136,6 +136,7 @@
     <ClCompile Include="FullWriteCommand.cpp" />
     <ClCompile Include="HelpCommand.cpp" />
     <ClCompile Include="InvalidCommand.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Runner.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="FullWriteCommand.h" />
     <ClInclude Include="HelpCommand.h" />
     <ClInclude Include="InvalidCommand.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Runner.h" />
     <ClInclude Include="Shell.h" />
