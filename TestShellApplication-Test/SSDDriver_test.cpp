@@ -22,13 +22,8 @@ public:
 		Read(lba);
 	}
 
-protected:
-	int _executeCommand(string command) override {
-		if (expectedCommand != "")
-			EXPECT_EQ(expectedCommand, command);
-		return 1;
-	}
 
+protected:
 	void SetUp() override {
 		expectedCommand = "";
 	}
@@ -40,51 +35,53 @@ TEST_F(SSDDriverInterfaceTestFixture, InterfaceTest) {
 }
 
 class SSDDriverExecuteTestFixture : public SSDDriver, public testing::Test {
+public:
+	MOCK_METHOD(void, _executeCommand, (const char* strCommand), ());
+	MOCK_METHOD(bool, _getSsdExisted, (), ());
+	MOCK_METHOD(string, _getSsdResult, (), ());
+
 protected:
-	MOCK_METHOD(int, _executeCommand, (string command), (override));
-	MOCK_METHOD(bool, _getSsdExisted, (), (override));
-	MOCK_METHOD(int, _getSsdResult, (), (override));
 
 	void SetUp() override {
 		// set default case return value
-		EXPECT_CALL(*this, _executeCommand)
-			.WillRepeatedly(Return(0));
 		EXPECT_CALL(*this, _getSsdExisted)
 			.WillRepeatedly(Return(true));
 		EXPECT_CALL(*this, _getSsdResult)
-			.WillRepeatedly(Return(0));
+			.WillRepeatedly(Return("0x00000000"));
 	}
 };
 
 TEST_F(SSDDriverExecuteTestFixture, BasicReadWriteTest) {
+	EXPECT_CALL(*this, _executeCommand)
+		.WillRepeatedly(Return());
 	EXPECT_CALL(*this, _getSsdResult)
-		.WillRepeatedly(Return(0x1234FFFF));
+		.WillRepeatedly(Return("0x1234FFFF"));
 	Write(0, 0x1234FFFF);
-	EXPECT_EQ(0x1234FFFF, Read(0));
+	Read(0);
+	EXPECT_EQ("0x1234FFFF", ReadBuffer());
 }
 
 TEST_F(SSDDriverExecuteTestFixture, ReadExecutionExceptionTest) {
 	EXPECT_CALL(*this, _executeCommand)
-		.WillRepeatedly(Return(-1));
-
+		.WillRepeatedly(Throw(exception()));
 	try {
-		EXPECT_EQ(0, Read(0));
+		Read(-1);
+		ReadBuffer();
+		FAIL();
 	}
 	catch (exception& e) {
 		cout << e.what() << endl;
-		FAIL();
 	}
 }
 
 TEST_F(SSDDriverExecuteTestFixture, WriteExecutionExceptionTest) {
 	EXPECT_CALL(*this, _executeCommand)
-		.WillRepeatedly(Return(-1));
-
+		.WillRepeatedly(Throw(exception()));
 	try {
 		Write(0, 0x1234FFFF);
+		FAIL();
 	}
 	catch (exception& e) {
 		cout << e.what() << endl;
-		FAIL();
 	}
 }
