@@ -151,14 +151,14 @@ bool SSD::_ReadFromWriteBuffer(int nLba)
 		vector<string> vWriteBufferTrimWords = _TrimFullCommand(sFullCommand);
 
 		if (_IsExistLbaInWriteBuffer(vWriteBufferTrimWords, nLba)) {
-			_UpdateResultFile(vWriteBufferTrimWords, nLba);
+			_UpdateResultFile(vWriteBufferTrimWords);
 			return true;
 		}
 	}
 	return false;
 }
 
-void SSD::_UpdateResultFile(vector<string> vWriteBufferTrimWords, int nLba) {
+void SSD::_UpdateResultFile(vector<string> vWriteBufferTrimWords) {
 	try {
 		m_stResultFile.OpenWriteStream();
 	}

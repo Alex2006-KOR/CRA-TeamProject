@@ -41,7 +41,7 @@ private:
 	void _ReadFromNandFile(int nLba);
 	vector<string> _TrimFullCommand(string sFullCommand);
 	bool _IsExistLbaInWriteBuffer(vector<string> vWriteBufferTrimWords, int nLba);
-	void _UpdateResultFile(vector<string> vWriteBufferTrimWords, int nLba);
+	void _UpdateResultFile(vector<string> vWriteBufferTrimWords);
 	
 	// write, erase
 	void _WriteToNandFile(int nLba, string sData);
