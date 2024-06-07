@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "IOManager.h"
 #include "FileManager.h"
+#include "SSDCommand.h"
 
 IOManager::IOManager(DeviceDriver* pstDeviceDriver) : m_pstDeviceDriver(pstDeviceDriver)
 {
@@ -11,9 +12,14 @@ IOManager::IOManager(DeviceDriver* pstDeviceDriver) : m_pstDeviceDriver(pstDevic
 
 void IOManager::DoCommand(int argc, char* argv[]) {
 	_ProcessArgument(argc, argv);
+	Command* pstCommand = nullptr;
 
-	if (m_strCommand == "W") m_pstDeviceDriver->WriteData(m_nLbaNumber, m_strData);
-	if (m_strCommand == "R") m_pstDeviceDriver->ReadData(m_nLbaNumber);
+	if (m_strCommand == "W") pstCommand = new WriteCommand(m_nLbaNumber, m_strData);
+	if (m_strCommand == "R") pstCommand = new ReadCommand(m_nLbaNumber);
+	if (m_strCommand == "E") pstCommand = new EraseCommand(m_nLbaNumber, m_nSize);
+		
+	m_pstDeviceDriver->SetCmd(pstCommand);
+	m_pstDeviceDriver->Execute();
 
 	_AddLog();
 }
@@ -40,6 +46,7 @@ bool IOManager::_CheckInvalidArgumentNumber(int argc, char* argv[]) {
 	if (argc == THERE_IS_NO_ARGUMENT) return true;
 	if (string(argv[1]) == "W" && argc != WRITE_CMD_ARGUMENT_NUM) return true;
 	if (string(argv[1]) == "R" && argc != READ_CMD_ARGUMENT_NUM) return true;
+	if (string(argv[1]) == "E" && argc != ERASE_CMD_ARGUMENT_NUM) return true;
 
 	return false;
 }
@@ -48,12 +55,14 @@ void IOManager::_ExtractArgument(char* argv[]) {
 	m_strCommand = string(argv[1]);
 	m_nLbaNumber = stoi(string(argv[2]));
 	if (m_strCommand == "W") m_strData = string(argv[3]);
+	if (m_strCommand == "E") m_nSize = stoi(string(argv[3]));
 }
 
 bool IOManager::_CheckInvalidArgumentValue() {
 	if (_IsInvalidCmd()) return true;
 	if (m_strCommand == "W" && _CheckWriteCmdInvalidArgument()) return true;
 	if (m_strCommand == "R" && _CheckReadCmdInvalidArgument()) return true;
+	if (m_strCommand == "E" && _CheckEraseCmdInvalidArgument()) return true;
 	return false;
 }
 
@@ -70,6 +79,13 @@ bool IOManager::_CheckWriteCmdInvalidArgument() {
 	return false;
 }
 
+bool IOManager::_CheckEraseCmdInvalidArgument() {
+	if (m_nLbaNumber < 0 || m_nLbaNumber >= 100) return true;
+	if (m_nSize < 0 || m_nSize >= 100) return true;
+	if (m_nLbaNumber + m_nSize > 100) return true;
+	return false;
+}
+
 bool IOManager::_IsInvalidSubString() {
 	string strSubstring = m_strData.substr(2, 10 - 2);
 	for (const auto& cChar : strSubstring) {
@@ -81,5 +97,5 @@ bool IOManager::_IsInvalidSubString() {
 }
 
 bool IOManager::_IsInvalidCmd() {
-	return m_strCommand != "W" && m_strCommand != "R";
+	return m_strCommand != "W" && m_strCommand != "R" && m_strCommand != "E";
 }

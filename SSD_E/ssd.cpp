@@ -54,6 +54,18 @@ bool SSD::Write(int nLba, string sData) {
 	return true;
 }
 
+bool SSD::Erase(int nLba, int nSize) {
+	vector<string> vLines = _ExtractNandValue();
+
+	for (int lineNum = nLba; lineNum < nLba + nSize; lineNum++) {
+		vLines[lineNum] = INITIAL_VALUE;
+	}
+
+	_UpdateNandValues(vLines);
+
+	return true;
+}
+
 void SSD::_UpdateNandValues(vector<string>& vLines) {
 	try {
 		m_stNandFile.OpenWriteStream();

@@ -20,6 +20,7 @@ public:
 	void Init();
 	bool Read(int nLba) override;
 	bool Write(int nLba, string sData) override;
+	bool Erase(int nLba, int nSize) override;
 
 private:
 	FileManager m_stNandFile;
