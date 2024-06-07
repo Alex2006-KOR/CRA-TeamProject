@@ -134,6 +134,9 @@
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
     <ClCompile Include="TestLibrary.cpp" />
+    <ClCompile Include="TestScripts\TestApp1.cpp" />
+    <ClCompile Include="TestScripts\TestApp2.cpp" />
+    <ClCompile Include="TestScripts\TestScriptBase.cpp" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +147,9 @@
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDDriver.h" />
     <ClInclude Include="TestLibrary.h" />
+    <ClInclude Include="TestScripts\TestApp1.h" />
+    <ClInclude Include="TestScripts\TestApp2.h" />
+    <ClInclude Include="TestScripts\TestScriptBase.h" />
     <ClInclude Include="WriteCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
