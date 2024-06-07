@@ -1,6 +1,7 @@
 #include "Runner.h"
 #include "fstream"
 #include "sstream"
+#include "Logger.h"
 
 Runner::Runner(Shell& shell)
 	:_shell(shell), _scenarioList("") {}
@@ -28,8 +29,12 @@ void Runner::_runCmdLineMode()
 
 void Runner::_runScenarioMode()
 {
+	Logger::getInstance().EnableConsoleLog(false);
+	
 	std::istringstream scenario(_scenarioList);
 	_shell.Run(scenario, std::cout);
+	
+	Logger::getInstance().EnableConsoleLog(true);
 }
 
 bool Runner::_getScenarioExisted(string listFile)

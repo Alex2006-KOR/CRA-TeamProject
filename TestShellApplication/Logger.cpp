@@ -28,7 +28,8 @@ void Logger::Print(string strMessage, string strCallerName)
 
 void Logger::_printMessageToConsole(const string& strMessage)
 {
-    std::cout << strMessage << std::endl;
+    if(m_bEnableConsoleLog)
+        std::cout << strMessage << std::endl;
 }
 
 void Logger::_printMessageToLogFile(const string& strMessage, const string& strCallerName)

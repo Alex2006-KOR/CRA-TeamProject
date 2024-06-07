@@ -112,12 +112,11 @@
     <ClInclude Include="TestApp2Command.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="Runner.h">
-=======
-    <ClInclude Include="Logger.h">
->>>>>>> origin/feature/shellTestApp
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
+	<ClInclude Include="Runner.h">
+		<Filter>헤더 파일</Filter>
+	</ClInclude>
+	<ClInclude Include="Logger.h">
+		<Filter>헤더 파일</Filter>
+	</ClInclude>
   </ItemGroup>
 </Project>
