@@ -17,3 +17,9 @@ EraseCommand::EraseCommand(int nLba, int nSize) : m_nLba(nLba), m_nSize(nSize) {
 bool EraseCommand::ExecuteCmd(SSDInterface* pstSSDInterface) {
 	return pstSSDInterface->Erase(m_nLba, m_nSize);
 }
+
+FlushCommand::FlushCommand() {}
+
+bool FlushCommand::ExecuteCmd(SSDInterface* pstSSDInterface) {
+	return pstSSDInterface->Flush();
+}

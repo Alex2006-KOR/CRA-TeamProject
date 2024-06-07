@@ -45,7 +45,8 @@ private:
 	
 	// write, erase
 	void _WriteToNandFile(int nLba, string sData);
-	void _AddWriteBuffer(string sCmd, int nLba, string sData);
+	void _EraseToNandFile(int nLba, int nSize);
+	void _AddWriteBuffer(string sCmd, string sParam1, string sParam2);
 	void _OptimizeWriteBuffer();
 	void _UpdateNandValues(vector<string>& vLines);
 	vector<string> _ExtractNandValue(void);

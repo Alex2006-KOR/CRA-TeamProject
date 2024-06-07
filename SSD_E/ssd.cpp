@@ -17,11 +17,35 @@ bool SSD::Read(int nLba) {
 }
 
 bool SSD::Write(int nLba, string sData) {
-	_AddWriteBuffer("W", nLba, sData);
+	_AddWriteBuffer("W", to_string(nLba), sData);
 	_OptimizeWriteBuffer();
 	if (m_vWriteBufferList.size() >= MAX_WRITE_BUFFER_NUM) Flush();
 
 	return true;
+}
+
+bool SSD::Erase(int nLba, int nSize) {
+	_AddWriteBuffer("E", to_string(nLba), to_string(nSize));
+	_OptimizeWriteBuffer();
+	if (m_vWriteBufferList.size() >= MAX_WRITE_BUFFER_NUM) Flush();
+
+	return true;
+}
+
+bool SSD::Flush() {
+	_FlushWriteBuffer();
+	_ClearWriteBuffer();
+	return true;
+}
+
+void SSD::_EraseToNandFile(int nLba, int nSize) {
+	vector<string> vLines = _ExtractNandValue();
+
+	for (int lineNum = nLba; lineNum < nLba + nSize; lineNum++) {
+		vLines[lineNum] = INITIAL_VALUE;
+	}
+
+	_UpdateNandValues(vLines);
 }
 
 void SSD::_OptimizeWriteBuffer() {
@@ -35,8 +59,8 @@ void SSD::_WriteToNandFile(int nLba, string sData)
 	_UpdateNandValues(vLines);
 }
 
-void SSD::_AddWriteBuffer(string sCmd, int nLba, string sData) {
-	string sWriteBufferInput = sCmd + " " + to_string(nLba) + " " + sData;
+void SSD::_AddWriteBuffer(string sCmd, string sParam1, string sParam2) {
+	string sWriteBufferInput = sCmd + " " + sParam1 + " " + sParam2;
 
 	try {
 		m_stWriteBufferFile.OpenWriteStream("append");
@@ -49,12 +73,6 @@ void SSD::_AddWriteBuffer(string sCmd, int nLba, string sData) {
 	m_vWriteBufferList.push_back(sWriteBufferInput);
 
 	m_stWriteBufferFile.CloseWriteStream();
-}
-
-bool SSD::Flush() {
-	_FlushWriteBuffer();
-	_ClearWriteBuffer();
-	return true;
 }
 
 void SSD::_FlushWriteBuffer()
@@ -71,9 +89,8 @@ void SSD::_FlushWriteBuffer()
 		}
 		if (sCmd == "E") {
 			int nStartLba = stoi(vWriteBufferTrimWords[1]);
-			int nLbaNum = stoi(vWriteBufferTrimWords[2]);
-
-			// Erase(nStartLba, nLbaNum); // TO DO
+			int nLbaSize = stoi(vWriteBufferTrimWords[2]);
+			_EraseToNandFile(nStartLba, nLbaSize);
 		}
 	}
 }
@@ -208,18 +225,6 @@ void SSD::_ReadFromNandFile(int nLba)
 
 	m_stNandFile.CloseReadStream();
 	m_stResultFile.CloseWriteStream();
-}
-
-bool SSD::Erase(int nLba, int nSize) {
-	vector<string> vLines = _ExtractNandValue();
-
-	for (int lineNum = nLba; lineNum < nLba + nSize; lineNum++) {
-		vLines[lineNum] = INITIAL_VALUE;
-	}
-
-	_UpdateNandValues(vLines);
-
-	return true;
 }
 
 void SSD::_UpdateNandValues(vector<string>& vLines) {
