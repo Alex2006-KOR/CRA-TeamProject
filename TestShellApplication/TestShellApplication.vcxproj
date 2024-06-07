@@ -130,6 +130,7 @@
     <None Include="SSDCommand.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Device.cpp" />
     <ClCompile Include="DriverInterface.h" />
     <ClCompile Include="ExitCommand.cpp" />
     <ClCompile Include="FullReadCommand.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Device.h" />
     <ClInclude Include="ExitCommand.h" />
     <ClInclude Include="FullReadCommand.h" />
     <ClInclude Include="FullWriteCommand.h" />

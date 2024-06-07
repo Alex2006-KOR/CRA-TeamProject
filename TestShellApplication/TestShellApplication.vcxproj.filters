@@ -60,6 +60,9 @@
     <ClCompile Include="TestApp2Command.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Device.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SSDCommand.h">
@@ -104,6 +107,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TestApp2Command.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Device.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
