@@ -37,7 +37,7 @@ private:
 
 void SSDDriver::Read(int lba)
 {
-    system(
+    _executeCommand(
         ExecutionCommandBuilder()
         .setAccessType("R")
         .setLbaIndex(lba)
@@ -47,7 +47,7 @@ void SSDDriver::Read(int lba)
 
 void SSDDriver::Write(int lba, int data)
 {
-    system(
+    _executeCommand(
         ExecutionCommandBuilder()
         .setAccessType("W")
         .setLbaIndex(lba)
@@ -60,6 +60,7 @@ std::string SSDDriver::ReadBuffer()
 {
     if (_getSsdExisted())
         return _getSsdResult();
+    return string();
 }
 
 int SSDDriver::GetMinLba()
@@ -70,6 +71,10 @@ int SSDDriver::GetMinLba()
 int SSDDriver::GetMaxLba()
 {
     return MAX_LBA;
+}
+
+void SSDDriver::_executeCommand(const char* strCommand) {
+    system(strCommand);
 }
 
 bool SSDDriver::_getSsdExisted(void)
