@@ -14,6 +14,7 @@ public:
 
 public:
 	void Print(string strMessage, string strCallerName);
+	inline void EnableConsoleLog(bool b) { m_bEnableConsoleLog = b; }
 
 private:
 	void _printMessageToConsole(const string& strMessage);
@@ -31,4 +32,5 @@ private:
 
 private:
 	const string LOG_FILE_NAME = "latest.log";
+	bool m_bEnableConsoleLog = true;
 };
