@@ -6,7 +6,7 @@
 Shell::Shell(DriverInterface* pstDriver, ostream& output)
     : m_out(output)
 {
-    m_pstTestLib = new TestLibrary{ pstDriver, output };
+    m_pstTestLib = TestLibrary::GetLibrary(pstDriver, &output);
 }
 
 void Shell::Run(istream& input)
@@ -29,10 +29,10 @@ bool Shell::handleCommand(string strLine)
     if (strCommand == "") {
     }
     else if (strCommand == "write") {
-        m_pstTestLib->SingleWrite(vCommandList);
+        m_pstTestLib->Write(vCommandList);
     }
     else if (strCommand == "read") {
-        m_pstTestLib->SingleRead(vCommandList);
+        m_pstTestLib->Read(vCommandList);
     }
     else if (strCommand == "fullwrite") {
         m_pstTestLib->FullWrite(vCommandList);

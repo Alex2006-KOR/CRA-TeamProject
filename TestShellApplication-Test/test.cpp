@@ -4,7 +4,7 @@
 #include "ReadCommand.cpp"
 #include "WriteCommand.cpp"
 #include "Device.cpp"
-#include "Platform.cpp"
+#include "TestLibrary.cpp"
 #include "Shell.cpp"
 
 using namespace testing;

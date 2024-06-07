@@ -2,7 +2,7 @@
 
 TestLibrary* TestLibrary::m_Instance = nullptr;
 
-TestLibrary* TestLibrary::GetLibrary(DriverInterface* pstDriver = nullptr, ostream* output = nullptr)
+TestLibrary* TestLibrary::GetLibrary(DriverInterface* pstDriver, ostream* output)
 {
 	if (m_Instance == nullptr) m_Instance = new TestLibrary();
 	if (pstDriver != nullptr) m_Instance->m_pstDriver = new Device(pstDriver);
@@ -48,7 +48,7 @@ void TestLibrary::FullWrite(vector<string> vCommandList)
 	}
 }
 
-void TestLibrary::FullRead(string strExpected = "")
+void TestLibrary::FullRead(string strExpected)
 {
 	string ret;
 	for (int nLBA = m_pstDriver->GetMinLba(); nLBA < m_pstDriver->GetMaxLba(); nLBA++) {
@@ -79,7 +79,7 @@ void TestLibrary::WriteRange(int nStartLba, int nEndLba, string strData)
 	}
 }
 
-void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected = "")
+void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected)
 {
 	string ret;
 	for (int nLBA = nStartLba; nLBA <= nEndLba; nLBA++) {
@@ -94,4 +94,13 @@ void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected = "")
 			return;
 		}
 	}
+}
+
+TestLibrary::~TestLibrary()
+{
+}
+
+
+TestLibrary::TestLibrary()
+{
 }

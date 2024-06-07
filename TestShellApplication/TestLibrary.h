@@ -13,7 +13,7 @@ public:
 	void FullWrite(vector<string> vCommandList);
 	void FullRead(string strExpected = "");
 	void WriteRange(int nStartLba, int nEndLba, string strData);
-	void ReadRange(int nStartLba, int nEndLba, string strData);
+	void ReadRange(int nStartLba, int nEndLba, string strData = "");
 
 private:
 	TestLibrary();
