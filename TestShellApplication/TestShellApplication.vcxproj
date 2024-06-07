@@ -127,41 +127,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="SSDCommand.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DriverInterface.h" />
-    <ClCompile Include="ExitCommand.cpp" />
-    <ClCompile Include="FullReadCommand.cpp" />
-    <ClCompile Include="FullWriteCommand.cpp" />
-    <ClCompile Include="HelpCommand.cpp" />
-    <ClCompile Include="InvalidCommand.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Shell.cpp" />
-    <ClCompile Include="SSDCommand.cpp" />
-    <ClCompile Include="SSDCommandInvoker.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
-    <ClCompile Include="TestApp1Command.cpp" />
-    <ClCompile Include="TestApp2Command.cpp" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />
-    <ClInclude Include="ExitCommand.h" />
-    <ClInclude Include="FullReadCommand.h" />
-    <ClInclude Include="FullWriteCommand.h" />
-    <ClInclude Include="HelpCommand.h" />
-    <ClInclude Include="InvalidCommand.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Shell.h" />
-    <ClInclude Include="SSDCommandInvoker.h" />
     <ClInclude Include="SSDDriver.h" />
-    <ClInclude Include="TestApp1Command.h" />
-    <ClInclude Include="TestApp2Command.h" />
     <ClInclude Include="WriteCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

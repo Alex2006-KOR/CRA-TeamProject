@@ -102,7 +102,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SSDDriver_test.cpp" />
     <ClCompile Include="test.cpp" />
-    <ClCompile Include="TestAppCommand_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TestShellApplication\TestShellApplication.vcxproj">
