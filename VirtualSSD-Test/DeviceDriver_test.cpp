@@ -4,6 +4,7 @@
 #include "SSD.cpp"
 #include "DeviceDriver.cpp"
 #include "FileManager.cpp"
+#include "SSDCommand.cpp"
 
 using namespace testing;
 
@@ -40,7 +41,8 @@ TEST_F(DeviceDriverTestFixture, SimpleRead) {
 	EXPECT_CALL(ssdMock, Write)
 		.Times(0);
 
-	pDeviceDriver->ReadData(0);
+	pDeviceDriver->SetCmd(new ReadCommand(0));
+	pDeviceDriver->Execute();
 }
 
 TEST_F(DeviceDriverTestFixture, SimpleWrite) {
@@ -50,15 +52,19 @@ TEST_F(DeviceDriverTestFixture, SimpleWrite) {
 		.Times(1)
 		.WillOnce(Return(true));
 
-	pDeviceDriver->WriteData(0, "0x00000000");
+	pDeviceDriver->SetCmd(new WriteCommand(0, "0x00000000"));
+	pDeviceDriver->Execute();
 }
 
 TEST(RealSSDTestSuite, SimpleRead) {
 	SSD stSSD;
 	DeviceDriver* pDeviceDriver = new DeviceDriver(&stSSD);
 
-	pDeviceDriver->WriteData(0, "0x0000ABCD");
-	pDeviceDriver->ReadData(0);
+	pDeviceDriver->SetCmd(new WriteCommand(0, "0x0000ABCD"));
+	pDeviceDriver->Execute();
+
+	pDeviceDriver->SetCmd(new ReadCommand(0));
+	pDeviceDriver->Execute();
 
 	FileManager stResultFile("Result.txt");
 	stResultFile.OpenReadStream();
@@ -70,7 +76,8 @@ TEST(RealSSDTestSuite, SimpleWrite) {
 	SSD stSSD;
 	DeviceDriver* pDeviceDriver = new DeviceDriver(&stSSD);
 
-	pDeviceDriver->WriteData(0, "0xDEADDEAD");
+	pDeviceDriver->SetCmd(new WriteCommand(0, "0xDEADDEAD"));
+	pDeviceDriver->Execute();
 
 	FileManager stNandFile("Nand.txt");
 	stNandFile.OpenReadStream();

@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "IOManager.h"
 #include "FileManager.h"
+#include "SSDCommand.h"
 
 IOManager::IOManager(DeviceDriver* pstDeviceDriver) : m_pstDeviceDriver(pstDeviceDriver)
 {
@@ -11,9 +12,13 @@ IOManager::IOManager(DeviceDriver* pstDeviceDriver) : m_pstDeviceDriver(pstDevic
 
 void IOManager::DoCommand(int argc, char* argv[]) {
 	_ProcessArgument(argc, argv);
+	Command* pstCommand = nullptr;
 
-	if (m_strCommand == "W") m_pstDeviceDriver->WriteData(m_nLbaNumber, m_strData);
-	if (m_strCommand == "R") m_pstDeviceDriver->ReadData(m_nLbaNumber);
+	if (m_strCommand == "W") pstCommand = new WriteCommand(m_nLbaNumber, m_strData);
+	if (m_strCommand == "R") pstCommand = new ReadCommand(m_nLbaNumber);
+		
+	m_pstDeviceDriver->SetCmd(pstCommand);
+	m_pstDeviceDriver->Execute();
 
 	_AddLog();
 }
