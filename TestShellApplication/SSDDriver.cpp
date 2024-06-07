@@ -62,6 +62,16 @@ std::string SSDDriver::ReadBuffer()
         return _getSsdResult();
 }
 
+int SSDDriver::GetMinLba()
+{
+    return MIN_LBA;
+}
+
+int SSDDriver::GetMaxLba()
+{
+    return MAX_LBA;
+}
+
 bool SSDDriver::_getSsdExisted(void)
 {
     bool ret = false;

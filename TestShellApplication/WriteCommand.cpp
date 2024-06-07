@@ -58,7 +58,7 @@ void WriteCommand::_updateLBA(string strLBA)
 
 void WriteCommand::_checkLBARange()
 {
-	if (m_nLBA < 0 || m_nLBA >= 100)
+	if (m_nLBA < m_pstDriver->GetMinLba() || m_nLBA >= m_pstDriver->GetMaxLba())
 		throw invalid_argument("INVALID LBA");
 }
 
