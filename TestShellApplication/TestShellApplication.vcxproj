@@ -138,6 +138,7 @@
     <ClCompile Include="InvalidCommand.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
+    <ClCompile Include="Runner.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDCommand.cpp" />
     <ClCompile Include="SSDCommandInvoker.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="HelpCommand.h" />
     <ClInclude Include="InvalidCommand.h" />
     <ClInclude Include="ReadCommand.h" />
+    <ClInclude Include="Runner.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDCommandInvoker.h" />
     <ClInclude Include="SSDDriver.h" />

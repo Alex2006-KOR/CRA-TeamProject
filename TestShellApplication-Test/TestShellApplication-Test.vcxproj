@@ -100,6 +100,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Runner_test.cpp" />
     <ClCompile Include="SSDDriver_test.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="TestAppCommand_test.cpp" />
