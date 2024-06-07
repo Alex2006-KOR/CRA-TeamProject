@@ -10,6 +10,9 @@ public:
 	void Write(vector<string> vCommandList);
 	string Read(vector<string> vCommandList);
 
+	int GetMinLba();
+	int GetMaxLba();
+
 private:
 	DriverInterface* m_pstDriver;
 	WriteCommand m_stWrite{ m_pstDriver };

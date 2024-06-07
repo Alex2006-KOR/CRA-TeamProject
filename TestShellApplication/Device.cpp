@@ -23,3 +23,13 @@ string Device::Read(vector<string> vCommandList)
 	return m_stRead.setLBA(vCommandList[0])
 		.execute();
 }
+
+int Device::GetMinLba()
+{
+	return m_pstDriver->GetMinLba();
+}
+
+int Device::GetMaxLba()
+{
+	return m_pstDriver->GetMaxLba();
+}
