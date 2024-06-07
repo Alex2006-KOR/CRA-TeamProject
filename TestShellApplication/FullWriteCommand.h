@@ -2,23 +2,18 @@
 #include "SSDCommand.h"
 #include "DriverInterface.h"
 
-class WriteCommand
+class FullWriteCommand
 	: public BaseSSDCommand
 {
 public:
-	WriteCommand(DriverInterface* pSSDDriver, std::ostream& output);
+	FullWriteCommand(DriverInterface* pSSDDriver, std::ostream& output);
 
 protected:
 	bool _parseCommand() override;
 	void _execute() override;
 
 private:
-	int _checkAndGetLBA(string paramString);
-	int _checkAndGetData(string paramString);
-
-private:
 	DriverInterface* m_pstSSDDriver;
 
-	int m_nLBA;
-	int m_nData;
+	string m_sData;
 };

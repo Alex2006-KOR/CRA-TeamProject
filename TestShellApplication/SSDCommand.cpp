@@ -1,11 +1,20 @@
 #include "SSDCommand.h"
 
-BaseSSDCommand::BaseSSDCommand(vector<string> commandList) {
-	m_commandList = commandList;
+BaseSSDCommand::BaseSSDCommand(std::ostream& output)
+	: m_out(output)
+{
 }
 
-void BaseSSDCommand::Execute()
+void BaseSSDCommand::SetCommandList(vector<string> vCommandList)
 {
-	_parseCommand();
+	m_vCommandList = vCommandList;
+}
+
+bool BaseSSDCommand::Execute()
+{
+	if (_parseCommand() == false) {
+		return false;
+	}
 	_execute();
+	return true;
 }
