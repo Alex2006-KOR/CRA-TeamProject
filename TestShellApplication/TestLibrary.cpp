@@ -1,12 +1,12 @@
-#include "Platform.h"
+#include "TestLibrary.h"
 
-Platform::Platform(DriverInterface* pstDriver, ostream& output)
+TestLibrary::TestLibrary(DriverInterface* pstDriver, ostream& output)
 	: m_out(output)
 {
 	m_pstDriver = new Device(pstDriver);
 }
 
-void Platform::SingleWrite(vector<string> vCommandList)
+void TestLibrary::SingleWrite(vector<string> vCommandList)
 {
 	try {
 		m_pstDriver->Write(vCommandList);
@@ -16,7 +16,7 @@ void Platform::SingleWrite(vector<string> vCommandList)
 	}
 }
 
-void Platform::SingleRead(vector<string> vCommandList)
+void TestLibrary::SingleRead(vector<string> vCommandList)
 {
 	string ret;
 	try {
@@ -28,7 +28,7 @@ void Platform::SingleRead(vector<string> vCommandList)
 	m_out << ret << endl;
 }
 
-void Platform::FullWrite(vector<string> vCommandList)
+void TestLibrary::FullWrite(vector<string> vCommandList)
 {
 	vCommandList.insert(vCommandList.begin(), "DummyLBA");
 	for (int nLBA = 0; nLBA < 100; nLBA++) {
@@ -44,7 +44,7 @@ void Platform::FullWrite(vector<string> vCommandList)
 	}
 }
 
-void Platform::FullRead()
+void TestLibrary::FullRead()
 {
 	string ret;
 	for (int nLBA = 0; nLBA < 100; nLBA++) {

@@ -3,9 +3,9 @@
 
 #include <iomanip>
 
-class Platform {
+class TestLibrary {
 public:
-	Platform(DriverInterface* pstDevice, ostream& output);
+	TestLibrary(DriverInterface* pstDevice, ostream& output);
 	void SingleWrite(vector<string> vCommandList);
 	void SingleRead(vector<string> vCommandList);
 	void FullWrite(vector<string> vCommandList);
