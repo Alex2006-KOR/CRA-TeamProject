@@ -1,18 +1,20 @@
 #pragma once
+#include "CommandInterface.h"
 #include "DriverInterface.h"
 #include <vector>
 
 using namespace std;
 
 class WriteCommand
+	: public NonDataCommand, public LbaArgument, public DataArguement
 {
 public:
 	WriteCommand(DriverInterface* pstDriver);
-	WriteCommand& setLBA(string strLba);
-	WriteCommand& setData(string strData);
-	void execute();
+	WriteCommand& setLBA(string strLba) override;
+	WriteCommand& setData(string strData) override;
+	void execute() override;
 
-	bool CheckArgCnt(vector<string> vArgs) const;
+	bool CheckArgCnt(vector<string> vArgs) const override;
 
 private:
 	DriverInterface* m_pstDriver;
@@ -23,11 +25,11 @@ private:
 	const int REQUIRED_COMMAND_COUNT = 2;
 	const int REQUIRED_DATA_LENGTH = 10;
 
-	void _checkValidLBAFormat(string strLBA);
-	void _updateLBA(string strLBA);
-	void _checkLBARange();
+	void _checkLBAFormat(string strLBA) override;
+	void _updateLBA(string strLBA) override;
+	void _checkLBARange() override;
 
-	void _updateData(std::string& strData);
-	void _checkSpelling(std::string& strData);
-	void _checkDataFormat(std::string& strData) const;
+	void _updateData(std::string& strData) override;
+	void _checkSpelling(std::string& strData) override;
+	void _checkDataFormat(std::string& strData) const override;
 };

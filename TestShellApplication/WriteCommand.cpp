@@ -11,7 +11,7 @@ WriteCommand::WriteCommand(DriverInterface* pstDriver)
 
 WriteCommand& WriteCommand::setLBA(string strLBA)
 {
-	_checkValidLBAFormat(strLBA);
+	_checkLBAFormat(strLBA);
 	_updateLBA(strLBA);
 	_checkLBARange();
 	return *this;
@@ -35,7 +35,7 @@ bool WriteCommand::CheckArgCnt(vector<string> vArgs) const
 	return vArgs.size() == this->REQUIRED_COMMAND_COUNT;
 }
 
-void WriteCommand::_checkValidLBAFormat(string strLBA)
+void WriteCommand::_checkLBAFormat(string strLBA)
 {
 	if (strLBA.substr(0, 2) == "0x") {
 		throw invalid_argument("INVALID LBA");

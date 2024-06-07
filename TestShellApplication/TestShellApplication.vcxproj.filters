@@ -53,13 +53,13 @@
     <ClInclude Include="Shell.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="FullReadCommand.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Device.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Platform.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandInterface.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

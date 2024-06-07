@@ -137,6 +137,7 @@
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommandInterface.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="ReadCommand.h" />
