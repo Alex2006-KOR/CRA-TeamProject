@@ -10,3 +10,8 @@ void DeviceDriver::SetCmd(Command* pstCommand) {
 void DeviceDriver::Execute() {
     m_pstCommand->ExecuteCmd(m_pstSSDInterface);
 }
+
+void DeviceDriver::FlushNand()
+{
+    m_pstSSDInterface->Flush();
+}

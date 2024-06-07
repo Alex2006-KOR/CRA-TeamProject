@@ -20,6 +20,7 @@ void IOManager::DoCommand(int argc, char* argv[]) {
 		
 	m_pstDeviceDriver->SetCmd(pstCommand);
 	m_pstDeviceDriver->Execute();
+	if (m_strCommand == "F") m_pstDeviceDriver->FlushNand();
 
 	_AddLog();
 }
@@ -37,9 +38,9 @@ void IOManager::_AddLog() {
 }
 
 void IOManager::_ProcessArgument(int argc, char* argv[]) {
-	if (_CheckInvalidArgumentNumber(argc, argv)) throw std::invalid_argument("Invalid Argument.");
+	if (_CheckInvalidArgumentNumber(argc, argv)) throw std::invalid_argument("Invalid Argument Number.");
 	_ExtractArgument(argv);
-	if (_CheckInvalidArgumentValue()) throw std::invalid_argument("Invalid Argument.");
+	if (_CheckInvalidArgumentValue()) throw std::invalid_argument("Invalid Argument Value.");
 }
 
 bool IOManager::_CheckInvalidArgumentNumber(int argc, char* argv[]) {
@@ -53,8 +54,13 @@ bool IOManager::_CheckInvalidArgumentNumber(int argc, char* argv[]) {
 
 void IOManager::_ExtractArgument(char* argv[]) {
 	m_strCommand = string(argv[1]);
-	m_nLbaNumber = stoi(string(argv[2]));
-	if (m_strCommand == "W") m_strData = string(argv[3]);
+	if (m_strCommand == "R") {
+		m_nLbaNumber = stoi(string(argv[2]));
+	}
+	else if (m_strCommand == "W") {
+		m_nLbaNumber = stoi(string(argv[2]));
+		m_strData = string(argv[3]);
+	}
 	if (m_strCommand == "E") m_nSize = stoi(string(argv[3]));
 }
 
@@ -97,5 +103,9 @@ bool IOManager::_IsInvalidSubString() {
 }
 
 bool IOManager::_IsInvalidCmd() {
-	return m_strCommand != "W" && m_strCommand != "R" && m_strCommand != "E";
+	if (m_strCommand == "W") return false;
+	if (m_strCommand == "R") return false;
+	if (m_strCommand == "E") return false;
+	if (m_strCommand == "F") return false;
+	return true;
 }

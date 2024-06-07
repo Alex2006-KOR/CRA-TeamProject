@@ -14,6 +14,7 @@ void FileManager::OpenReadStream() {
 
 void FileManager::OpenWriteStream(string mode) {
 	if (mode == "append") m_ofstreamWrite.open(m_sFileName, fstream::app);
+	else if (mode == "trunc") m_ofstreamWrite.open(m_sFileName, fstream::trunc);
 	else m_ofstreamWrite.open(m_sFileName);
 
 	if (m_ofstreamWrite.is_open() == false) {

@@ -23,6 +23,8 @@ public:
 	bool Read(int nLba) override;
 	bool Write(int nLba, string sData) override;
 	bool Erase(int nLba, int nSize) override;
+	bool Flush() override;
+
 
 private:
 	FileManager m_stNandFile;
@@ -41,8 +43,14 @@ private:
 	bool _IsExistLbaInWriteBuffer(vector<string> vWriteBufferTrimWords, int nLba);
 	void _UpdateResultFile(vector<string> vWriteBufferTrimWords, int nLba);
 	
-	// write
+	// write, erase
+	void _WriteToNandFile(int nLba, string sData);
+	void _AddWriteBuffer(string sCmd, int nLba, string sData);
+	void _OptimizeWriteBuffer();
 	void _UpdateNandValues(vector<string>& vLines);
 	vector<string> _ExtractNandValue(void);
-
+	
+	// flush
+	void _FlushWriteBuffer();
+	void _ClearWriteBuffer();
 };

@@ -17,11 +17,78 @@ bool SSD::Read(int nLba) {
 }
 
 bool SSD::Write(int nLba, string sData) {
+	_AddWriteBuffer("W", nLba, sData);
+	_OptimizeWriteBuffer();
+	if (m_vWriteBufferList.size() >= MAX_WRITE_BUFFER_NUM) Flush();
+
+	return true;
+}
+
+void SSD::_OptimizeWriteBuffer() {
+	// TO DO
+}
+
+void SSD::_WriteToNandFile(int nLba, string sData)
+{
 	vector<string> vLines = _ExtractNandValue();
 	vLines[nLba] = sData;
 	_UpdateNandValues(vLines);
+}
 
+void SSD::_AddWriteBuffer(string sCmd, int nLba, string sData) {
+	string sWriteBufferInput = sCmd + " " + to_string(nLba) + " " + sData;
+
+	try {
+		m_stWriteBufferFile.OpenWriteStream("append");
+	}
+	catch (exception e) {
+		cout << e.what() << endl;
+	}
+
+	m_stWriteBufferFile.Write(sWriteBufferInput);
+	m_vWriteBufferList.push_back(sWriteBufferInput);
+
+	m_stWriteBufferFile.CloseWriteStream();
+}
+
+bool SSD::Flush() {
+	_FlushWriteBuffer();
+	_ClearWriteBuffer();
 	return true;
+}
+
+void SSD::_FlushWriteBuffer()
+{
+	for (int nWriteBufferIndex = 0; nWriteBufferIndex < m_vWriteBufferList.size(); nWriteBufferIndex++) {
+		string sFullCommand = m_vWriteBufferList[nWriteBufferIndex];
+		vector<string> vWriteBufferTrimWords = _TrimFullCommand(sFullCommand);
+
+		string sCmd = vWriteBufferTrimWords[0];
+		if (sCmd == "W") {
+			int nLineLba = stoi(vWriteBufferTrimWords[1]);
+			string sData = vWriteBufferTrimWords[2];
+			_WriteToNandFile(nLineLba, sData);
+		}
+		if (sCmd == "E") {
+			int nStartLba = stoi(vWriteBufferTrimWords[1]);
+			int nLbaNum = stoi(vWriteBufferTrimWords[2]);
+
+			// Erase(nStartLba, nLbaNum); // TO DO
+		}
+	}
+}
+
+void SSD::_ClearWriteBuffer() {
+	try {
+		m_stWriteBufferFile.OpenWriteStream("trunc");
+	}
+	catch (exception e) {
+		cout << e.what() << endl;
+	}
+
+	m_vWriteBufferList.clear();
+
+	m_stWriteBufferFile.CloseWriteStream();
 }
 
 void SSD::_InitiateNandFile()

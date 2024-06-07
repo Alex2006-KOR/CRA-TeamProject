@@ -11,6 +11,7 @@ public:
     DeviceDriver(SSDInterface* pstSSDInterface);
     void SetCmd(Command* pstCommand);
     void Execute();
+    void FlushNand();
 
 protected:
     SSDInterface* m_pstSSDInterface;
