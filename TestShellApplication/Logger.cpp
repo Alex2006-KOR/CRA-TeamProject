@@ -9,6 +9,11 @@
 #include <regex>
 
 
+Logger::Logger()
+	: m_os{ std::cout }
+{
+}
+
 void Logger::Print(string strMessage, string strCallerName)
 {
     _printMessageToConsole(strMessage);
@@ -32,6 +37,11 @@ void Logger::_printMessageToLogFile(const string& strMessage, const string& strC
     ofs.close();
 
     _splitLogFileOnSize();
+}
+
+void Logger::SetOutStream(std::ostream& os)
+{
+    m_os.rdbuf(os.rdbuf());
 }
 
 string Logger::_makeFormatMessage(const string& strCallerName, const string& msg)
