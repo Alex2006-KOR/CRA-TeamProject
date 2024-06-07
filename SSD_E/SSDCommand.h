@@ -24,3 +24,13 @@ private:
 	int m_nLba;
 	string m_sData;
 };
+
+class EraseCommand : public Command {
+public:
+	EraseCommand(int nLba, int nSize);
+	bool ExecuteCmd(SSDInterface* pstSSDInterface) override;
+
+private:
+	int m_nLba;
+	int m_nSize;
+};
