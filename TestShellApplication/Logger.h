@@ -6,9 +6,15 @@
 using std::string;
 using std::vector;
 
+#define LOG(msg) Logger::getInstance().Print(msg, __FUNCTION__);
+
+
 class Logger
 {
 public:
+	static Logger& getInstance();
+
+private:
 	Logger();
 	virtual ~Logger() = default;
 

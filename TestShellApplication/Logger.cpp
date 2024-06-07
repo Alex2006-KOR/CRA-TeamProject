@@ -9,6 +9,12 @@
 #include <regex>
 
 
+Logger& Logger::getInstance()
+{
+    static Logger inst;
+    return inst;
+}
+
 Logger::Logger()
 	: m_os{ std::cout }
 {
