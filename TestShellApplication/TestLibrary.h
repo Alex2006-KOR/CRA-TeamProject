@@ -2,16 +2,24 @@
 #include "Device.h"
 
 #include <iomanip>
+#include <iostream>
 
 class TestLibrary {
 public:
-	TestLibrary(DriverInterface* pstDevice, ostream& output);
-	void SingleWrite(vector<string> vCommandList);
-	void SingleRead(vector<string> vCommandList);
+	static TestLibrary* GetLibrary(DriverInterface * pstDevice = nullptr, ostream* output = nullptr);
+
+	void Write(vector<string> vCommandList);
+	void Read(vector<string> vCommandList);
 	void FullWrite(vector<string> vCommandList);
 	void FullRead();
 
 private:
-	ostream& m_out;
+	TestLibrary();
+	~TestLibrary();
+	TestLibrary(const TestLibrary&) = delete;
+	TestLibrary& operator=(const TestLibrary&) = delete;
+
+	static TestLibrary* m_Instance;
 	Device* m_pstDriver;
+	ostream* m_out;
 };

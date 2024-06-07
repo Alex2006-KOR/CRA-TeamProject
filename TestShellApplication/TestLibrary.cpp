@@ -1,22 +1,26 @@
 #include "TestLibrary.h"
 
-TestLibrary::TestLibrary(DriverInterface* pstDriver, ostream& output)
-	: m_out(output)
+TestLibrary* TestLibrary::m_Instance = nullptr;
+
+TestLibrary* TestLibrary::GetLibrary(DriverInterface* pstDriver = nullptr, ostream* output = nullptr)
 {
-	m_pstDriver = new Device(pstDriver);
+	if (m_Instance == nullptr) m_Instance = new TestLibrary();
+	if (pstDriver != nullptr) m_Instance->m_pstDriver = new Device(pstDriver);
+	if (output != nullptr) m_Instance->m_out = output;
+	return m_Instance;
 }
 
-void TestLibrary::SingleWrite(vector<string> vCommandList)
+void TestLibrary::Write(vector<string> vCommandList)
 {
 	try {
 		m_pstDriver->Write(vCommandList);
 	}
 	catch (exception e) {
-		m_out << e.what() << endl;
+		*m_out << e.what() << endl;
 	}
 }
 
-void TestLibrary::SingleRead(vector<string> vCommandList)
+void TestLibrary::Read(vector<string> vCommandList)
 {
 	string ret;
 	try {
@@ -25,7 +29,7 @@ void TestLibrary::SingleRead(vector<string> vCommandList)
 	catch (exception e) {
 		ret = e.what();
 	}
-	m_out << ret << endl;
+	*m_out << ret << endl;
 }
 
 void TestLibrary::FullWrite(vector<string> vCommandList)
@@ -38,7 +42,7 @@ void TestLibrary::FullWrite(vector<string> vCommandList)
 			m_pstDriver->Write(vCommandList);
 		}
 		catch (exception e) {
-			m_out << e.what() << endl;
+			*m_out << e.what() << endl;
 			return;
 		}
 	}
