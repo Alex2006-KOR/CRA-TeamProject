@@ -50,10 +50,12 @@ void TestLibrary::FullRead()
 	for (int nLBA = m_pstDriver->GetMinLba(); nLBA < m_pstDriver->GetMaxLba(); nLBA++) {
 		try {
 			ret = m_pstDriver->Read({ to_string(nLBA) });
+			*m_out << ret << endl;
 		}
 		catch (exception e) {
 			ret = e.what();
+			*m_out << ret << endl;
+			return;
 		}
-		m_out << ret << endl;
 	}
 }
