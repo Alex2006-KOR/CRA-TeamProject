@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Platform.h"
+#include "TestLibrary.h"
 #include "DriverInterface.h"
 
 #include <iostream>
@@ -18,7 +18,7 @@ public:
 
 private:
 	ostream& m_out;
-	Platform* m_pstTestList;
+	TestLibrary* m_pstTestLib;
 
 	void _printHelp();
 
