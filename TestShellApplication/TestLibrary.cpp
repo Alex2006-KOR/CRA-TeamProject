@@ -31,7 +31,7 @@ void TestLibrary::SingleRead(vector<string> vCommandList)
 void TestLibrary::FullWrite(vector<string> vCommandList)
 {
 	vCommandList.insert(vCommandList.begin(), "DummyLBA");
-	for (int nLBA = 0; nLBA < 100; nLBA++) {
+	for (int nLBA = m_pstDriver->GetMinLba(); nLBA < m_pstDriver->GetMaxLba(); nLBA++) {
 
 		try {
 			vCommandList[0] = to_string(nLBA);
@@ -47,7 +47,7 @@ void TestLibrary::FullWrite(vector<string> vCommandList)
 void TestLibrary::FullRead()
 {
 	string ret;
-	for (int nLBA = 0; nLBA < 100; nLBA++) {
+	for (int nLBA = m_pstDriver->GetMinLba(); nLBA < m_pstDriver->GetMaxLba(); nLBA++) {
 		try {
 			ret = m_pstDriver->Read({ to_string(nLBA) });
 		}
