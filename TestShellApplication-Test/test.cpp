@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
+#include "TestScripts/TestScriptBase.cpp"
+#include "TestScripts/TestApp1.cpp"
+#include "TestScripts/TestApp2.cpp"
 #include "ReadCommand.cpp"
 #include "WriteCommand.cpp"
 #include "Device.cpp"

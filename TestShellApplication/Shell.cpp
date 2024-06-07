@@ -7,6 +7,8 @@ Shell::Shell(DriverInterface* pstDriver, ostream& output)
     : m_out(output)
 {
     m_pstTestLib = TestLibrary::GetLibrary(pstDriver, &output);
+    m_pstTestApp1 = new TestApp1(pstDriver, output);
+    m_pstTestApp2 = new TestApp2(pstDriver, output);
 }
 
 void Shell::Run(istream& input)
@@ -39,6 +41,12 @@ bool Shell::handleCommand(string strLine)
     }
     else if (strCommand == "fullread") {
         m_pstTestLib->FullRead();
+    }
+    else if (strCommand == "testapp1") {
+        m_pstTestApp1->Run();
+    }
+    else if (strCommand == "testapp2") {
+        m_pstTestApp2->Run();
     }
     else if (strCommand == "help") {
         _printHelp();

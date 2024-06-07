@@ -2,7 +2,6 @@
 #include "gmock/gmock.h"
 
 #include "SSDDriver.h"
-#include "SSDCommandInvoker.h"
 #include "TestApp1Command.cpp"
 #include "TestApp2Command.cpp"
 

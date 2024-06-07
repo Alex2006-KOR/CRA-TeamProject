@@ -22,6 +22,6 @@ private:
 	TestLibrary& operator=(const TestLibrary&) = delete;
 
 	static TestLibrary* m_Instance;
-	Device* m_pstDriver;
+	Device* m_pstDevice;
 	ostream* m_out;
 };
