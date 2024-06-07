@@ -27,31 +27,27 @@ public:
         return *this;
     }
 
-    string build() {
-        return command;
+    const char* build() {
+        return command.c_str();
     }
 
 private:
     string command;
 };
 
-int SSDDriver::Read(int lba)
+void SSDDriver::Read(int lba)
 {
-    int retCode = _executeCommand(
+    system(
         ExecutionCommandBuilder()
         .setAccessType("R")
         .setLbaIndex(lba)
         .build()
     );
-
-    if (retCode == -1)
-        return 0;
-    return _getReadResult();
 }
 
 void SSDDriver::Write(int lba, int data)
 {
-    int retCode = _executeCommand(
+    system(
         ExecutionCommandBuilder()
         .setAccessType("W")
         .setLbaIndex(lba)
@@ -60,30 +56,10 @@ void SSDDriver::Write(int lba, int data)
     );
 }
 
-int SSDDriver::_executeCommand(string command)
+std::string SSDDriver::ReadBuffer()
 {
-    try {
-        int retCode = system(command.c_str());
-        return retCode;
-    }
-    catch (exception& e) {
-        cout << "Virtual SSD execution failed" << endl;
-        cout << e.what() << endl;
-        return -1;
-    }
-}
-
-int SSDDriver::_getReadResult(void)
-{
-    try {
-        if (_getSsdExisted())
-            return _getSsdResult();
-        return 0;
-    }
-    catch (exception& e) {
-        cout << e.what() << endl;
-        return 0;
-    }
+    if (_getSsdExisted())
+        return _getSsdResult();
 }
 
 bool SSDDriver::_getSsdExisted(void)
@@ -97,17 +73,15 @@ bool SSDDriver::_getSsdExisted(void)
     return ret;
 }
 
-int SSDDriver::_getSsdResult(void)
+std::string SSDDriver::_getSsdResult(void)
 {
     ifstream ifstreamRead(SSD_FILE);
     if (ifstreamRead.is_open() == false)
         throw exception("Open SSD Result file fail");
 
-    int ret = 0;
     string readData;
     getline(ifstreamRead, readData);
-    ret = stoll(readData, nullptr, 16);
     ifstreamRead.close();
 
-    return ret;
+    return readData;
 }
