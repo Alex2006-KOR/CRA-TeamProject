@@ -48,17 +48,49 @@ void TestLibrary::FullWrite(vector<string> vCommandList)
 	}
 }
 
-void TestLibrary::FullRead()
+void TestLibrary::FullRead(string strExpected = "")
 {
 	string ret;
 	for (int nLBA = m_pstDriver->GetMinLba(); nLBA < m_pstDriver->GetMaxLba(); nLBA++) {
 		try {
 			ret = m_pstDriver->Read({ to_string(nLBA) });
+			if (strExpected.size() == 10 && ret != strExpected)
+				throw runtime_error("Data Mismatch!!");
 			*m_out << ret << endl;
 		}
 		catch (exception e) {
 			ret = e.what();
 			*m_out << ret << endl;
+			return;
+		}
+	}
+}
+
+void TestLibrary::WriteRange(int nStartLba, int nEndLba, string strData)
+{
+	for (int nLBA = nStartLba; nLBA <= nEndLba; nLBA++) {
+		try {
+			m_pstDriver->Write({to_string(nLBA), strData});
+		}
+		catch (exception e) {
+			*m_out << e.what() << endl;
+			return;
+		}
+	}
+}
+
+void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected = "")
+{
+	string ret;
+	for (int nLBA = nStartLba; nLBA <= nEndLba; nLBA++) {
+		try {
+			ret = m_pstDriver->Read({ to_string(nLBA) });
+			if (strExpected.size() == 10 && ret != strExpected)
+				throw runtime_error("Data Mismatch!!");
+			*m_out << ret << endl;
+		}
+		catch (exception e) {
+			*m_out << e.what() << endl;
 			return;
 		}
 	}
