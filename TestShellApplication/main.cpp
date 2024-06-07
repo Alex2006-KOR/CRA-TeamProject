@@ -3,6 +3,7 @@
 #include "SSDDriver.h"
 #include "Shell.h"
 #include "Runner.h"
+#include "Logger.h"
 
 int main(int argc, char* argv[]) {
 	SSDDriver ssd;
@@ -10,6 +11,7 @@ int main(int argc, char* argv[]) {
 	Runner runner(shell);
 
 	if (argc == 2) {
+		Logger::getInstance().EnableConsoleLog(false);
 		int result = runner.SetScenario(argv[1]);
 		if (result == false) return 0;
 	}

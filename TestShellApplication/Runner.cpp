@@ -1,17 +1,16 @@
+#include "Shell.h"
+#include "Logger.h"
 #include "Runner.h"
 #include "fstream"
 #include "sstream"
-#include "Logger.h"
 
 Runner::Runner(Shell& shell)
 	:_shell(shell), _scenarioList("") {}
 
 void Runner::RunShell()
 {
-	if (_scenarioList.length() == 0)
-		_runCmdLineMode();
-	else
-		_runScenarioMode();
+	_runCmdLineMode();
+	_runScenarioMode();
 }
 
 bool Runner::SetScenario(string scenarioList)
@@ -24,17 +23,17 @@ bool Runner::SetScenario(string scenarioList)
 
 void Runner::_runCmdLineMode()
 {
+	if (_scenarioList.length() != 0)
+		return;
 	_shell.Run(std::cin, std::cout);
 }
 
 void Runner::_runScenarioMode()
 {
-	Logger::getInstance().EnableConsoleLog(false);
-	
+	if (_scenarioList.length() == 0)
+		return;
 	std::istringstream scenario(_scenarioList);
 	_shell.Run(scenario, std::cout);
-	
-	Logger::getInstance().EnableConsoleLog(true);
 }
 
 bool Runner::_getScenarioExisted(string listFile)
