@@ -63,6 +63,9 @@
     <ClCompile Include="Device.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Platform.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SSDCommand.h">
@@ -110,6 +113,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Device.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
