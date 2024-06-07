@@ -130,10 +130,10 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DriverInterface.h" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Platform.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
+    <ClCompile Include="TestLibrary.cpp" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +143,7 @@
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDDriver.h" />
+    <ClInclude Include="TestLibrary.h" />
     <ClInclude Include="WriteCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

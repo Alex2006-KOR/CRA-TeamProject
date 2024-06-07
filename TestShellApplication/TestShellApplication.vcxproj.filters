@@ -36,7 +36,7 @@
     <ClCompile Include="Device.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Platform.cpp">
+    <ClCompile Include="TestLibrary.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,9 +50,6 @@
     <ClInclude Include="SSDDriver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Shell.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Device.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -60,6 +57,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CommandInterface.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TestLibrary.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Shell.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
