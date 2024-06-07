@@ -44,9 +44,8 @@ bool FileManager::IsFileExist() {
 
 string FileManager::Read() {
 	string sData;
-	getline(m_ifstreamRead, sData);
-
-	return sData;
+	if (getline(m_ifstreamRead, sData)) return sData;
+	return "";
 }
 
 void FileManager::Write(string sData) {
