@@ -31,25 +31,7 @@ void Logger::_printMessageToLogFile(const string& strMessage, const string& strC
     ofs << formatMessage << std::endl;
     ofs.close();
 
-    long long llFileSize = _getLogFileSize();
-    if (llFileSize > 10 * 1024) {
-        string strNewFileName;
-        std::time_t now = std::time(nullptr);
-        std::tm localTime;
-        errno_t err = localtime_s(&localTime, &now);
-        std::ostringstream oss;
-        oss << std::put_time(&localTime, "until_%y%m%d_%Hh_%Mm_%Ss.log");
-        strNewFileName = oss.str();
-
-        if (MoveFileA(LOG_FILE_NAME.c_str(), strNewFileName.c_str()) == FALSE) {
-            throw std::exception("Failed to make old log file");
-        }
-
-        vector<string> vOldLogFiles = _getOldLogFiles(strNewFileName);
-        for (string oldLogFile : vOldLogFiles) {
-            _compressLogFile(oldLogFile);
-        }
-    }
+    _splitLogFileOnSize();
 }
 
 string Logger::_makeFormatMessage(const string& strCallerName, const string& msg)
@@ -80,6 +62,31 @@ string Logger::_getFormatMessage(string strCallerName, const string& msg)
     return ossMessage.str();
 }
 
+void Logger::_splitLogFileOnSize()
+{
+    if (_isNeedToSplitLogFile() == false) {
+        return;
+	}
+
+    string strBackupLogFileName = _getNewBackupLogFileName();
+	if (MoveFileA(LOG_FILE_NAME.c_str(), strBackupLogFileName.c_str()) == FALSE) {
+		throw std::exception("Failed to make old log file");
+	}
+
+    _checkAndCompressOldLogFiles(strBackupLogFileName);
+}
+
+bool Logger::_isNeedToSplitLogFile()
+{
+    constexpr int MAX_LOG_FILE_SIZE = 10 * 1024;
+
+    long long llFileSize = _getLogFileSize();
+    if (llFileSize > MAX_LOG_FILE_SIZE) {
+        return true;
+    }
+    return false;
+}
+
 long long Logger::_getLogFileSize()
 {
     std::ifstream file(LOG_FILE_NAME, std::ios::binary | std::ios::ate);
@@ -89,6 +96,27 @@ long long Logger::_getLogFileSize()
     return file.tellg();
 }
 
+string Logger::_getNewBackupLogFileName()
+{
+    const string LOG_FILE_NAME_FORMAT = "until_%y%m%d_%Hh_%Mm_%Ss.log";
+
+    std::time_t now = std::time(nullptr);
+    std::tm localTime;
+    errno_t err = localtime_s(&localTime, &now);
+    std::ostringstream oss;
+    oss << std::put_time(&localTime, LOG_FILE_NAME_FORMAT.c_str());
+ 
+    return oss.str();
+}
+
+void Logger::_checkAndCompressOldLogFiles(const string& strNewFileName)
+{
+    vector<string> vOldLogFiles = _getOldLogFiles(strNewFileName);
+    for (string oldLogFile : vOldLogFiles) {
+        _compressLogFile(oldLogFile);
+    }
+}
+
 vector<string> Logger::_getOldLogFiles(const string& strNewFileName) {
     WIN32_FIND_DATAA findData;
     HANDLE hFind = FindFirstFileA(".\\*.log", &findData);
@@ -96,18 +124,18 @@ vector<string> Logger::_getOldLogFiles(const string& strNewFileName) {
         return vector<string>();
     }
 
-    vector<string> fileList;
+    vector<string> vFileList;
     std::regex regexFilter("until_\\d{6}_\\d{2}h_\\d{2}m_\\d{2}s\\.log");
     do {
         std::string strFileName = findData.cFileName;
         if (std::regex_match(strFileName, regexFilter)) {
             if (strFileName == strNewFileName) continue;
-            fileList.push_back(strFileName);
+            vFileList.push_back(strFileName);
         }
     } while (FindNextFileA(hFind, &findData) != 0);
     FindClose(hFind);
 
-    return fileList;
+    return vFileList;
 }
 
 void Logger::_compressLogFile(const string& strFileName)

@@ -21,7 +21,11 @@ private:
 	string _makeFormatMessage(const string& strCallerName, const string& msg);
 	string _getDateString();
 	string _getFormatMessage(string strCallerName, const string& msg);
+	void _splitLogFileOnSize();
+	bool _isNeedToSplitLogFile();
 	long long _getLogFileSize();
+	string _getNewBackupLogFileName();
+	void _checkAndCompressOldLogFiles(const string& strNewFileName);
 	vector<string> _getOldLogFiles(const string& strNewFileName);
 	void _compressLogFile(const string& strFileName);
 
