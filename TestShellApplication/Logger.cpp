@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <ctime>
 #include <sstream>
+#include <fstream>
 
 
 void Logger::print(string msg, string strCallerName)
@@ -21,5 +22,13 @@ void Logger::print(string msg, string strCallerName)
     ossMessage << ": " << msg;
     string strMessage = ossMessage.str();
 
-    std::cout << strDate << " " << strMessage << std::endl;
+    string strTotalMessage = strDate + " " + strMessage;
+
+    std::cout << strTotalMessage << std::endl;
+    std::ofstream ofs(".\\latest.log", std::ios::app);
+    if (ofs.is_open() == false) {
+        throw std::exception("Failed to open log file.");
+    }
+    ofs << strTotalMessage << std::endl;
+    ofs.close();
 }
