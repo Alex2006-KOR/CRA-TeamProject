@@ -18,4 +18,8 @@ private:
 	string _makeFormatMessage(const string& strCallerName, const string& msg);
 	string _getDateString();
 	string _getFormatMessage(string strCallerName, const string& msg);
+	long long _getLogFileSize();
+
+private:
+	const string LOG_FILE_NAME = "latest.log";
 };
