@@ -127,5 +127,8 @@
     <ClInclude Include="OutstreamLoggerPrinter.h">
       <Filter>Logger</Filter>
     </ClInclude>
+    <ClInclude Include="LoggerPrinter.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
