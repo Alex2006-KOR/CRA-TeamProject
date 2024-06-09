@@ -19,6 +19,7 @@ public:
 	MOCK_METHOD(void, Read, (int nLba), (override));
 	MOCK_METHOD(void, Write, (int nLba, int nData), (override));
 	MOCK_METHOD(void, Erase, (int nLba, int nBlkCnt), (override));
+	MOCK_METHOD(void, Flush, (), (override));
 	MOCK_METHOD(std::string, ReadBuffer, (), (override));
 	MOCK_METHOD(int, GetMinLba, (), (override));
 	MOCK_METHOD(int, GetMaxLba, (), (override));

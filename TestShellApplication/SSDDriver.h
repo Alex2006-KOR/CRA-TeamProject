@@ -5,6 +5,8 @@ public:
 	void Read(int nLba) override;
 	void Write(int nLba, int nData) override;
 	void Erase(int nLba, int blkCnt) override;
+	void Flush() override;
+
 	std::string ReadBuffer() override;
 
 	int GetMinLba() override;

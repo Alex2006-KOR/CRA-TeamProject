@@ -130,6 +130,7 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DriverInterface.h" />
     <ClCompile Include="EraseCommand.cpp" />
+    <ClCompile Include="FlushCommand.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Shell.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="CommandInterface.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="EraseCommand.h" />
+    <ClInclude Include="FlushCommand.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Shell.h" />

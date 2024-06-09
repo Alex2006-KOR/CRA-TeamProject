@@ -72,6 +72,15 @@ void SSDDriver::Erase(int nLba, int nBlkCnt)
     );
 }
 
+void SSDDriver::Flush()
+{
+    _executeCommand(
+        ExecutionCommandBuilder()
+        .setAccessType("F")
+        .build()
+    );
+}
+
 void SSDDriver::_executeCommand(const char* strCommand) {
     system(strCommand);
 }
