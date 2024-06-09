@@ -6,6 +6,7 @@
 #include "TestScripts/TestApp2.cpp"
 #include "ReadCommand.cpp"
 #include "WriteCommand.cpp"
+#include "EraseCommand.cpp"
 #include "Device.cpp"
 #include "TestLibrary.cpp"
 #include "Shell.cpp"
@@ -14,8 +15,9 @@ using namespace testing;
 
 class SsdDeviceDriverMock : public DriverInterface {
 public:
-	MOCK_METHOD(void, Read, (int lba), (override));
-	MOCK_METHOD(void, Write, (int lba, int dat), (override));
+	MOCK_METHOD(void, Read, (int nLba), (override));
+	MOCK_METHOD(void, Write, (int nLba, int nData), (override));
+	MOCK_METHOD(void, Erase, (int nLba, int nBlkCnt), (override));
 	MOCK_METHOD(std::string, ReadBuffer, (), (override));
 	MOCK_METHOD(int, GetMinLba, (), (override));
 	MOCK_METHOD(int, GetMaxLba, (), (override));

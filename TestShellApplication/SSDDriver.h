@@ -2,8 +2,9 @@
 
 class SSDDriver : public DriverInterface {
 public:
-	void Read(int lba) override;
-	void Write(int lba, int data) override;
+	void Read(int nLba) override;
+	void Write(int nLba, int nData) override;
+	void Erase(int nLba, int blkCnt) override;
 	std::string ReadBuffer() override;
 
 	int GetMinLba() override;
