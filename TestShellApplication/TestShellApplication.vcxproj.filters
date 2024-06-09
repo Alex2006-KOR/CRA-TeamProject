@@ -51,6 +51,9 @@
     <ClCompile Include="EraseCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ShellException.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReadCommand.h">
@@ -87,6 +90,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="EraseCommand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellException.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

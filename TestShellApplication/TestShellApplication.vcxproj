@@ -133,6 +133,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Shell.cpp" />
+    <ClCompile Include="ShellException.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
     <ClCompile Include="TestLibrary.cpp" />
     <ClCompile Include="TestScripts\TestApp1.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Platform.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Shell.h" />
+    <ClInclude Include="ShellException.h" />
     <ClInclude Include="SSDDriver.h" />
     <ClInclude Include="TestLibrary.h" />
     <ClInclude Include="TestScripts\TestApp1.h" />
