@@ -12,4 +12,5 @@ public:
 
 	virtual int GetMinLba() = 0;
 	virtual int GetMaxLba() = 0;
+	virtual int GetMaxBlkCntPerErase() = 0;
 };

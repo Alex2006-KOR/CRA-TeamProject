@@ -21,6 +21,7 @@ public:
 	MOCK_METHOD(std::string, ReadBuffer, (), (override));
 	MOCK_METHOD(int, GetMinLba, (), (override));
 	MOCK_METHOD(int, GetMaxLba, (), (override));
+	MOCK_METHOD(int, GetMaxBlkCntPerErase, (), (override));
 };
 
 

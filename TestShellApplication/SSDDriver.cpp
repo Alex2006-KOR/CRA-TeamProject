@@ -116,3 +116,8 @@ int SSDDriver::GetMaxLba()
 {
     return MAX_LBA;
 }
+
+int SSDDriver::GetMaxBlkCntPerErase()
+{
+    return MAX_BLK_CNT_PER_ERASE;
+}

@@ -9,10 +9,12 @@ public:
 
 	int GetMinLba() override;
 	int GetMaxLba() override;
+	int GetMaxBlkCntPerErase() override;
 
 protected:
 	const int MIN_LBA = 0;
 	const int MAX_LBA = 100;
+	const int MAX_BLK_CNT_PER_ERASE = 10;
 
 	virtual void _executeCommand(const char* strCommand);
 	virtual bool _getSsdExisted(void);
