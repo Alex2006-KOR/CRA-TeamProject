@@ -15,7 +15,7 @@ void TestLibrary::Write(vector<string> vCommandList)
 	try {
 		m_pstDevice->Write(vCommandList);
 	}
-	catch (exception e) {
+	catch (exception& e) {
 		*m_out << e.what() << endl;
 	}
 }
@@ -26,7 +26,7 @@ void TestLibrary::Read(vector<string> vCommandList)
 	try {
 		ret = m_pstDevice->Read(vCommandList);
 	}
-	catch (exception e) {
+	catch (exception& e) {
 		ret = e.what();
 	}
 	*m_out << ret << endl;
@@ -38,7 +38,7 @@ void TestLibrary::Erase(vector<string> vCommandList)
 	try {
 		m_pstDevice->Erase(vCommandList);
 	}
-	catch (exception e) {
+	catch (exception& e) {
 		*m_out << e.what() << endl;
 	}
 }
@@ -52,7 +52,7 @@ void TestLibrary::FullWrite(vector<string> vCommandList)
 			vCommandList[0] = to_string(nLBA);
 			m_pstDevice->Write(vCommandList);
 		}
-		catch (exception e) {
+		catch (exception& e) {
 			*m_out << e.what() << endl;
 			return;
 		}
@@ -69,7 +69,7 @@ void TestLibrary::FullRead(string strExpected)
 				throw runtime_error("Data Mismatch!!");
 			*m_out << ret << endl;
 		}
-		catch (exception e) {
+		catch (exception& e) {
 			ret = e.what();
 			*m_out << ret << endl;
 			return;
@@ -83,7 +83,7 @@ void TestLibrary::WriteRange(int nStartLba, int nEndLba, string strData)
 		try {
 			m_pstDevice->Write({to_string(nLBA), strData});
 		}
-		catch (exception e) {
+		catch (exception& e) {
 			*m_out << e.what() << endl;
 			return;
 		}
@@ -100,7 +100,7 @@ void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected)
 				throw runtime_error("Data Mismatch!!");
 			*m_out << ret << endl;
 		}
-		catch (exception e) {
+		catch (exception& e) {
 			*m_out << e.what() << endl;
 			return;
 		}

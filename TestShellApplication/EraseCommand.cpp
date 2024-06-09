@@ -1,4 +1,5 @@
 #include "EraseCommand.h"
+#include "ShellException.h"
 
 #include <stdexcept>
 
@@ -38,11 +39,11 @@ bool EraseCommand::CheckArgCnt(vector<string> vArgs) const
 void EraseCommand::_checkLBAFormat(string strLBA)
 {
 	if (strLBA.substr(0, 2) == "0x") {
-		throw invalid_argument("INVALID LBA");
+		throw Invalid_LBA("not a decimal format");
 	}
 	for (const char ch : strLBA) {
 		if ((ch >= '0') && (ch <= '9')) continue;
-		throw invalid_argument("INVALID LBA");
+		throw Invalid_LBA("not a decimal number found");
 	}
 }
 
@@ -59,7 +60,7 @@ void EraseCommand::_updateLBA(string strLBA)
 void EraseCommand::_checkLBARange()
 {
 	if (m_nLBA < m_pstDriver->GetMinLba() || m_nLBA >= m_pstDriver->GetMaxLba())
-		throw invalid_argument("INVALID LBA");
+		throw Invalid_LBA("LBA out of range");
 }
 
 
@@ -71,11 +72,11 @@ void EraseCommand::_checkLBAIsValid()
 void EraseCommand::_checkBlkCntFormat(std::string strBlkCnt)
 {
 	if (strBlkCnt.substr(0, 2) == "0x") {
-		throw invalid_argument("INVALID BLOCK COUNT");
+		throw Invalid_BlockCount("not a decimal format");
 	}
 	for (const char ch : strBlkCnt) {
 		if ((ch >= '0') && (ch <= '9')) continue;
-		throw invalid_argument("INVALID BLOCK COUNT");
+		throw Invalid_BlockCount("not a decimal number found");
 	}
 }
 
@@ -91,9 +92,9 @@ void EraseCommand::_updateBlkCnt(std::string strBlkCnt)
 
 void EraseCommand::_checkBlkRange()
 {
-	if (m_nBlkCnt < m_pstDriver->GetMinLba())
-		throw invalid_argument("INVALID BLOCK COUNT");
-	else if (m_nBlkCnt < m_pstDriver->GetMaxBlkCntPerErase())
-		throw invalid_argument("INBALID BLOCK COUNT - use 'erase_range [start_LBA] [end_LBA]'");
+	if (m_nBlkCnt < m_pstDriver->GetMinLba()) 
+		throw Invalid_BlockCount("Block Count out of range");
+	else if (m_nBlkCnt < m_pstDriver->GetMaxBlkCntPerErase()) 
+		throw Invalid_BlockCount("use 'erase_range [start_LBA] [end_LBA]'");
 	// TODO : check more conditions ?
 }
