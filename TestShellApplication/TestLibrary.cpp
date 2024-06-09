@@ -32,6 +32,17 @@ void TestLibrary::Read(vector<string> vCommandList)
 	*m_out << ret << endl;
 }
 
+void TestLibrary::Erase(vector<string> vCommandList)
+{
+	string ret;
+	try {
+		m_pstDevice->Erase(vCommandList);
+	}
+	catch (exception e) {
+		*m_out << e.what() << endl;
+	}
+}
+
 void TestLibrary::FullWrite(vector<string> vCommandList)
 {
 	vCommandList.insert(vCommandList.begin(), "DummyLBA");

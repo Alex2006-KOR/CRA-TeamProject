@@ -10,6 +10,7 @@ public:
 
 	void Write(vector<string> vCommandList);
 	void Read(vector<string> vCommandList);
+	void Erase(vector<string> vCommandList);
 	void FullWrite(vector<string> vCommandList);
 	void FullRead(string strExpected = "");
 	void WriteRange(int nStartLba, int nEndLba, string strData);

@@ -36,6 +36,9 @@ bool Shell::handleCommand(string strLine)
     else if (strCommand == "read") {
         m_pstTestLib->Read(vCommandList);
     }
+    else if (strCommand == "erase") {
+        m_pstTestLib->Erase(vCommandList);
+    }
     else if (strCommand == "fullwrite") {
         m_pstTestLib->FullWrite(vCommandList);
     }
