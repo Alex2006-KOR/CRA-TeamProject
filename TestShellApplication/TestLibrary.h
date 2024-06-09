@@ -15,13 +15,16 @@ public:
 	void FullRead(string strExpected = "");
 	void WriteRange(int nStartLba, int nEndLba, string strData);
 	void ReadRange(int nStartLba, int nEndLba, string strData = "");
-	void EraseRange(vector<string> vCommandList);
+	void EraseRangeInString(vector<string> vCommandList);
+	void EraseRange(int nStartLba, int nEndLba);
 
 private:
 	TestLibrary();
 	~TestLibrary();
 	TestLibrary(const TestLibrary&) = delete;
 	TestLibrary& operator=(const TestLibrary&) = delete;
+
+	void _ValidateArguemnts(std::vector<std::string>& vCommandList);
 
 	static TestLibrary* m_Instance;
 	Device* m_pstDevice;

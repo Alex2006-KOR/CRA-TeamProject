@@ -108,7 +108,13 @@ void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected)
 	}
 }
 
-void TestLibrary::EraseRange(vector<string> vCommandList)
+void TestLibrary::EraseRangeInString(vector<string> vCommandList)
+{
+	_ValidateArguemnts(vCommandList);
+	EraseRange(stoi(vCommandList[0]), stoi(vCommandList[1]));
+}
+
+void TestLibrary::_ValidateArguemnts(std::vector<std::string>& vCommandList)
 {
 	if (vCommandList.size() < 2)
 		throw invalid_argument("invalid # of args. please check help.");
@@ -120,9 +126,11 @@ void TestLibrary::EraseRange(vector<string> vCommandList)
 			// pass
 		}
 	}
+}
+
+void TestLibrary::EraseRange(int nStartLba, int nEndLba)
+{
 	try {
-		int nStartLba = stoi(vCommandList[0]);
-		int nEndLba = stoi(vCommandList[1]);
 		int nBlkCnt;
 		while (nStartLba <= nEndLba) {
 			nBlkCnt = ((nEndLba - nStartLba) > 10) ? 10 : nEndLba - nStartLba;
