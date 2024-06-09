@@ -35,9 +35,18 @@ void TestLibrary::Read(vector<string> vCommandList)
 
 void TestLibrary::Erase(vector<string> vCommandList)
 {
-	string ret;
 	try {
 		m_pstDevice->Erase(vCommandList);
+	}
+	catch (exception& e) {
+		*m_out << e.what() << endl;
+	}
+}
+
+void TestLibrary::Flush(vector<string> vCommandList)
+{
+	try {
+		m_pstDevice->Flush(vCommandList);
 	}
 	catch (exception& e) {
 		*m_out << e.what() << endl;

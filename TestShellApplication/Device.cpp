@@ -34,6 +34,14 @@ void Device::Erase(vector<string> vCommandList)
 		.execute();
 }
 
+void Device::Flush(vector<string> vCommandList)
+{
+	if (m_stFlush.CheckArgCnt(vCommandList) == false)
+		throw invalid_argument("invalid # of args. please check help.");
+
+	return m_stFlush.execute();
+}
+
 int Device::GetMinLba()
 {
 	return m_pstDriver->GetMinLba();
