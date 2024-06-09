@@ -45,6 +45,9 @@ bool Shell::handleCommand(string strLine)
     else if (strCommand == "fullread") {
         m_pstTestLib->FullRead();
     }
+    else if (strCommand == "erase_range") {
+        m_pstTestLib->EraseRangeInString(vCommandList);
+    }
     else if (strCommand == "testapp1") {
         m_pstTestApp1->Run();
     }

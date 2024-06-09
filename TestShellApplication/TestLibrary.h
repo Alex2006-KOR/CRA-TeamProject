@@ -15,6 +15,7 @@ public:
 	void FullRead(string strExpected = "");
 	void WriteRange(int nStartLba, int nEndLba, string strData);
 	void ReadRange(int nStartLba, int nEndLba, string strData = "");
+	void EraseRange(vector<string> vCommandList);
 
 private:
 	TestLibrary();

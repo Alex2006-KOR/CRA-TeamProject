@@ -1,4 +1,5 @@
 #include "TestLibrary.h"
+#include "ShellException.h"
 
 TestLibrary* TestLibrary::m_Instance = nullptr;
 
@@ -107,11 +108,39 @@ void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected)
 	}
 }
 
-TestLibrary::~TestLibrary()
+void TestLibrary::EraseRange(vector<string> vCommandList)
+{
+	if (vCommandList.size() < 2)
+		throw invalid_argument("invalid # of args. please check help.");
+	for (int nArgIndex = 0; nArgIndex < 2; nArgIndex++) {
+		try {
+			m_pstDevice->Erase({ vCommandList[nArgIndex], to_string(-1) });
+		}
+		catch (Invalid_BlockCount& e) {
+			// pass
+		}
+	}
+	try {
+		int nStartLba = stoi(vCommandList[0]);
+		int nEndLba = stoi(vCommandList[1]);
+		int nBlkCnt;
+		while (nStartLba <= nEndLba) {
+			nBlkCnt = ((nEndLba - nStartLba) > 10) ? 10 : nEndLba - nStartLba;
+			m_pstDevice->Erase({ to_string(nStartLba), to_string(nBlkCnt) });
+			nStartLba += nBlkCnt;
+		}
+	}
+	catch (exception& e) {
+		*m_out << e.what() << endl;
+	}
+}
+
+TestLibrary::TestLibrary()
+	: m_pstDevice(nullptr)
+	, m_out(nullptr)
 {
 }
 
-
-TestLibrary::TestLibrary()
+TestLibrary::~TestLibrary()
 {
 }
