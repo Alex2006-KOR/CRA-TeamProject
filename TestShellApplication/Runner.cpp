@@ -25,7 +25,7 @@ void Runner::_runCmdLineMode()
 {
 	if (_scenarioList.length() != 0)
 		return;
-	_shell.Run(std::cin, std::cout);
+	_shell.Run(std::cin);
 }
 
 void Runner::_runScenarioMode()
@@ -33,7 +33,7 @@ void Runner::_runScenarioMode()
 	if (_scenarioList.length() == 0)
 		return;
 	std::istringstream scenario(_scenarioList);
-	_shell.Run(scenario, std::cout);
+	_shell.Run(scenario);
 }
 
 bool Runner::_getScenarioExisted(string listFile)

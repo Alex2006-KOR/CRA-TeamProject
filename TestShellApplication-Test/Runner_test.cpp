@@ -8,8 +8,11 @@ using std::string;
 
 class SsdDeviceDriverMock : public DriverInterface {
 public:
-	MOCK_METHOD(int, Read, (int lba), (override));
+	MOCK_METHOD(void, Read, (int lba), (override));
 	MOCK_METHOD(void, Write, (int lba, int dat), (override));
+	MOCK_METHOD(std::string, ReadBuffer, (), (override));
+	MOCK_METHOD(int, GetMinLba, (), (override));
+	MOCK_METHOD(int, GetMaxLba, (), (override));
 };
 
 class RunnerMock : public Runner {
@@ -37,8 +40,8 @@ protected:
 		shell = new Shell(&ssd);
 		runner = new RunnerMock(*shell);
 
-		EXPECT_CALL(ssd, Read)
-			.WillRepeatedly(Return(0xABCD1234));
+		EXPECT_CALL(ssd, ReadBuffer)
+			.WillRepeatedly(Return(string("0xABCD1234")));
 
 		EXPECT_CALL(ssd, Write)
 			.WillRepeatedly(Return());
