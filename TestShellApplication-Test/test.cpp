@@ -26,7 +26,7 @@ class ShellTestFixture : public Test {
 public:
 	SsdDeviceDriverMock mockDevice;
 	std::ostringstream output;
-	Shell shell{ &mockDevice, output };
+	Shell shell{ &mockDevice };
 
 	std::string RunCommands(std::string strCommandLines) {
 		std::istringstream input(strCommandLines);
