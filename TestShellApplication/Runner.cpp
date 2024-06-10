@@ -33,7 +33,7 @@ void Runner::_runScenarioMode()
 	if (_scenarioList.length() == 0)
 		return;
 	std::istringstream scenario(_scenarioList);
-	_shell.Run(scenario);
+	_shell.Run(scenario, true);
 }
 
 bool Runner::_getScenarioExisted(string listFile)

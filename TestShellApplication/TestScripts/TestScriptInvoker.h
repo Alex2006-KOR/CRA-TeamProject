@@ -8,7 +8,7 @@ class TestScriptInvoker {
 public:
 	TestScriptInvoker(TestLibCommandInvoker* pstTestLibCommandInvoker);
 	TestScriptInterface* GetTestScript(string strCommand);
-	void Run(TestScriptInterface* stFunction);
+	bool Run(TestScriptInterface* stFunction, bool isScriptMode);
 
 private:
 	std::map<string, TestScriptInterface*> m_mapCommand;

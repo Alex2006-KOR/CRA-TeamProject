@@ -17,9 +17,18 @@ TestScriptInterface* TestScriptInvoker::GetTestScript(string strCommand)
 	return iterFind->second;
 }
 
-void TestScriptInvoker::Run(TestScriptInterface* stFunction)
+bool TestScriptInvoker::Run(TestScriptInterface* stFunction, bool isScriptMode)
 {
+	if (isScriptMode)
+		std::cout << stFunction->Name() << " --- Run ...";
 	stFunction->Run();
+
+	if (stFunction->Verdict() == false)
+		std::cout << "FAIL!" << endl;
+	else
+		std::cout << "Pass" << endl;
+
+	return stFunction->Verdict();
 }
 
 void TestScriptInvoker::_initCommands(TestLibCommandInvoker* pstTestLibCommandInvoker)

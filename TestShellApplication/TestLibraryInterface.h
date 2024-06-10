@@ -13,5 +13,5 @@ public:
 	virtual ~TestLibrary() {}
 
 public:
-	virtual void execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const = 0;
+	virtual bool execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const = 0;
 };
