@@ -30,4 +30,13 @@ Interface DataArguement{
 	virtual void _updateData(std::string& strData) = 0;
 	virtual void _checkSpelling(std::string& strData) = 0;
 	virtual void _checkDataFormat(std::string& strData) const = 0;
+}; 
+
+Interface BlkCntArgument{
+	virtual BlkCntArgument & setBlkCnt(std::string strBlkCnt) = 0;
+
+	virtual void _checkLBAIsValid() = 0;
+	virtual void _checkBlkCntFormat(std::string strLBA) = 0;
+	virtual void _updateBlkCnt(std::string strBlkCnt) = 0;
+	virtual void _checkBlkRange() = 0;
 };

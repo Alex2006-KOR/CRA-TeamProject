@@ -51,6 +51,15 @@
     <ClCompile Include="TestScripts\TestScriptBase.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="EraseCommand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ShellException.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FlushCommand.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="TestLibraryCommandInvoker.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -102,6 +111,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TestScripts\TestScriptBase.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EraseCommand.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellException.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FlushCommand.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TestLibraryCommandInvoker.h">

@@ -20,16 +20,21 @@ public:
         return *this;
     }
 
-    ExecutionCommandBuilder& setLbaIndex(int lbaIdx) {
-        command += (" " + std::to_string(lbaIdx));
+    ExecutionCommandBuilder& setLbaIndex(int nLba) {
+        command += (" " + std::to_string(nLba));
         return *this;
     }
 
-    ExecutionCommandBuilder& setWriteData(int data) {
+    ExecutionCommandBuilder& setWriteData(int nData) {
         std::stringstream ss;
         ss << "0x" << hex << std::uppercase
-            << setw(8) << setfill('0') << data;
+            << setw(8) << setfill('0') << nData;
         command += (" " + ss.str());
+        return *this;
+    }
+
+    ExecutionCommandBuilder& setBlockCount(int nBlkCnt) {
+        command += (" " + std::to_string(nBlkCnt));
         return *this;
     }
 
@@ -41,25 +46,49 @@ private:
     string command;
 };
 
-void SSDDriver::Read(int lba)
+void SSDDriver::Read(int nLba)
 {
     _executeCommand(
         ExecutionCommandBuilder()
         .setAccessType("R")
-        .setLbaIndex(lba)
+        .setLbaIndex(nLba)
         .build()
     );
 }
 
-void SSDDriver::Write(int lba, int data)
+void SSDDriver::Write(int nLba, int nData)
 {
     _executeCommand(
         ExecutionCommandBuilder()
         .setAccessType("W")
-        .setLbaIndex(lba)
-        .setWriteData(data)
+        .setLbaIndex(nLba)
+        .setWriteData(nData)
         .build()
     );
+}
+
+void SSDDriver::Erase(int nLba, int nBlkCnt)
+{
+    _executeCommand(
+        ExecutionCommandBuilder()
+        .setAccessType("E")
+        .setLbaIndex(nLba)
+        .setBlockCount(nBlkCnt)
+        .build()
+    );
+}
+
+void SSDDriver::Flush()
+{
+    _executeCommand(
+        ExecutionCommandBuilder()
+        .setAccessType("F")
+        .build()
+    );
+}
+
+void SSDDriver::_executeCommand(const char* strCommand) {
+    system(strCommand);
 }
 
 std::string SSDDriver::ReadBuffer()
@@ -67,20 +96,6 @@ std::string SSDDriver::ReadBuffer()
     if (_getSsdExisted())
         return _getSsdResult();
     return string();
-}
-
-int SSDDriver::GetMinLba()
-{
-    return MIN_LBA;
-}
-
-int SSDDriver::GetMaxLba()
-{
-    return MAX_LBA;
-}
-
-void SSDDriver::_executeCommand(const char* strCommand) {
-    system(strCommand);
 }
 
 bool SSDDriver::_getSsdExisted(void)
@@ -105,4 +120,19 @@ std::string SSDDriver::_getSsdResult(void)
     ifstreamRead.close();
 
     return readData;
+}
+
+int SSDDriver::GetMinLba()
+{
+    return MIN_LBA;
+}
+
+int SSDDriver::GetMaxLba()
+{
+    return MAX_LBA;
+}
+
+int SSDDriver::GetMaxBlkCntPerErase()
+{
+    return MAX_BLK_CNT_PER_ERASE;
 }

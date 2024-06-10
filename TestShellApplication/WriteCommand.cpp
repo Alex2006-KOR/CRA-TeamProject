@@ -1,4 +1,5 @@
 #include "WriteCommand.h"
+#include "ShellException.h"
 
 #include <stdexcept>
 
@@ -38,11 +39,11 @@ bool WriteCommand::CheckArgCnt(vector<string> vArgs) const
 void WriteCommand::_checkLBAFormat(string strLBA)
 {
 	if (strLBA.substr(0, 2) == "0x") {
-		throw invalid_argument("INVALID LBA");
+		throw Invalid_LBA("not a decimal format");
 	}
 	for (const char ch : strLBA) {
 		if ((ch >= '0') && (ch <= '9')) continue;
-		throw invalid_argument("INVALID LBA");
+		throw Invalid_LBA("not a decimal number found");
 	}
 }
 
@@ -59,7 +60,7 @@ void WriteCommand::_updateLBA(string strLBA)
 void WriteCommand::_checkLBARange()
 {
 	if (m_nLBA < m_pstDriver->GetMinLba() || m_nLBA >= m_pstDriver->GetMaxLba())
-		throw invalid_argument("INVALID LBA");
+		throw Invalid_LBA("LBA out of range");
 }
 
 
@@ -67,7 +68,7 @@ void WriteCommand::_checkDataFormat(string& strData) const
 {
 	if (strData.substr(0, 2).compare("0x") != 0
 		|| strData.size() != REQUIRED_DATA_LENGTH)
-		throw invalid_argument("INVALID DATA");
+		throw Invalid_Data("not a hexadecimal format");
 }
 
 void WriteCommand::_checkSpelling(string& strData)
@@ -78,7 +79,7 @@ void WriteCommand::_checkSpelling(string& strData)
 		if ((ch >= '0') && (ch <= '9')) continue;
 		if ((ch >= 'a') && (ch <= 'f')) continue;
 		if ((ch >= 'A') && (ch <= 'F')) continue;
-		throw exception("INVALID DATA");
+		throw Invalid_Data("not a hexadecial number found");
 	}
 }
 

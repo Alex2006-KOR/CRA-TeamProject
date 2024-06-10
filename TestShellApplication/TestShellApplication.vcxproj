@@ -129,6 +129,8 @@
   <ItemGroup>
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DriverInterface.h" />
+    <ClCompile Include="EraseCommand.cpp" />
+    <ClCompile Include="FlushCommand.cpp" />
     <ClCompile Include="FileLoggerPrinter.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
@@ -136,6 +138,7 @@
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Runner.cpp" />
     <ClCompile Include="Shell.cpp" />
+    <ClCompile Include="ShellException.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
     <ClCompile Include="TestLibrary.cpp" />
     <ClCompile Include="TestLibraryCommandInvoker.cpp" />
@@ -149,6 +152,8 @@
   <ItemGroup>
     <ClInclude Include="CommandInterface.h" />
     <ClInclude Include="Device.h" />
+    <ClInclude Include="EraseCommand.h" />
+    <ClInclude Include="FlushCommand.h" />
     <ClInclude Include="FileLoggerPrinter.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="LoggerPrinter.h" />
@@ -156,6 +161,7 @@
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Runner.h" />
     <ClInclude Include="Shell.h" />
+    <ClInclude Include="ShellException.h" />
     <ClInclude Include="SSDDriver.h" />
     <ClInclude Include="TestLibrary.h" />
     <ClInclude Include="TestLibraryCommandInvoker.h" />

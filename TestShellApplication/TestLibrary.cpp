@@ -1,5 +1,6 @@
 #include "Logger.h"
 #include "TestLibrary.h"
+#include "ShellException.h"
 
 TestLibWrite::TestLibWrite(Device* pstDevice)
 	:m_pstDevice(pstDevice){}
@@ -9,7 +10,7 @@ void TestLibWrite::execute(const vector<string>& vCommandList, int nStartLba, in
 	try {
 		m_pstDevice->Write(vCommandList);
 	}
-	catch (exception e) {
+	catch (exception& e) {
 		LOG(e.what());
 	}
 }
@@ -23,10 +24,36 @@ void TestLibRead::execute(const vector<string>& vCommandList, int nStartLba, int
 	try {
 		ret = m_pstDevice->Read(vCommandList);
 	}
-	catch (exception e) {
+	catch (exception& e) {
 		ret = e.what();
 	}
 	LOG(ret);
+}
+
+TestLibErase::TestLibErase(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
+
+void TestLibErase::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+{
+	try {
+		m_pstDevice->Erase(vCommandList);
+	}
+	catch (exception& e) {
+		LOG(e.what());
+	}
+}
+
+TestLibFlush::TestLibFlush(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
+
+void TestLibFlush::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+{
+	try {
+		m_pstDevice->Flush(vCommandList);
+	}
+	catch (exception& e) {
+		LOG(e.what());
+	}
 }
 
 TestLibFullWrite::TestLibFullWrite(Device* pstDevice)
@@ -43,7 +70,7 @@ void TestLibFullWrite::execute(const vector<string>& vCommandList, int nStartLba
 			string strData = vCommandList[nIndex % vCommandList.size()];
 			m_pstDevice->Write({ to_string(nLBA), strData });
 		}
-		catch (exception e) {
+		catch (exception& e) {
 			LOG(e.what());
 			return;
 		}
@@ -68,7 +95,7 @@ void TestLibFullRead::execute(const vector<string>& vCommandList, int nStartLba,
 			}
 			LOG(ret);
 		}
-		catch (exception e) {
+		catch (exception& e) {
 			LOG(e.what());
 			return;
 		}
@@ -84,7 +111,7 @@ void TestLibWriteRange::execute(const vector<string>& vCommandList, int nStartLb
 		try {
 			m_pstDevice->Write({ to_string(nLBA), strData });
 		}
-		catch (exception e) {
+		catch (exception& e) {
 			LOG(e.what());
 			return;
 		}
@@ -104,9 +131,41 @@ void TestLibReadRange::execute(const vector<string>& vCommandList, int nStartLba
 				throw runtime_error("Data Mismatch!!");
 			LOG(ret);
 		}
-		catch (exception e) {
+		catch (exception& e) {
 			LOG(e.what());
 			return;
+		}
+	}
+}
+
+TestLibEraseRange::TestLibEraseRange(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
+
+void TestLibEraseRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+{
+	if (vCommandList.size() > 0) {
+		_validateArguments(vCommandList);
+		nStartLba = stoi(vCommandList[0]);
+		nEndLba = stoi(vCommandList[1]);
+	}
+	try {
+		m_pstDevice->Erase({ to_string(nStartLba), to_string(nEndLba - nStartLba) });
+	}
+	catch (exception& e) {
+		LOG(e.what());
+	}
+}
+
+void TestLibEraseRange::_validateArguments(const std::vector<std::string>& vCommandList) const
+{
+	if (vCommandList.size() < 2)
+		throw invalid_argument("invalid # of args. please check help.");
+	for (int nArgIndex = 0; nArgIndex < 2; nArgIndex++) {
+		try {
+			m_pstDevice->Erase({ vCommandList[nArgIndex], to_string(-1) });
+		}
+		catch (Invalid_BlockCount& e) {
+			// pass
 		}
 	}
 }

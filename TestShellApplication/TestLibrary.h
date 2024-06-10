@@ -27,6 +27,22 @@ private:
 	Device* m_pstDevice;
 };
 
+class TestLibErase : public TestLibrary {
+public:
+	TestLibErase(Device* pstDevice);
+	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+private:
+	Device* m_pstDevice;
+};
+
+class TestLibFlush : public TestLibrary {
+public:
+	TestLibFlush(Device* pstDevice);
+	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+private:
+	Device* m_pstDevice;
+};
+
 class TestLibFullWrite : public TestLibrary {
 public:
 	TestLibFullWrite(Device* pstDevice);
@@ -57,4 +73,14 @@ public:
 	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
 private:
 	Device* m_pstDevice;
+};
+
+class TestLibEraseRange : public TestLibrary {
+public:
+	TestLibEraseRange(Device* pstDevice);
+	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+private:
+	Device* m_pstDevice;
+	void _validateArguments(const std::vector<std::string>& vCommandList) const;
+
 };

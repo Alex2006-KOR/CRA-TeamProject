@@ -24,6 +24,24 @@ string Device::Read(vector<string> vCommandList)
 		.execute();
 }
 
+void Device::Erase(vector<string> vCommandList)
+{
+	if (m_stErase.CheckArgCnt(vCommandList) == false)
+		throw invalid_argument("invalid # of args. please check help.");
+
+	return m_stErase.setLBA(vCommandList[0])
+		.setBlkCnt(vCommandList[1])
+		.execute();
+}
+
+void Device::Flush(vector<string> vCommandList)
+{
+	if (m_stFlush.CheckArgCnt(vCommandList) == false)
+		throw invalid_argument("invalid # of args. please check help.");
+
+	return m_stFlush.execute();
+}
+
 int Device::GetMinLba()
 {
 	return m_pstDriver->GetMinLba();

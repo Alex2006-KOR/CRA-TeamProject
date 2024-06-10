@@ -1,4 +1,5 @@
 #include "ReadCommand.h"
+#include "ShellException.h"
 
 #include <stdexcept>
 
@@ -30,11 +31,11 @@ bool ReadCommand::CheckArgCnt(vector<string> vArgs) const
 void ReadCommand::_checkLBAFormat(string strLBA)
 {
     if (strLBA.substr(0, 2) == "0x") {
-        throw invalid_argument("INVALID LBA");
+        throw Invalid_LBA("not a decimal format");
     }
     for (const char ch : strLBA) {
         if ((ch >= '0') && (ch <= '9')) continue;
-        throw invalid_argument("INVALID LBA");
+        throw Invalid_LBA("not a decimal number found");
     }
 }
 
@@ -51,5 +52,5 @@ void ReadCommand::_updateLBA(string strLBA)
 void ReadCommand::_checkLBARange()
 {
     if (m_nLBA < m_pstDriver->GetMinLba() || m_nLBA >= m_pstDriver->GetMaxLba())
-        throw invalid_argument("INVALID LBA");
+        throw Invalid_LBA("LBA out of range");
 }

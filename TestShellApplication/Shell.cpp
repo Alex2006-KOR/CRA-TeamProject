@@ -24,7 +24,7 @@ void Shell::Run(istream& input)
 bool Shell::handleCommand(string strLine)
 {
     vector<string> vCommandList = _splitLine(strLine);
-
+    if (vCommandList.size() == 0) return false;
     string strCommand = _trim(vCommandList[0]);
     if (strCommand == "") return false;
 
@@ -62,12 +62,15 @@ void Shell::_printHelp()
 << Command Usage >> \n\
 - write [lba] [data]\n\
 - read [lba]\n\
+- erase [lba] [block count]\n\
 - fullwrite [data]\n\
 - fullread\n\
+- erase_range [start lba] [end lba]\n\
 - exit\n\
 \n\
 [lba] : decimal only, range = [0, 99]\n\
 [data] : hexadecimal only, range = [0x00000000, 0xFFFFFFFF]\n\
+[block count] : decimal only, range = [0, 10] (erase) \n\
 ";
     LOG(strHelp);
 }
