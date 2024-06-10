@@ -12,7 +12,7 @@ using namespace std;
 class Shell
 {
 public:
-	Shell(DriverInterface* pstDevice, ostream& output);
+	Shell(DriverInterface* pstDevice);
 
 public:
 	void Run(istream& input);

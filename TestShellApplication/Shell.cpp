@@ -3,12 +3,12 @@
 #include <sstream>
 #include <vector>
 
-Shell::Shell(DriverInterface* pstDriver, ostream& output)
-    : m_out(output)
+Shell::Shell(DriverInterface* pstDriver)
+    : m_out(std::cout)
 {
-    m_pstTestLib = TestLibrary::GetLibrary(pstDriver, &output);
-    m_pstTestApp1 = new TestApp1(pstDriver, output);
-    m_pstTestApp2 = new TestApp2(pstDriver, output);
+    m_pstTestLib = TestLibrary::GetLibrary(pstDriver, &m_out);
+    m_pstTestApp1 = new TestApp1(pstDriver, m_out);
+    m_pstTestApp2 = new TestApp2(pstDriver, m_out);
 }
 
 void Shell::Run(istream& input)
