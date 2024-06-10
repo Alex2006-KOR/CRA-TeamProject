@@ -2,27 +2,27 @@
 #include "TestLibrary.h"
 #include "ShellException.h"
 
-TestLibWrite::TestLibWrite(Device* pstDevice)
+TestLibWrite::TestLibWrite(Device& pstDevice)
 	:m_pstDevice(pstDevice){}
 
 void TestLibWrite::execute() const
 {
 	try {
-		m_pstDevice->Write(m_vCommandList);
+		m_pstDevice.Write(m_vCommandList);
 	}
 	catch (exception& e) {
 		LOG(e.what());
 	}
 }
 
-TestLibRead::TestLibRead(Device* pstDevice)
+TestLibRead::TestLibRead(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
 void TestLibRead::execute() const
 {
 	string ret;
 	try {
-		ret = m_pstDevice->Read(m_vCommandList);
+		ret = m_pstDevice.Read(m_vCommandList);
 	}
 	catch (exception& e) {
 		ret = e.what();
@@ -30,45 +30,45 @@ void TestLibRead::execute() const
 	LOG(ret);
 }
 
-TestLibErase::TestLibErase(Device* pstDevice)
+TestLibErase::TestLibErase(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
 void TestLibErase::execute() const
 {
 	try {
-		m_pstDevice->Erase(m_vCommandList);
+		m_pstDevice.Erase(m_vCommandList);
 	}
 	catch (exception& e) {
 		LOG(e.what());
 	}
 }
 
-TestLibFlush::TestLibFlush(Device* pstDevice)
+TestLibFlush::TestLibFlush(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
 void TestLibFlush::execute() const
 {
 	try {
-		m_pstDevice->Flush(m_vCommandList);
+		m_pstDevice.Flush(m_vCommandList);
 	}
 	catch (exception& e) {
 		LOG(e.what());
 	}
 }
 
-TestLibFullWrite::TestLibFullWrite(Device* pstDevice)
+TestLibFullWrite::TestLibFullWrite(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
 void TestLibFullWrite::execute() const
 {
-	for (int nLBA = m_pstDevice->GetMinLba(); nLBA < m_pstDevice->GetMaxLba(); nLBA++) {
+	for (int nLBA = m_pstDevice.GetMinLba(); nLBA < m_pstDevice.GetMaxLba(); nLBA++) {
 
 		try {
-			int nIndex = nLBA - m_pstDevice->GetMinLba();
+			int nIndex = nLBA - m_pstDevice.GetMinLba();
 
 			if (m_vCommandList.size() == 0) throw invalid_argument("check help - fullwrite [data]");
 			string strData = m_vCommandList[nIndex % m_vCommandList.size()];
-			m_pstDevice->Write({ to_string(nLBA), strData });
+			m_pstDevice.Write({ to_string(nLBA), strData });
 		}
 		catch (exception& e) {
 			LOG(e.what());
@@ -77,18 +77,18 @@ void TestLibFullWrite::execute() const
 	}
 }
 
-TestLibFullRead::TestLibFullRead(Device* pstDevice)
+TestLibFullRead::TestLibFullRead(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
 void TestLibFullRead::execute() const
 {
 	string ret;
-	for (int nLBA = m_pstDevice->GetMinLba(); nLBA < m_pstDevice->GetMaxLba(); nLBA++) {
+	for (int nLBA = m_pstDevice.GetMinLba(); nLBA < m_pstDevice.GetMaxLba(); nLBA++) {
 		try {
-			ret = m_pstDevice->Read({ to_string(nLBA) });
+			ret = m_pstDevice.Read({ to_string(nLBA) });
 
 			if (m_vCommandList.size() > 0) {
-				int nIndex = nLBA - m_pstDevice->GetMinLba();
+				int nIndex = nLBA - m_pstDevice.GetMinLba();
 				string strCompareData = m_vCommandList[nIndex % m_vCommandList.size()];
 				if (strCompareData.size() == 10 && ret != strCompareData)
 					throw runtime_error("Data Mismatch!!");
@@ -102,14 +102,14 @@ void TestLibFullRead::execute() const
 	}
 }
 
-TestLibWriteRange::TestLibWriteRange(Device* pstDevice)
+TestLibWriteRange::TestLibWriteRange(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
 void TestLibWriteRange::execute() const
 {
 	for (int nLBA = m_nStartLba; nLBA <= m_nEndLba; nLBA++) {
 		try {
-			m_pstDevice->Write({ to_string(nLBA), m_strData });
+			m_pstDevice.Write({ to_string(nLBA), m_strData });
 		}
 		catch (exception& e) {
 			LOG(e.what());
@@ -118,7 +118,7 @@ void TestLibWriteRange::execute() const
 	}
 }
 
-TestLibReadRange::TestLibReadRange(Device* pstDevice)
+TestLibReadRange::TestLibReadRange(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
 void TestLibReadRange::execute() const
@@ -126,7 +126,7 @@ void TestLibReadRange::execute() const
 	string ret;
 	for (int nLBA = m_nStartLba; nLBA <= m_nEndLba; nLBA++) {
 		try {
-			ret = m_pstDevice->Read({ to_string(nLBA) });
+			ret = m_pstDevice.Read({ to_string(nLBA) });
 			if (m_strData.size() == 10 && ret != m_strData)
 				throw runtime_error("Data Mismatch!!");
 			LOG(ret);
@@ -138,7 +138,7 @@ void TestLibReadRange::execute() const
 	}
 }
 
-TestLibEraseRange::TestLibEraseRange(Device* pstDevice)
+TestLibEraseRange::TestLibEraseRange(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
 void TestLibEraseRange::execute() const
@@ -151,7 +151,7 @@ void TestLibEraseRange::execute() const
 		nEndLba = stoi(m_vCommandList[1]);
 	}
 	try {
-		m_pstDevice->Erase({ to_string(nStartLba), to_string(nEndLba - nStartLba) });
+		m_pstDevice.Erase({ to_string(nStartLba), to_string(nEndLba - nStartLba) });
 	}
 	catch (exception& e) {
 		LOG(e.what());
@@ -164,7 +164,7 @@ void TestLibEraseRange::_validateArguments() const
 		throw invalid_argument("invalid # of args. please check help.");
 	for (int nArgIndex = 0; nArgIndex < 2; nArgIndex++) {
 		try {
-			m_pstDevice->Erase({ m_vCommandList[nArgIndex], to_string(-1) });
+			m_pstDevice.Erase({ m_vCommandList[nArgIndex], to_string(-1) });
 		}
 		catch (Invalid_BlockCount& e) {
 			// pass

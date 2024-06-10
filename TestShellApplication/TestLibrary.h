@@ -7,75 +7,75 @@
 
 class TestLibWrite : public TestLibrary {
 public:
-	TestLibWrite(Device* pstDevice);
+	TestLibWrite(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 
 };
 
 class TestLibRead : public TestLibrary {
 public:
-	TestLibRead(Device* pstDevice);
+	TestLibRead(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibErase : public TestLibrary {
 public:
-	TestLibErase(Device* pstDevice);
+	TestLibErase(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibFlush : public TestLibrary {
 public:
-	TestLibFlush(Device* pstDevice);
+	TestLibFlush(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibFullWrite : public TestLibrary {
 public:
-	TestLibFullWrite(Device* pstDevice);
+	TestLibFullWrite(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibFullRead : public TestLibrary {
 public:
-	TestLibFullRead(Device* pstDevice);
+	TestLibFullRead(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibWriteRange : public TestLibrary {
 public:
-	TestLibWriteRange(Device* pstDevice);
+	TestLibWriteRange(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibReadRange : public TestLibrary {
 public:
-	TestLibReadRange(Device* pstDevice);
+	TestLibReadRange(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibEraseRange : public TestLibrary {
 public:
-	TestLibEraseRange(Device* pstDevice);
+	TestLibEraseRange(Device& pstDevice);
 	void execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 	void _validateArguments() const;
 
 };

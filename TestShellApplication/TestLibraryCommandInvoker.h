@@ -14,5 +14,5 @@ public:
 private:
 	std::map<string, TestLibrary*> m_mapCommand;
 
-	void _initCommands(Device* pstDevice);
+	void _initCommands(DriverInterface* pstDriver);
 };
