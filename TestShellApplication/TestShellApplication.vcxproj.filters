@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Logger">
+      <UniqueIdentifier>{1e26a09f-fef8-451e-9abe-5a97dd7c54ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SSDCommand.cpp">
@@ -64,7 +67,13 @@
 		<Filter>소스 파일</Filter>
 	</ClCompile>
     <ClCompile Include="Logger.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="OutstreamLoggerPrinter.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="FileLoggerPrinter.cpp">
+      <Filter>Logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,8 +124,17 @@
 	<ClInclude Include="Runner.h">
 		<Filter>헤더 파일</Filter>
 	</ClInclude>
-	<ClInclude Include="Logger.h">
-		<Filter>헤더 파일</Filter>
-	</ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="FileLoggerPrinter.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="OutstreamLoggerPrinter.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerPrinter.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
