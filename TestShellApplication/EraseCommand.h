@@ -20,7 +20,7 @@ private:
 	DriverInterface* m_pstDriver;
 	vector<string> m_vArguemnts;
 	int m_nLBA;
-	int m_nBlkCnt;
+	int m_nRemainBlkCnt;
 
 	const int REQUIRED_COMMAND_COUNT = 2;
 	const int REQUIRED_DATA_LENGTH = 10;

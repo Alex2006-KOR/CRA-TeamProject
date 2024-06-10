@@ -6,7 +6,7 @@
 EraseCommand::EraseCommand(DriverInterface* pstDriver)
 	: m_pstDriver(pstDriver)
 	, m_nLBA(-1)
-	, m_nBlkCnt(0x00000000)
+	, m_nRemainBlkCnt(0)
 {
 }
 
@@ -28,7 +28,13 @@ EraseCommand& EraseCommand::setBlkCnt(string strData)
 
 void EraseCommand::execute()
 {
-	m_pstDriver->Erase(m_nLBA, m_nBlkCnt);
+	int nMaxBlkCnt = m_pstDriver->GetMaxBlkCntPerErase();
+	while (m_nRemainBlkCnt > 0) {
+		int nBlkCnt = (m_nRemainBlkCnt > nMaxBlkCnt) ? nMaxBlkCnt : m_nRemainBlkCnt;
+		m_pstDriver->Erase(m_nLBA, nBlkCnt);
+		m_nLBA += nBlkCnt;
+		m_nRemainBlkCnt -= nBlkCnt;
+	}
 }
 
 bool EraseCommand::CheckArgCnt(vector<string> vArgs) const
@@ -83,18 +89,16 @@ void EraseCommand::_checkBlkCntFormat(std::string strBlkCnt)
 void EraseCommand::_updateBlkCnt(std::string strBlkCnt)
 {
 	try {
-		m_nBlkCnt = stoi(strBlkCnt);
+		m_nRemainBlkCnt = stoi(strBlkCnt);
 	}
 	catch (const out_of_range& e) {
-		m_nBlkCnt = -1;
+		m_nRemainBlkCnt = -1;
 	}
 }
 
 void EraseCommand::_checkBlkRange()
 {
-	if (m_nBlkCnt <= 0) 
+	if (m_nRemainBlkCnt <= 0) 
 		throw Invalid_BlockCount("Block Count out of range");
-	else if (m_nBlkCnt > m_pstDriver->GetMaxBlkCntPerErase()) 
-		throw Invalid_BlockCount("use 'erase_range [start_LBA] [end_LBA]'");
 	// TODO : check more conditions ?
 }

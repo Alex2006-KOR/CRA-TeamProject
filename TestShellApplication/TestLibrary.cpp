@@ -149,12 +149,7 @@ void TestLibEraseRange::execute(const vector<string>& vCommandList, int nStartLb
 		nEndLba = stoi(vCommandList[1]);
 	}
 	try {
-		int nBlkCnt;
-		while (nStartLba < nEndLba) {
-			nBlkCnt = ((nEndLba - nStartLba) > 10) ? 10 : nEndLba - nStartLba;
-			m_pstDevice->Erase({ to_string(nStartLba), to_string(nBlkCnt) });
-			nStartLba += nBlkCnt;
-		}
+		m_pstDevice->Erase({ to_string(nStartLba), to_string(nEndLba - nStartLba) });
 	}
 	catch (exception& e) {
 		LOG(e.what());
