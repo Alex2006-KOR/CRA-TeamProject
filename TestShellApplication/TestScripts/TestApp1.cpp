@@ -1,6 +1,6 @@
 #include "TestApp1.h"
 
-TestApp1::TestApp1(TestLibCommandInvoker* pstTestLibCommandInvoker)
+TestApp1::TestApp1(TestLibCommandInvokerdInterface* pstTestLibCommandInvoker)
 	: TestScriptBase(pstTestLibCommandInvoker)
 {
 }

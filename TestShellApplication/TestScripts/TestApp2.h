@@ -3,7 +3,7 @@
 
 class TestApp2 : public TestScriptBase {
 public:
-	TestApp2(TestLibCommandInvoker* pstTestLibCommandInvoker);
+	TestApp2(TestLibCommandInvokerdInterface* pstTestLibCommandInvoker);
 
 	void _setup() override;
 	void _main() override;

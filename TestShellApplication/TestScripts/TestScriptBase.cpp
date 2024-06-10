@@ -1,6 +1,6 @@
 #include "TestScriptBase.h"
 
-TestScriptBase::TestScriptBase(TestLibCommandInvoker* pstTestLibCommandInvoker)
+TestScriptBase::TestScriptBase(TestLibCommandInvokerdInterface* pstTestLibCommandInvoker)
 	: m_pstTestLibCommandInvoker(pstTestLibCommandInvoker)
 {
 }

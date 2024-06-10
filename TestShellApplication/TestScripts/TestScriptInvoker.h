@@ -1,16 +1,17 @@
 #pragma once
-#include "TestApp1.h"
-#include "TestApp2.h"
+#include "../TestLibraryCommandInvoker.h"
+#include "TestScriptInterface.h"
+
 #include <map>
 
 class TestScriptInvoker {
 public:
 	TestScriptInvoker(TestLibCommandInvoker* pstTestLibCommandInvoker);
-	TestScriptBase* GetTestScript(string strCommand);
-	void Run(TestScriptBase* stFunction);
+	TestScriptInterface* GetTestScript(string strCommand);
+	void Run(TestScriptInterface* stFunction);
 
 private:
-	std::map<string, TestScriptBase*> m_mapCommand;
+	std::map<string, TestScriptInterface*> m_mapCommand;
 
 	void _initCommands(TestLibCommandInvoker* pstTestLibCommandInvoker);
 };

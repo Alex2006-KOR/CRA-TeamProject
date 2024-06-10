@@ -1,11 +1,14 @@
+#include <Windows.h>
+
 #include "TestScriptInvoker.h"
+
 
 TestScriptInvoker::TestScriptInvoker(TestLibCommandInvoker* pstTestLibCommandInvoker)
 {
 	_initCommands(pstTestLibCommandInvoker);
 }
 
-TestScriptBase* TestScriptInvoker::GetTestScript(string strCommand)
+TestScriptInterface* TestScriptInvoker::GetTestScript(string strCommand)
 {
 	auto iterFind = m_mapCommand.find(strCommand);
 	if (iterFind == m_mapCommand.end()) {
@@ -14,13 +17,31 @@ TestScriptBase* TestScriptInvoker::GetTestScript(string strCommand)
 	return iterFind->second;
 }
 
-void TestScriptInvoker::Run(TestScriptBase* stFunction)
+void TestScriptInvoker::Run(TestScriptInterface* stFunction)
 {
 	stFunction->Run();
 }
 
 void TestScriptInvoker::_initCommands(TestLibCommandInvoker* pstTestLibCommandInvoker)
 {
-	m_mapCommand["testapp1"] = new TestApp1(pstTestLibCommandInvoker);
-	m_mapCommand["testapp2"] = new TestApp2(pstTestLibCommandInvoker);
+	char path[MAX_PATH];
+	GetModuleFileNameA(NULL, path, MAX_PATH);
+	string strPath = path;
+	int nPos = strPath.find_last_of("\\");
+	strPath = strPath.substr(0, nPos + 1);
+	strPath += "TestScriptLib.dll";
+
+	typedef void (*GetTestSciprtList)(TestLibCommandInvoker*, std::map<string, TestScriptInterface*>&);
+
+	HMODULE hDLL = LoadLibraryA(strPath.c_str());
+	if (hDLL == nullptr) {
+		return;
+	}
+
+	GetTestSciprtList getTestScriptListFunc = (GetTestSciprtList)GetProcAddress(hDLL, "GetTestSciprtList");
+	if (getTestScriptListFunc == NULL) {
+		return;
+	}
+
+	getTestScriptListFunc(pstTestLibCommandInvoker, m_mapCommand);
 }

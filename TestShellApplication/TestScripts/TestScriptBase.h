@@ -1,16 +1,19 @@
 #pragma once
 #include "../Device.h"
-#include "../TestLibraryCommandInvoker.h"
+#include "../TestLibraryCommandInvokerInterface.h"
+#include "TestScriptInterface.h"
 
-class TestScriptBase{
+class TestScriptBase
+	: public TestScriptInterface
+{
 public:
-	TestScriptBase(TestLibCommandInvoker* pstTestLibCommandInvoker);
-	void Run();
+	TestScriptBase(TestLibCommandInvokerdInterface* pstTestLibCommandInvoker);
+	void Run() override;
 
 protected:
 	virtual void _setup() = 0;
 	virtual void _main() = 0;
 	virtual void _cleanup() = 0;
 
-	TestLibCommandInvoker* m_pstTestLibCommandInvoker;
+	TestLibCommandInvokerdInterface* m_pstTestLibCommandInvoker;
 };

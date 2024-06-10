@@ -1,14 +1,9 @@
 #pragma once
 #include "Device.h"
+#include "TestLibraryInterface.h"
 
 #include <iomanip>
 #include <iostream>
-
-class TestLibrary {
-public:
-	virtual ~TestLibrary() = default;
-	virtual void execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const = 0;
-};
 
 class TestLibWrite : public TestLibrary {
 public:
