@@ -129,7 +129,10 @@
   <ItemGroup>
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="DriverInterface.h" />
+    <ClCompile Include="FileLoggerPrinter.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OutstreamLoggerPrinter.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
@@ -142,7 +145,10 @@
   <ItemGroup>
     <ClInclude Include="CommandInterface.h" />
     <ClInclude Include="Device.h" />
-    <ClInclude Include="Platform.h" />
+    <ClInclude Include="FileLoggerPrinter.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="LoggerPrinter.h" />
+    <ClInclude Include="OutstreamLoggerPrinter.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDDriver.h" />

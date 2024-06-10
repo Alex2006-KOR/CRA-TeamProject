@@ -11,13 +11,17 @@ public:
 	string expectedCommand;
 
 	void doWriteCommandTest(int lba, int data) {
-		expectedCommand = "VirtualSSD.exe W " + 
-			to_string(lba) + " " + to_string(data);
+		std::stringstream ss;
+		ss << "0x" << hex << std::uppercase
+			<< setw(8) << setfill('0') << data;
+
+		expectedCommand = "VirtualSSD.exe W " +
+			to_string(lba) + " " + ss.str();
 		Write(lba, data);
 	}
 
 	void doReadCommandTest(int lba) {
-		expectedCommand = "VirtualSSD.exe R " + 
+		expectedCommand = "VirtualSSD.exe R " +
 			to_string(lba);
 		Read(lba);
 	}
