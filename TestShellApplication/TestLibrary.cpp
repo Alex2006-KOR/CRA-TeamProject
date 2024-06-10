@@ -1,12 +1,13 @@
 #include "TestLibrary.h"
 
+#include "Logger.h"
+
 TestLibrary* TestLibrary::m_Instance = nullptr;
 
-TestLibrary* TestLibrary::GetLibrary(DriverInterface* pstDriver, ostream* output)
+TestLibrary* TestLibrary::GetLibrary(DriverInterface* pstDriver)
 {
 	if (m_Instance == nullptr) m_Instance = new TestLibrary();
 	if (pstDriver != nullptr) m_Instance->m_pstDevice = new Device(pstDriver);
-	if (output != nullptr) m_Instance->m_out = output;
 	return m_Instance;
 }
 
@@ -16,7 +17,7 @@ void TestLibrary::Write(vector<string> vCommandList)
 		m_pstDevice->Write(vCommandList);
 	}
 	catch (exception e) {
-		*m_out << e.what() << endl;
+		LOG(e.what());
 	}
 }
 
@@ -29,7 +30,7 @@ void TestLibrary::Read(vector<string> vCommandList)
 	catch (exception e) {
 		ret = e.what();
 	}
-	*m_out << ret << endl;
+	LOG(ret);
 }
 
 void TestLibrary::FullWrite(vector<string> vCommandList)
@@ -42,7 +43,7 @@ void TestLibrary::FullWrite(vector<string> vCommandList)
 			m_pstDevice->Write(vCommandList);
 		}
 		catch (exception e) {
-			*m_out << e.what() << endl;
+			LOG(e.what());
 			return;
 		}
 	}
@@ -56,11 +57,10 @@ void TestLibrary::FullRead(string strExpected)
 			ret = m_pstDevice->Read({ to_string(nLBA) });
 			if (strExpected.size() == 10 && ret != strExpected)
 				throw runtime_error("Data Mismatch!!");
-			*m_out << ret << endl;
+			LOG(ret);
 		}
 		catch (exception e) {
-			ret = e.what();
-			*m_out << ret << endl;
+			LOG(e.what());
 			return;
 		}
 	}
@@ -73,7 +73,7 @@ void TestLibrary::WriteRange(int nStartLba, int nEndLba, string strData)
 			m_pstDevice->Write({to_string(nLBA), strData});
 		}
 		catch (exception e) {
-			*m_out << e.what() << endl;
+			LOG(e.what());
 			return;
 		}
 	}
@@ -87,10 +87,10 @@ void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected)
 			ret = m_pstDevice->Read({ to_string(nLBA) });
 			if (strExpected.size() == 10 && ret != strExpected)
 				throw runtime_error("Data Mismatch!!");
-			*m_out << ret << endl;
+			LOG(ret);
 		}
 		catch (exception e) {
-			*m_out << e.what() << endl;
+			LOG(e.what());
 			return;
 		}
 	}

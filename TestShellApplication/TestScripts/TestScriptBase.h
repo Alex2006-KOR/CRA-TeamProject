@@ -4,7 +4,7 @@
 
 class TestScriptBase{
 public:
-	TestScriptBase(DriverInterface* pstDriver, ostream& output);
+	TestScriptBase(DriverInterface* pstDriver);
 	void Run();
 
 protected:
@@ -14,5 +14,4 @@ protected:
 
 	TestLibrary* m_pstTestLib;
 	Device* m_pstDevice;
-	ostream& m_out;
 };
