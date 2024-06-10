@@ -36,7 +36,7 @@ bool Shell::handleCommand(string strLine)
         return false;
     }
 
-    TestScriptBase* targetScript = m_pstTestScriptInvoker->GetTestScript(strCommand);
+    TestScriptInterface* targetScript = m_pstTestScriptInvoker->GetTestScript(strCommand);
     if (targetScript) {
         m_pstTestScriptInvoker->Run(targetScript);
         return false;

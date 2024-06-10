@@ -42,15 +42,6 @@
     <ClCompile Include="TestLibrary.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TestScripts\TestApp1.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TestScripts\TestApp2.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TestScripts\TestScriptBase.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="EraseCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -104,15 +95,6 @@
     <ClInclude Include="Shell.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TestScripts\TestApp1.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TestScripts\TestApp2.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TestScripts\TestScriptBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="EraseCommand.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -139,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="LoggerPrinter.h">
       <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScripts\TestScriptInterface.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
