@@ -4,6 +4,7 @@
 #include "Logger.cpp"
 #include "OutstreamLoggerPrinter.cpp"
 #include "FileLoggerPrinter.cpp"
+#include "TestScripts/TestScriptInvoker.cpp"
 #include "TestScripts/TestScriptBase.cpp"
 #include "TestScripts/TestApp1.cpp"
 #include "TestScripts/TestApp2.cpp"
@@ -11,6 +12,7 @@
 #include "WriteCommand.cpp"
 #include "Device.cpp"
 #include "TestLibrary.cpp"
+#include "TestLibraryCommandInvoker.cpp"
 #include "Shell.cpp"
 
 using namespace testing;
