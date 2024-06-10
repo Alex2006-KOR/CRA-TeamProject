@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 
+#include "BufferManager.h"
 #include "SSDInterface.h"
 #include "FileManager.h"
 
@@ -12,7 +13,6 @@ class SSD : public SSDInterface {
 public:
 	const string RESULT = "result.txt";
 	const string NAND = "nand.txt";
-	const string WRITE_BUFFER = "WriteBuffer.txt";
 	const string INITIAL_VALUE = "0x00000000";
 	const int LBA_NUM = 100;
 	const int MAX_WRITE_BUFFER_NUM = 10;
@@ -29,29 +29,19 @@ public:
 private:
 	FileManager m_stNandFile;
 	FileManager m_stResultFile;
-	FileManager m_stWriteBufferFile;
-	vector<string> m_vWriteBufferList;
+	BufferManager m_stBufferManager;
 
 	// init
 	void _InitiateNandFile();
-	void _ExtractWriteBufferList();
 	
 	// read
-	bool _ReadFromWriteBuffer(int nLba);
 	void _ReadFromNandFile(int nLba);
-	vector<string> _TrimFullCommand(string sFullCommand);
-	bool _IsExistLbaInWriteBuffer(vector<string> vWriteBufferTrimWords, int nLba);
 	void _UpdateResultFile(vector<string> vWriteBufferTrimWords);
 	
 	// write, erase
 	void _WriteToNandFile(int nLba, string sData);
 	void _EraseToNandFile(int nLba, int nSize);
-	void _AddWriteBuffer(string sCmd, string sParam1, string sParam2);
-	void _OptimizeWriteBuffer();
 	void _UpdateNandValues(vector<string>& vLines);
 	vector<string> _ExtractNandValue(void);
 	
-	// flush
-	void _FlushWriteBuffer();
-	void _ClearWriteBuffer();
 };

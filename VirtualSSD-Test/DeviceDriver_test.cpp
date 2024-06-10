@@ -5,6 +5,7 @@
 #include "DeviceDriver.cpp"
 #include "FileManager.cpp"
 #include "SSDCommand.cpp"
+#include "BufferManager.cpp"
 
 using namespace testing;
 
