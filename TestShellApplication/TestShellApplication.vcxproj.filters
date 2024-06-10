@@ -54,6 +54,9 @@
     <ClCompile Include="TestLibraryCommandInvoker.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Runner.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Logger.cpp">
       <Filter>Logger</Filter>
     </ClCompile>
@@ -102,6 +105,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TestLibraryCommandInvoker.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Runner.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">

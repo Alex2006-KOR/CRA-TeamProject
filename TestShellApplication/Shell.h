@@ -11,14 +11,13 @@ using namespace std;
 class Shell
 {
 public:
-	Shell(DriverInterface* pstDevice, ostream& output);
+	Shell(DriverInterface* pstDevice);
 
 public:
 	void Run(istream& input);
 	bool handleCommand(string lineString);
 
 private:
-	ostream& m_out;
 	TestLibCommandInvoker* m_pstTestLibCommandInvoker;
 	TestScriptInvoker* m_pstTestScriptInvoker;
 

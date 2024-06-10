@@ -5,12 +5,12 @@
 
 class TestScriptInvoker {
 public:
-	TestScriptInvoker(TestLibCommandInvoker* pstTestLibCommandInvoker, ostream* output = nullptr);
+	TestScriptInvoker(TestLibCommandInvoker* pstTestLibCommandInvoker);
 	TestScriptBase* GetTestScript(string strCommand);
 	void Run(TestScriptBase* stFunction);
 
 private:
 	std::map<string, TestScriptBase*> m_mapCommand;
 
-	void _initCommands(TestLibCommandInvoker* pstTestLibCommandInvoker, ostream* output = nullptr);
+	void _initCommands(TestLibCommandInvoker* pstTestLibCommandInvoker);
 };

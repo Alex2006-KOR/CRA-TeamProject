@@ -1,8 +1,8 @@
 #include "TestLibraryCommandInvoker.h"
 
-TestLibCommandInvoker::TestLibCommandInvoker(DriverInterface* pstDriver, ostream* output)
+TestLibCommandInvoker::TestLibCommandInvoker(DriverInterface* pstDriver)
 {
-	_initCommands(new Device(pstDriver), output);
+	_initCommands(new Device(pstDriver));
 }
 
 TestLibrary* TestLibCommandInvoker::GetFunction(string strCommand)
@@ -19,12 +19,12 @@ void TestLibCommandInvoker::Run(TestLibrary* stFunction, const vector<string>& v
 	stFunction->execute(vCommandList, nStartLba, nEndLba, strData);
 }
 
-void TestLibCommandInvoker::_initCommands(Device* pstDevice, ostream* output)
+void TestLibCommandInvoker::_initCommands(Device* pstDevice)
 {
-	m_mapCommand["write"] = new TestLibWrite(pstDevice, output);
-	m_mapCommand["read"] = new TestLibRead(pstDevice, output);
-	m_mapCommand["fullwrite"] = new TestLibFullWrite(pstDevice, output);
-	m_mapCommand["fullread"] = new TestLibFullRead(pstDevice, output);
-	m_mapCommand["write_range"] = new TestLibWriteRange(pstDevice, output);
-	m_mapCommand["read_range"] = new TestLibReadRange(pstDevice, output);
+	m_mapCommand["write"] = new TestLibWrite(pstDevice);
+	m_mapCommand["read"] = new TestLibRead(pstDevice);
+	m_mapCommand["fullwrite"] = new TestLibFullWrite(pstDevice);
+	m_mapCommand["fullread"] = new TestLibFullRead(pstDevice);
+	m_mapCommand["write_range"] = new TestLibWriteRange(pstDevice);
+	m_mapCommand["read_range"] = new TestLibReadRange(pstDevice);
 }

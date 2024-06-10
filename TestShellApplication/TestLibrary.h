@@ -12,55 +12,49 @@ public:
 
 class TestLibWrite : public TestLibrary {
 public:
-	TestLibWrite(Device* pstDevice, ostream* output = nullptr);
+	TestLibWrite(Device* pstDevice);
 	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
 private:
 	Device* m_pstDevice;
-	ostream* m_out;
 
 };
 
 class TestLibRead : public TestLibrary {
 public:
-	TestLibRead(Device* pstDevice, ostream* output = nullptr);
+	TestLibRead(Device* pstDevice);
 	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
 private:
 	Device* m_pstDevice;
-	ostream* m_out;
 };
 
 class TestLibFullWrite : public TestLibrary {
 public:
-	TestLibFullWrite(Device* pstDevice, ostream* output = nullptr);
+	TestLibFullWrite(Device* pstDevice);
 	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
 private:
 	Device* m_pstDevice;
-	ostream* m_out;
 };
 
 class TestLibFullRead : public TestLibrary {
 public:
-	TestLibFullRead(Device* pstDevice, ostream* output = nullptr);
+	TestLibFullRead(Device* pstDevice);
 	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
 private:
 	Device* m_pstDevice;
-	ostream* m_out;
 };
 
 class TestLibWriteRange : public TestLibrary {
 public:
-	TestLibWriteRange(Device* pstDevice, ostream* output = nullptr);
+	TestLibWriteRange(Device* pstDevice);
 	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
 private:
 	Device* m_pstDevice;
-	ostream* m_out;
 };
 
 class TestLibReadRange : public TestLibrary {
 public:
-	TestLibReadRange(Device* pstDevice, ostream* output = nullptr);
+	TestLibReadRange(Device* pstDevice);
 	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
 private:
 	Device* m_pstDevice;
-	ostream* m_out;
 };

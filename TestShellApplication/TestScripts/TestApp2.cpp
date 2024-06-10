@@ -1,7 +1,7 @@
 #include "TestApp2.h"
 
-TestApp2::TestApp2(TestLibCommandInvoker* pstTestLibCommandInvoker, ostream& output)
-	: TestScriptBase(pstTestLibCommandInvoker, output)
+TestApp2::TestApp2(TestLibCommandInvoker* pstTestLibCommandInvoker)
+	: TestScriptBase(pstTestLibCommandInvoker)
 {
 }
 

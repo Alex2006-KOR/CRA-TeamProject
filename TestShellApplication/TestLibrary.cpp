@@ -1,7 +1,8 @@
+#include "Logger.h"
 #include "TestLibrary.h"
 
-TestLibWrite::TestLibWrite(Device* pstDevice, ostream* output)
-	:m_pstDevice(pstDevice), m_out(output) {}
+TestLibWrite::TestLibWrite(Device* pstDevice)
+	:m_pstDevice(pstDevice){}
 
 void TestLibWrite::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
@@ -9,12 +10,12 @@ void TestLibWrite::execute(const vector<string>& vCommandList, int nStartLba, in
 		m_pstDevice->Write(vCommandList);
 	}
 	catch (exception e) {
-		*m_out << e.what() << endl;
+		LOG(e.what());
 	}
 }
 
-TestLibRead::TestLibRead(Device* pstDevice, ostream* output)
-	:m_pstDevice(pstDevice), m_out(output) {}
+TestLibRead::TestLibRead(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
 
 void TestLibRead::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
@@ -25,11 +26,11 @@ void TestLibRead::execute(const vector<string>& vCommandList, int nStartLba, int
 	catch (exception e) {
 		ret = e.what();
 	}
-	*m_out << ret << endl;
+	LOG(ret);
 }
 
-TestLibFullWrite::TestLibFullWrite(Device* pstDevice, ostream* output)
-	:m_pstDevice(pstDevice), m_out(output) {}
+TestLibFullWrite::TestLibFullWrite(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
 
 void TestLibFullWrite::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
@@ -43,14 +44,14 @@ void TestLibFullWrite::execute(const vector<string>& vCommandList, int nStartLba
 			m_pstDevice->Write({ to_string(nLBA), strData });
 		}
 		catch (exception e) {
-			*m_out << e.what() << endl;
+			LOG(e.what());
 			return;
 		}
 	}
 }
 
-TestLibFullRead::TestLibFullRead(Device* pstDevice, ostream* output)
-	:m_pstDevice(pstDevice), m_out(output) {}
+TestLibFullRead::TestLibFullRead(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
 
 void TestLibFullRead::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
@@ -65,19 +66,17 @@ void TestLibFullRead::execute(const vector<string>& vCommandList, int nStartLba,
 				if (strCompareData.size() == 10 && ret != strCompareData)
 					throw runtime_error("Data Mismatch!!");
 			}
-
-			*m_out << ret << endl;
+			LOG(ret);
 		}
 		catch (exception e) {
-			ret = e.what();
-			*m_out << ret << endl;
+			LOG(e.what());
 			return;
 		}
 	}
 }
 
-TestLibWriteRange::TestLibWriteRange(Device* pstDevice, ostream* output)
-	:m_pstDevice(pstDevice), m_out(output) {}
+TestLibWriteRange::TestLibWriteRange(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
 
 void TestLibWriteRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
@@ -86,14 +85,14 @@ void TestLibWriteRange::execute(const vector<string>& vCommandList, int nStartLb
 			m_pstDevice->Write({ to_string(nLBA), strData });
 		}
 		catch (exception e) {
-			*m_out << e.what() << endl;
+			LOG(e.what());
 			return;
 		}
 	}
 }
 
-TestLibReadRange::TestLibReadRange(Device* pstDevice, ostream* output)
-	:m_pstDevice(pstDevice), m_out(output) {}
+TestLibReadRange::TestLibReadRange(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
 
 void TestLibReadRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
@@ -103,10 +102,10 @@ void TestLibReadRange::execute(const vector<string>& vCommandList, int nStartLba
 			ret = m_pstDevice->Read({ to_string(nLBA) });
 			if (strData.size() == 10 && ret != strData)
 				throw runtime_error("Data Mismatch!!");
-			*m_out << ret << endl;
+			LOG(ret);
 		}
 		catch (exception e) {
-			*m_out << e.what() << endl;
+			LOG(e.what());
 			return;
 		}
 	}

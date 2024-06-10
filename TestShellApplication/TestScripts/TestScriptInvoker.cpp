@@ -1,8 +1,8 @@
 #include "TestScriptInvoker.h"
 
-TestScriptInvoker::TestScriptInvoker(TestLibCommandInvoker* pstTestLibCommandInvoker, ostream* output)
+TestScriptInvoker::TestScriptInvoker(TestLibCommandInvoker* pstTestLibCommandInvoker)
 {
-	_initCommands(pstTestLibCommandInvoker, output);
+	_initCommands(pstTestLibCommandInvoker);
 }
 
 TestScriptBase* TestScriptInvoker::GetTestScript(string strCommand)
@@ -19,8 +19,8 @@ void TestScriptInvoker::Run(TestScriptBase* stFunction)
 	stFunction->Run();
 }
 
-void TestScriptInvoker::_initCommands(TestLibCommandInvoker* pstTestLibCommandInvoker, ostream* output)
+void TestScriptInvoker::_initCommands(TestLibCommandInvoker* pstTestLibCommandInvoker)
 {
-	m_mapCommand["testapp1"] = new TestApp1(pstTestLibCommandInvoker, *output);
-	m_mapCommand["testapp2"] = new TestApp2(pstTestLibCommandInvoker, *output);
+	m_mapCommand["testapp1"] = new TestApp1(pstTestLibCommandInvoker);
+	m_mapCommand["testapp2"] = new TestApp2(pstTestLibCommandInvoker);
 }

@@ -16,7 +16,7 @@ Logger& Logger::getInstance()
 }
 
 Logger::Logger()
-    : m_fileLoggerPrinter{".\\log\\"}
+    : m_fileLoggerPrinter{ ".\\log\\" }
 {
     AddLoggerPrinter(&m_outStreamLoggerPrinter);
     AddLoggerPrinter(&m_fileLoggerPrinter);
@@ -43,7 +43,7 @@ void Logger::AddLoggerPrinter(LoggerPrinter* p)
 {
     auto iterFind = std::find(m_vLoggerPrinters.begin(), m_vLoggerPrinters.end(), p);
     if (iterFind != m_vLoggerPrinters.end()) return;
-    
+
     m_vLoggerPrinters.push_back(p);
 }
 

@@ -1,8 +1,7 @@
 #include "TestScriptBase.h"
 
-TestScriptBase::TestScriptBase(TestLibCommandInvoker* pstTestLibCommandInvoker, ostream& output)
+TestScriptBase::TestScriptBase(TestLibCommandInvoker* pstTestLibCommandInvoker)
 	: m_pstTestLibCommandInvoker(pstTestLibCommandInvoker)
-	, m_out(output)
 {
 }
 

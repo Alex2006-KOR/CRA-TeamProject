@@ -4,7 +4,7 @@
 
 class TestScriptBase{
 public:
-	TestScriptBase(TestLibCommandInvoker* pstTestLibCommandInvoker, ostream& output);
+	TestScriptBase(TestLibCommandInvoker* pstTestLibCommandInvoker);
 	void Run();
 
 protected:
@@ -13,5 +13,4 @@ protected:
 	virtual void _cleanup() = 0;
 
 	TestLibCommandInvoker* m_pstTestLibCommandInvoker;
-	ostream& m_out;
 };
