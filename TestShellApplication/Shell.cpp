@@ -78,7 +78,8 @@ vector<string> Shell::_splitLine(std::string& strLine)
     strLine += " ";
     auto nPos = strLine.find(" ");
     while (nPos != string::npos) {
-        vCommandList.push_back(strLine.substr(0, nPos));
+        string strSubString = strLine.substr(0, nPos);
+        if (strSubString.size() > 0) vCommandList.push_back(strSubString);
         strLine = strLine.substr(nPos + 1);
         nPos = strLine.find(" ");
     }
