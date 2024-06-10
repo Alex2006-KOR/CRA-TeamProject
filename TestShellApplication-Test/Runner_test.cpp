@@ -9,10 +9,13 @@ using std::string;
 class SsdDeviceDriverMock : public DriverInterface {
 public:
 	MOCK_METHOD(void, Read, (int lba), (override));
-	MOCK_METHOD(void, Write, (int lba, int dat), (override));
+	MOCK_METHOD(void, Write, (int lba, int data), (override));
+	MOCK_METHOD(void, Erase, (int lba, int blkCnt), (override));
+	MOCK_METHOD(void, Flush, (), (override));
 	MOCK_METHOD(std::string, ReadBuffer, (), (override));
 	MOCK_METHOD(int, GetMinLba, (), (override));
 	MOCK_METHOD(int, GetMaxLba, (), (override));
+	MOCK_METHOD(int, GetMaxBlkCntPerErase, (), (override));
 };
 
 class RunnerMock : public Runner {
