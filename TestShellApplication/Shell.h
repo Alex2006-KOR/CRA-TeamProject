@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TestLibrary.h"
+#include "TestLibraryCommandInvoker.h"
 #include "DriverInterface.h"
 #include "./TestScripts/TestApp1.h"
 #include "./TestScripts/TestApp2.h"
@@ -20,9 +20,9 @@ public:
 
 private:
 	ostream& m_out;
-	TestLibrary* m_pstTestLib;
 	TestApp1* m_pstTestApp1;
 	TestApp2* m_pstTestApp2;
+	TestLibCommandInvoker* m_pstTestLibCommandInvoker;
 
 	void _printHelp();
 

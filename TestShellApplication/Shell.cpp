@@ -6,9 +6,9 @@
 Shell::Shell(DriverInterface* pstDriver, ostream& output)
     : m_out(output)
 {
-    m_pstTestLib = TestLibrary::GetLibrary(pstDriver, &output);
-    m_pstTestApp1 = new TestApp1(pstDriver, output);
-    m_pstTestApp2 = new TestApp2(pstDriver, output);
+    m_pstTestApp1 = new TestApp1(m_pstTestLibICommandInvoker, output);
+    m_pstTestApp2 = new TestApp2(m_pstTestLibICommandInvoker, output);
+    m_pstTestLibCommandInvoker = new TestLibCommandInvoker(pstDriver, &output);
 }
 
 void Shell::Run(istream& input)
@@ -27,21 +27,15 @@ bool Shell::handleCommand(string strLine)
     vector<string> vCommandList = _splitLine(strLine);
 
     string strCommand = _trim(vCommandList[0]);
+    if (strCommand == "") return false;
+
     vCommandList.erase(vCommandList.begin());
-    if (strCommand == "") {
+
+    TestLibrary* targetFunction = m_pstTestLibCommandInvoker->GetFunction(strCommand);
+    if (targetFunction) {
+        m_pstTestLibCommandInvoker->Run(targetFunction, vCommandList);
     }
-    else if (strCommand == "write") {
-        m_pstTestLib->Write(vCommandList);
-    }
-    else if (strCommand == "read") {
-        m_pstTestLib->Read(vCommandList);
-    }
-    else if (strCommand == "fullwrite") {
-        m_pstTestLib->FullWrite(vCommandList);
-    }
-    else if (strCommand == "fullread") {
-        m_pstTestLib->FullRead();
-    }
+
     else if (strCommand == "testapp1") {
         m_pstTestApp1->Run();
     }
