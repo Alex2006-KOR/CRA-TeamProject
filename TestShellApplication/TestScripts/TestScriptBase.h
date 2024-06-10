@@ -1,10 +1,10 @@
 #pragma once
 #include "../Device.h"
-#include "../TestLibrary.h"
+#include "../TestLibraryCommandInvoker.h"
 
 class TestScriptBase{
 public:
-	TestScriptBase(DriverInterface* pstDriver, ostream& output);
+	TestScriptBase(TestLibCommandInvoker* pstTestLibCommandInvoker);
 	void Run();
 
 protected:
@@ -12,7 +12,5 @@ protected:
 	virtual void _main() = 0;
 	virtual void _cleanup() = 0;
 
-	TestLibrary* m_pstTestLib;
-	Device* m_pstDevice;
-	ostream& m_out;
+	TestLibCommandInvoker* m_pstTestLibCommandInvoker;
 };

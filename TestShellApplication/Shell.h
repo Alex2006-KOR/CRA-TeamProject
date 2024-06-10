@@ -1,9 +1,8 @@
 #pragma once
 
-#include "TestLibrary.h"
 #include "DriverInterface.h"
-#include "./TestScripts/TestApp1.h"
-#include "./TestScripts/TestApp2.h"
+#include "TestLibraryCommandInvoker.h"
+#include "./TestScripts/TestScriptInvoker.h"
 
 #include <iostream>
 
@@ -12,17 +11,15 @@ using namespace std;
 class Shell
 {
 public:
-	Shell(DriverInterface* pstDevice, ostream& output);
+	Shell(DriverInterface* pstDevice);
 
 public:
 	void Run(istream& input);
 	bool handleCommand(string lineString);
 
 private:
-	ostream& m_out;
-	TestLibrary* m_pstTestLib;
-	TestApp1* m_pstTestApp1;
-	TestApp2* m_pstTestApp2;
+	TestLibCommandInvoker* m_pstTestLibCommandInvoker;
+	TestScriptInvoker* m_pstTestScriptInvoker;
 
 	void _printHelp();
 

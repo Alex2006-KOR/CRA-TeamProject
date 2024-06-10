@@ -14,6 +14,7 @@ public:
 	static const int THERE_IS_NO_ARGUMENT = 1;
 	static const int WRITE_CMD_ARGUMENT_NUM = 4;
 	static const int READ_CMD_ARGUMENT_NUM = 3;
+	static const int ERASE_CMD_ARGUMENT_NUM = 4;
 
 	IOManager(DeviceDriver* pstDeviceDriver);
 	void DoCommand(int argc, char* argv[]);
@@ -23,6 +24,7 @@ private:
 	string m_strCommand;
 	int m_nLbaNumber;
 	string m_strData;
+	int m_nSize;
 
 	void _AddLog();
 	void _ProcessArgument(int argc, char* argv[]);
@@ -31,6 +33,7 @@ private:
 	bool _CheckInvalidArgumentValue();
 	bool _CheckReadCmdInvalidArgument();
 	bool _CheckWriteCmdInvalidArgument();
+	bool _CheckEraseCmdInvalidArgument();
 	bool _IsInvalidSubString();
 	bool _IsInvalidCmd();
 };

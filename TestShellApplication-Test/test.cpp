@@ -1,6 +1,10 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
+#include "Logger.cpp"
+#include "OutstreamLoggerPrinter.cpp"
+#include "FileLoggerPrinter.cpp"
+#include "TestScripts/TestScriptInvoker.cpp"
 #include "TestScripts/TestScriptBase.cpp"
 #include "TestScripts/TestApp1.cpp"
 #include "TestScripts/TestApp2.cpp"
@@ -8,8 +12,10 @@
 #include "ReadCommand.cpp"
 #include "WriteCommand.cpp"
 #include "EraseCommand.cpp"
+#include "FlushCommand.cpp"
 #include "Device.cpp"
 #include "TestLibrary.cpp"
+#include "TestLibraryCommandInvoker.cpp"
 #include "Shell.cpp"
 
 using namespace testing;
@@ -31,7 +37,7 @@ class ShellTestFixture : public Test {
 public:
 	SsdDeviceDriverMock mockDevice;
 	std::ostringstream output;
-	Shell shell{ &mockDevice, output };
+	Shell shell{ &mockDevice };
 
 	std::string RunCommands(std::string strCommandLines) {
 		std::istringstream input(strCommandLines);
@@ -49,6 +55,8 @@ public:
 
 protected:
 	void SetUp() override {
+		Logger::getInstance().SetOutStream(output);
+
 		EXPECT_CALL(mockDevice, GetMinLba)
 			.WillRepeatedly(Return(0));
 		EXPECT_CALL(mockDevice, GetMaxLba)

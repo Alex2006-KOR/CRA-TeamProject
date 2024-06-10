@@ -133,9 +133,11 @@
     <ClCompile Include="IOManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SSD.cpp" />
+    <ClCompile Include="SSDCommand.cpp" />
     <ClCompile Include="SSDInterface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SSDCommand.h" />
     <ClInclude Include="DeviceDriver.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="IOManager.h" />
