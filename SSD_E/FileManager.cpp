@@ -5,7 +5,7 @@ FileManager::FileManager(string sFileName) :
 	m_sFileName(sFileName) {}
 
 void FileManager::OpenReadStream() {
-	m_ifstreamRead.open(m_sFileName);
+	m_ifstreamRead.open(m_sFileName, fstream::app);
 
 	if (m_ifstreamRead.is_open() == false) {
 		throw exception("Open input file fail");
