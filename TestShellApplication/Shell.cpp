@@ -4,7 +4,7 @@
 #include <vector>
 
 Shell::Shell(DriverInterface* pstDriver, ostream& output)
-    : m_out(output)
+    //: m_out(output)
 {
     m_pstTestLibCommandInvoker = new TestLibCommandInvoker(pstDriver, &output);
     m_pstTestScriptInvoker = new TestScriptInvoker(m_pstTestLibCommandInvoker, &output);
@@ -49,7 +49,7 @@ bool Shell::handleCommand(string strLine)
         return true;
     }
     else {
-        m_out << "INVALID COMMAND\n";
+        LOG("INVALID COMMAND\n")
     }
     return false;
 }
@@ -69,7 +69,8 @@ void Shell::_printHelp()
 [lba] : decimal only, range = [0, 99]\n\
 [data] : hexadecimal only, range = [0x00000000, 0xFFFFFFFF]\n\
 ";
-    cout << strHelp;
+    //cout << strHelp;
+    LOG(strHelp);
 }
 
 vector<string> Shell::_splitLine(std::string& strLine)

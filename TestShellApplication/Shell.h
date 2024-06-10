@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Logger.h"
 #include "DriverInterface.h"
 #include "TestLibraryCommandInvoker.h"
 #include "./TestScripts/TestScriptInvoker.h"
@@ -18,7 +19,7 @@ public:
 	bool handleCommand(string lineString);
 
 private:
-	ostream& m_out;
+	//ostream& m_out;
 	TestLibCommandInvoker* m_pstTestLibCommandInvoker;
 	TestScriptInvoker* m_pstTestScriptInvoker;
 
