@@ -141,6 +141,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OutstreamLoggerPrinter.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
+    <ClCompile Include="Runner.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDCommand.cpp" />
     <ClCompile Include="SSDCommandInvoker.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="LoggerPrinter.h" />
     <ClInclude Include="OutstreamLoggerPrinter.h" />
     <ClInclude Include="ReadCommand.h" />
+    <ClInclude Include="Runner.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDCommandInvoker.h" />
     <ClInclude Include="SSDDriver.h" />
