@@ -134,6 +134,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OutstreamLoggerPrinter.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
+    <ClCompile Include="Runner.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
     <ClCompile Include="TestLibrary.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="LoggerPrinter.h" />
     <ClInclude Include="OutstreamLoggerPrinter.h" />
     <ClInclude Include="ReadCommand.h" />
+    <ClInclude Include="Runner.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDDriver.h" />
     <ClInclude Include="TestLibrary.h" />
