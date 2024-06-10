@@ -106,7 +106,7 @@ void BufferManager::OptimizeWriteBuffer() {
 
 			if (nIndex != nLastIndex - 1) continue;
 
-			// Á¦¾à»çÇ×. ¿¬¼ÓµÈ Erase¸¸ °Ë»çÇÑ´Ù.
+			// ì œì•½ì‚¬í•­. ì—°ì†ëœ Eraseë§Œ ê²€ì‚¬í•œë‹¤.
 			if (nCompareCmd == "E") {
 				int nCompareStartLba = nCompareLba;
 				int nCompareLbaSize = stoi(vSearchCommandWords[2]);
@@ -127,7 +127,7 @@ void BufferManager::OptimizeWriteBuffer() {
 		}
 	}
 
-	// »õ·Î write
+	// ìƒˆë¡œ write
 	try {
 		m_stWriteBufferFile.OpenWriteStream("trunc");
 	}
