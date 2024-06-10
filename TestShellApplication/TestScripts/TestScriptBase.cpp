@@ -1,10 +1,9 @@
 #include "TestScriptBase.h"
 
-TestScriptBase::TestScriptBase(DriverInterface* pstDriver, ostream& output)
-	: m_pstTestLib(nullptr)
+TestScriptBase::TestScriptBase(TestLibCommandInvoker* pstTestLibCommandInvoker, ostream& output)
+	: m_pstTestLibCommandInvoker(pstTestLibCommandInvoker)
 	, m_out(output)
 {
-	m_pstDevice = new Device(pstDriver);
 }
 
 void TestScriptBase::Run()

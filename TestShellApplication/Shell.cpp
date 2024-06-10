@@ -6,9 +6,8 @@
 Shell::Shell(DriverInterface* pstDriver, ostream& output)
     : m_out(output)
 {
-    m_pstTestApp1 = new TestApp1(m_pstTestLibICommandInvoker, output);
-    m_pstTestApp2 = new TestApp2(m_pstTestLibICommandInvoker, output);
     m_pstTestLibCommandInvoker = new TestLibCommandInvoker(pstDriver, &output);
+    m_pstTestScriptInvoker = new TestScriptInvoker(m_pstTestLibCommandInvoker, &output);
 }
 
 void Shell::Run(istream& input)
@@ -34,15 +33,16 @@ bool Shell::handleCommand(string strLine)
     TestLibrary* targetFunction = m_pstTestLibCommandInvoker->GetFunction(strCommand);
     if (targetFunction) {
         m_pstTestLibCommandInvoker->Run(targetFunction, vCommandList);
+        return false;
     }
 
-    else if (strCommand == "testapp1") {
-        m_pstTestApp1->Run();
+    TestScriptBase* targetScript = m_pstTestScriptInvoker->GetTestScript(strCommand);
+    if (targetScript) {
+        m_pstTestScriptInvoker->Run(targetScript);
+        return false;
     }
-    else if (strCommand == "testapp2") {
-        m_pstTestApp2->Run();
-    }
-    else if (strCommand == "help") {
+    
+    if (strCommand == "help") {
         _printHelp();
     }
     else if (strCommand == "exit") {

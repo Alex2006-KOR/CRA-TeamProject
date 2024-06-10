@@ -63,6 +63,12 @@
     <ClCompile Include="FileLoggerPrinter.cpp">
       <Filter>Logger</Filter>
     </ClCompile>
+    <ClCompile Include="TestScripts\TestScriptInvoker.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScripts\TestScriptInvoker.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReadCommand.h">
@@ -75,9 +81,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Device.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CommandInterface.h">
