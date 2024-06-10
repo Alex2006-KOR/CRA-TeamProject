@@ -144,28 +144,19 @@ TestLibEraseRange::TestLibEraseRange(Device* pstDevice)
 void TestLibEraseRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	if (vCommandList.size() > 0) {
-		_validateArguments(vCommandList);
-		nStartLba = stoi(vCommandList[0]);
-		nEndLba = stoi(vCommandList[1]);
+		try {
+			nStartLba = stoi(vCommandList[0]);
+			nEndLba = stoi(vCommandList[1]);
+		}
+		catch (exception& e) {
+			LOG(e.what());
+			return;
+		}
 	}
 	try {
 		m_pstDevice->Erase({ to_string(nStartLba), to_string(nEndLba - nStartLba) });
 	}
 	catch (exception& e) {
 		LOG(e.what());
-	}
-}
-
-void TestLibEraseRange::_validateArguments(const std::vector<std::string>& vCommandList) const
-{
-	if (vCommandList.size() < 2)
-		throw invalid_argument("invalid # of args. please check help.");
-	for (int nArgIndex = 0; nArgIndex < 2; nArgIndex++) {
-		try {
-			m_pstDevice->Erase({ vCommandList[nArgIndex], to_string(-1) });
-		}
-		catch (Invalid_BlockCount& e) {
-			// pass
-		}
 	}
 }

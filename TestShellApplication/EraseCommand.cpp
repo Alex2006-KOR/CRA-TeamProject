@@ -29,11 +29,14 @@ EraseCommand& EraseCommand::setBlkCnt(string strData)
 void EraseCommand::execute()
 {
 	int nMaxBlkCnt = m_pstDriver->GetMaxBlkCntPerErase();
+	int nMaxLba = m_pstDriver->GetMaxLba();
 	while (m_nRemainBlkCnt > 0) {
 		int nBlkCnt = (m_nRemainBlkCnt > nMaxBlkCnt) ? nMaxBlkCnt : m_nRemainBlkCnt;
+		if (m_nLBA + nBlkCnt > nMaxLba) nBlkCnt = nMaxLba - m_nLBA;
 		m_pstDriver->Erase(m_nLBA, nBlkCnt);
 		m_nLBA += nBlkCnt;
 		m_nRemainBlkCnt -= nBlkCnt;
+		if (m_nLBA == nMaxLba) break;
 	}
 }
 
