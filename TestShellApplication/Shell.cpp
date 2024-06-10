@@ -24,7 +24,7 @@ void Shell::Run(istream& input)
 bool Shell::handleCommand(string strLine)
 {
     vector<string> vCommandList = _splitLine(strLine);
-
+    if (vCommandList.size() == 0) return false;
     string strCommand = _trim(vCommandList[0]);
     if (strCommand == "") return false;
 
