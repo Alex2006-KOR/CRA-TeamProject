@@ -150,7 +150,7 @@ void TestLibEraseRange::execute(const vector<string>& vCommandList, int nStartLb
 	}
 	try {
 		int nBlkCnt;
-		while (nStartLba <= nEndLba) {
+		while (nStartLba < nEndLba) {
 			nBlkCnt = ((nEndLba - nStartLba) > 10) ? 10 : nEndLba - nStartLba;
 			m_pstDevice->Erase({ to_string(nStartLba), to_string(nBlkCnt) });
 			nStartLba += nBlkCnt;

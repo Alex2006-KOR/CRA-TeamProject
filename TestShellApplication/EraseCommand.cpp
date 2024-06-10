@@ -92,9 +92,9 @@ void EraseCommand::_updateBlkCnt(std::string strBlkCnt)
 
 void EraseCommand::_checkBlkRange()
 {
-	if (m_nBlkCnt < m_pstDriver->GetMinLba()) 
+	if (m_nBlkCnt <= 0) 
 		throw Invalid_BlockCount("Block Count out of range");
-	else if (m_nBlkCnt < m_pstDriver->GetMaxBlkCntPerErase()) 
+	else if (m_nBlkCnt > m_pstDriver->GetMaxBlkCntPerErase()) 
 		throw Invalid_BlockCount("use 'erase_range [start_LBA] [end_LBA]'");
 	// TODO : check more conditions ?
 }
