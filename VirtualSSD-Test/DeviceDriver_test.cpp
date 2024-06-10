@@ -12,7 +12,6 @@ class SSDMock : public SSDInterface {
 public:
 	MOCK_METHOD(bool, Read, (int nLba), (override));
 	MOCK_METHOD(bool, Write, (int nLba, string sData), (override));
-	MOCK_METHOD(bool, Erase, (int nLba, int nSize), (override));
 };
 
 class DeviceDriverTestFixture : public testing::Test {

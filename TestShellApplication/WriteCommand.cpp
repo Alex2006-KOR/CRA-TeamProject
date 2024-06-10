@@ -1,73 +1,88 @@
 #include "WriteCommand.h"
 
-#include <iostream>
-#include <iomanip>
+#include <stdexcept>
 
-using std::string;
-
-WriteCommand::WriteCommand(DriverInterface* pSSDDriver, std::ostream& output)
-	: BaseSSDCommand(output)
-	, m_pstSSDDriver(pSSDDriver)
+WriteCommand::WriteCommand(DriverInterface* pstDriver)
+	: m_pstDriver(pstDriver)
 	, m_nLBA(-1)
 	, m_nData(0x00000000)
 {
 }
 
-bool WriteCommand::_parseCommand()
+WriteCommand& WriteCommand::setLBA(string strLBA)
 {
-	constexpr int REQUIRED_COMMAND_COUNT = 2;
-	if (m_vCommandList.size() != REQUIRED_COMMAND_COUNT) {
-		m_out << "Invalid usage.\nCheck help message.\n";
-		return false;
-	}
-
-	try {
-		m_nLBA = _checkAndGetLBA(m_vCommandList[0]);
-		m_nData = _checkAndGetData(m_vCommandList[1]);
-	}
-	catch (std::exception& e) {
-		m_out << e.what();
-		return false;
-	}
+	_checkLBAFormat(strLBA);
+	_updateLBA(strLBA);
+	_checkLBARange();
+	return *this;
 }
 
-void WriteCommand::_execute()
+WriteCommand& WriteCommand::setData(string strData)
 {
-	m_pstSSDDriver->Write(m_nLBA, m_nData);
+	_checkDataFormat(strData);
+	_checkSpelling(strData);
+	_updateData(strData);
+	return *this;
 }
 
-int WriteCommand::_checkAndGetLBA(string paramString)
+void WriteCommand::execute()
 {
-	for (const char ch : paramString) {
+	m_pstDriver->Write(m_nLBA, m_nData);
+}
+
+bool WriteCommand::CheckArgCnt(vector<string> vArgs) const
+{
+	return vArgs.size() == this->REQUIRED_COMMAND_COUNT;
+}
+
+void WriteCommand::_checkLBAFormat(string strLBA)
+{
+	if (strLBA.substr(0, 2) == "0x") {
+		throw invalid_argument("INVALID LBA");
+	}
+	for (const char ch : strLBA) {
 		if ((ch >= '0') && (ch <= '9')) continue;
-		throw std::exception("INVALID LBA\n");
+		throw invalid_argument("INVALID LBA");
 	}
-
-	int result = std::stoi(paramString, nullptr, 10);
-	if (result < 0 || result > 99) {
-		throw std::exception("INVALID LBA\n");
-	}
-
-	return result;
 }
 
-int WriteCommand::_checkAndGetData(string paramString)
+void WriteCommand::_updateLBA(string strLBA)
 {
-	if (paramString.substr(0, 2).compare("0x") != 0) {
-		throw std::exception("INVALID DATA\n");
+	try {
+		m_nLBA = stoi(strLBA);
 	}
-	paramString = paramString.substr(2);
-
-	if (paramString.size() != 8) {
-		throw std::exception("INVALID DATA\n");
+	catch (const out_of_range& e) {
+		m_nLBA = -1;
 	}
+}
 
-	for (const char ch : paramString) {
+void WriteCommand::_checkLBARange()
+{
+	if (m_nLBA < m_pstDriver->GetMinLba() || m_nLBA >= m_pstDriver->GetMaxLba())
+		throw invalid_argument("INVALID LBA");
+}
+
+
+void WriteCommand::_checkDataFormat(string& strData) const
+{
+	if (strData.substr(0, 2).compare("0x") != 0
+		|| strData.size() != REQUIRED_DATA_LENGTH)
+		throw invalid_argument("INVALID DATA");
+}
+
+void WriteCommand::_checkSpelling(string& strData)
+{
+	bool bCheckResult = true;
+	strData = strData.substr(2);
+	for (const char ch : strData) {
 		if ((ch >= '0') && (ch <= '9')) continue;
 		if ((ch >= 'a') && (ch <= 'f')) continue;
 		if ((ch >= 'A') && (ch <= 'F')) continue;
-		throw std::exception("INVALID DATA\n");
+		throw exception("INVALID DATA");
 	}
+}
 
-	return std::stoll(paramString, nullptr, 16);
+void WriteCommand::_updateData(std::string& strData)
+{
+	m_nData = stoll(strData, nullptr, 16);
 }

@@ -51,7 +51,8 @@ void TestApp1Command::_fullWrite(int expected) {
 
 void TestApp1Command::_fullWriteCheck(int expected) {
 	for (int lbaIdx = 0; lbaIdx < 100; lbaIdx++) {
-		int readValue = m_pstSSDDriver->Read(lbaIdx);
+		m_pstSSDDriver->Read(lbaIdx);
+		int readValue = stoll(m_pstSSDDriver->ReadBuffer());
 		if (readValue != expected)
 			throw TestApp1Exception(lbaIdx);
 	}

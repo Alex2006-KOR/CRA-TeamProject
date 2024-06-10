@@ -2,9 +2,6 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <iomanip>
-#include <sstream>
-
 #include "SSDDriver.h"
 
 using namespace std;
@@ -26,39 +23,31 @@ public:
     }
 
     ExecutionCommandBuilder& setWriteData(int data) {
-        std::stringstream ss;
-        ss << "0x" << hex << std::uppercase
-            << setw(8) << setfill('0') << data;
-
-        command += (" " + ss.str());
+        command += (" " + std::to_string(data));
         return *this;
     }
 
-    string build() {
-        return command;
+    const char* build() {
+        return command.c_str();
     }
 
 private:
     string command;
 };
 
-int SSDDriver::Read(int lba)
+void SSDDriver::Read(int lba)
 {
-    int retCode = _executeCommand(
+    _executeCommand(
         ExecutionCommandBuilder()
         .setAccessType("R")
         .setLbaIndex(lba)
         .build()
     );
-
-    if (retCode == -1)
-        return 0;
-    return _getReadResult();
 }
 
 void SSDDriver::Write(int lba, int data)
 {
-    int retCode = _executeCommand(
+    _executeCommand(
         ExecutionCommandBuilder()
         .setAccessType("W")
         .setLbaIndex(lba)
@@ -67,30 +56,25 @@ void SSDDriver::Write(int lba, int data)
     );
 }
 
-int SSDDriver::_executeCommand(string command)
+std::string SSDDriver::ReadBuffer()
 {
-    try {
-        int retCode = system(command.c_str());
-        return retCode;
-    }
-    catch (exception& e) {
-        cout << "Virtual SSD execution failed" << endl;
-        cout << e.what() << endl;
-        return -1;
-    }
+    if (_getSsdExisted())
+        return _getSsdResult();
+    return string();
 }
 
-int SSDDriver::_getReadResult(void)
+int SSDDriver::GetMinLba()
 {
-    try {
-        if (_getSsdExisted())
-            return _getSsdResult();
-        return 0;
-    }
-    catch (exception& e) {
-        cout << e.what() << endl;
-        return 0;
-    }
+    return MIN_LBA;
+}
+
+int SSDDriver::GetMaxLba()
+{
+    return MAX_LBA;
+}
+
+void SSDDriver::_executeCommand(const char* strCommand) {
+    system(strCommand);
 }
 
 bool SSDDriver::_getSsdExisted(void)
@@ -104,17 +88,15 @@ bool SSDDriver::_getSsdExisted(void)
     return ret;
 }
 
-int SSDDriver::_getSsdResult(void)
+std::string SSDDriver::_getSsdResult(void)
 {
     ifstream ifstreamRead(SSD_FILE);
     if (ifstreamRead.is_open() == false)
         throw exception("Open SSD Result file fail");
 
-    int ret = 0;
     string readData;
     getline(ifstreamRead, readData);
-    ret = stoll(readData, nullptr, 16);
     ifstreamRead.close();
 
-    return ret;
+    return readData;
 }

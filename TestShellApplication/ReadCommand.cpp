@@ -1,77 +1,55 @@
 #include "ReadCommand.h"
 
-#include <iostream>
-#include <iomanip>
 #include <stdexcept>
 
-
-ReadCommand::ReadCommand(DriverInterface* pSSDDriver, ostream& output)
-	: BaseSSDCommand(output)
-	, m_pstSSDDriver(pSSDDriver)
-	, m_nLBA(-1)
+ReadCommand::ReadCommand(DriverInterface* pstDriver)
+    : m_pstDriver(pstDriver)
+    , m_nLBA(-1)
 {
 }
 
-bool ReadCommand::_parseCommand() {
-	if (_checkValidityLBA() == false) return false;
-	return true;
+ReadCommand& ReadCommand::setLBA(string strLBA)
+{
+    _checkLBAFormat(strLBA);
+    _updateLBA(strLBA);
+    _checkLBARange();
+    return *this;
 }
 
-bool ReadCommand::_checkValidityLBA()
+string ReadCommand::execute()
 {
-	if (_hasEnoughArgs() == false) return false;
-	if (_isValidFormat() == false) return false;
-	_updateLBA();
-	if (_isLBAInRange() == false) return false;
-	return true;
+    m_pstDriver->Read(m_nLBA);
+    return m_pstDriver->ReadBuffer();
 }
 
-bool ReadCommand::_hasEnoughArgs()
+bool ReadCommand::CheckArgCnt(vector<string> vArgs) const
 {
-	if (m_vCommandList.size() != m_nExpectedArgCnt) {
-		m_out << "Invalid usage.\nCheck help message.\n";
-		return false;
-	}
-	return true;
+    return vArgs.size() == this->REQUIRED_COMMAND_COUNT;
 }
 
-bool ReadCommand::_isValidFormat()
+void ReadCommand::_checkLBAFormat(string strLBA)
 {
-	if (m_vCommandList[0].substr(0, 2) == "0x") {
-		m_out << "INVALID LBA\n";
-		return false;
-	}
-	for (const char ch : m_vCommandList[0]) {
-		if ((ch >= '0') && (ch <= '9')) continue;
-		m_out << "INVALID LBA\n";
-		return false;
-	}
-	return true;
+    if (strLBA.substr(0, 2) == "0x") {
+        throw invalid_argument("INVALID LBA");
+    }
+    for (const char ch : strLBA) {
+        if ((ch >= '0') && (ch <= '9')) continue;
+        throw invalid_argument("INVALID LBA");
+    }
 }
 
-void ReadCommand::_updateLBA()
+void ReadCommand::_updateLBA(string strLBA)
 {
-	try {
-		m_nLBA = stoi(m_vCommandList[0]);
-	}
-	catch (const out_of_range& e) {
-		m_nLBA = -1;
-	}
+    try {
+        m_nLBA = stoi(strLBA);
+    }
+    catch (const out_of_range& e) {
+        m_nLBA = -1;
+    }
 }
 
-bool ReadCommand::_isLBAInRange()
+void ReadCommand::_checkLBARange()
 {
-	if (m_nLBA < 0 || m_nLBA > 99) {
-		m_out << "INVALID LBA\n";
-		return false;
-	}
-	return true;
-}
-
-void ReadCommand::_execute()
-{
-	int nData = m_pstSSDDriver->Read(m_nLBA);
-	m_out << "0x";
-	m_out << hex << uppercase << setw(8) << setfill('0') << nData;
-	m_out << endl;
+    if (m_nLBA < m_pstDriver->GetMinLba() || m_nLBA >= m_pstDriver->GetMaxLba())
+        throw invalid_argument("INVALID LBA");
 }

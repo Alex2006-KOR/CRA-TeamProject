@@ -7,7 +7,7 @@
 
 int main(int argc, char* argv[]) {
 	SSDDriver ssd;
-	Shell shell{ &ssd };
+	Shell shell{ &ssd, std::cout };
 	Runner runner(shell);
 
 	if (argc == 2) {
@@ -16,6 +16,5 @@ int main(int argc, char* argv[]) {
 		if (result == false) return 0;
 	}
 	runner.RunShell();
-
 	return 0;
 }

@@ -1,45 +1,31 @@
 #pragma once
 
+#include "TestLibrary.h"
 #include "DriverInterface.h"
-#include "SSDCommandInvoker.h"
+#include "./TestScripts/TestApp1.h"
+#include "./TestScripts/TestApp2.h"
 
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
 class Shell
 {
 public:
-	Shell(DriverInterface* pSSDDriver);
-	virtual ~Shell();
+	Shell(DriverInterface* pstDevice, ostream& output);
 
-	void Run(istream& input, ostream& output);
-
-	// FIXME: move to private fuction ? use as public ?
-	bool handleCommand(string lineString, ostream& output); 
+public:
+	void Run(istream& input);
+	bool handleCommand(string lineString);
 
 private:
-	SSDCommandInvoker* _getCommandInvoker(ostream& output);
-	vector<string> SplitLine(string& strCommandLine);
-	string trim(const string& str);
+	ostream& m_out;
+	TestLibrary* m_pstTestLib;
+	TestApp1* m_pstTestApp1;
+	TestApp2* m_pstTestApp2;
 
-private:
-	DriverInterface* m_pSSDDriver;
-	SSDCommandInvoker* m_pCommandInvoker;
+	void _printHelp();
 
-	string strHelp = "\n\
-[[Shell Test Application]]\n\
-\n\
-<< Command Usage >> \n\
-- write [lba] [data]\n\
-- read [lba]\n\
-- fullwrite [data]\n\
-- fullread\n\
-- exit\n\
-\n\
-[lba] : decimal only, range = [0, 99]\n\
-[data] : hexadecimal only, range = [0x00000000, 0xFFFFFFFF]\n\
-";
+	vector<string> _splitLine(std::string& strLine);
+	string _trim(const string& str);
 };
-
