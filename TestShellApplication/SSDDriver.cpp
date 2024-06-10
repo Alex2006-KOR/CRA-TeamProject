@@ -2,6 +2,9 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
+
 #include "SSDDriver.h"
 
 using namespace std;
@@ -23,7 +26,10 @@ public:
     }
 
     ExecutionCommandBuilder& setWriteData(int data) {
-        command += (" " + std::to_string(data));
+        std::stringstream ss;
+        ss << "0x" << hex << std::uppercase
+            << setw(8) << setfill('0') << data;
+        command += (" " + ss.str());
         return *this;
     }
 
