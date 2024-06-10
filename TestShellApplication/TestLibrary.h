@@ -6,7 +6,7 @@
 
 class TestLibrary {
 public:
-	static TestLibrary* GetLibrary(DriverInterface * pstDevice = nullptr, ostream* output = nullptr);
+	static TestLibrary* GetLibrary(DriverInterface * pstDevice = nullptr);
 
 	void Write(vector<string> vCommandList);
 	void Read(vector<string> vCommandList);
@@ -23,5 +23,4 @@ private:
 
 	static TestLibrary* m_Instance;
 	Device* m_pstDevice;
-	ostream* m_out;
 };

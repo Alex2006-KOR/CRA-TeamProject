@@ -19,7 +19,6 @@ public:
 	bool handleCommand(string lineString);
 
 private:
-	ostream& m_out;
 	TestLibrary* m_pstTestLib;
 	TestApp1* m_pstTestApp1;
 	TestApp2* m_pstTestApp2;

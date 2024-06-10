@@ -1,14 +1,14 @@
 #include "Shell.h"
+#include "Logger.h"
 
 #include <sstream>
 #include <vector>
 
 Shell::Shell(DriverInterface* pstDriver)
-    : m_out(std::cout)
 {
-    m_pstTestLib = TestLibrary::GetLibrary(pstDriver, &m_out);
-    m_pstTestApp1 = new TestApp1(pstDriver, m_out);
-    m_pstTestApp2 = new TestApp2(pstDriver, m_out);
+    m_pstTestLib = TestLibrary::GetLibrary(pstDriver);
+    m_pstTestApp1 = new TestApp1(pstDriver);
+    m_pstTestApp2 = new TestApp2(pstDriver);
 }
 
 void Shell::Run(istream& input)
@@ -55,7 +55,7 @@ bool Shell::handleCommand(string strLine)
         return true;
     }
     else {
-        m_out << "INVALID COMMAND\n";
+        LOG("INVALID COMMAND");
     }
     return false;
 }

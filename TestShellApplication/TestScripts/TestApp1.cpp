@@ -1,7 +1,7 @@
 #include "TestApp1.h"
 
-TestApp1::TestApp1(DriverInterface* pstDriver, ostream& output)
-	: TestScriptBase(pstDriver, output)
+TestApp1::TestApp1(DriverInterface* pstDriver)
+	: TestScriptBase(pstDriver)
 {
 }
 

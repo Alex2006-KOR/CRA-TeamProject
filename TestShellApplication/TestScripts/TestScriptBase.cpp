@@ -1,8 +1,7 @@
 #include "TestScriptBase.h"
 
-TestScriptBase::TestScriptBase(DriverInterface* pstDriver, ostream& output)
+TestScriptBase::TestScriptBase(DriverInterface* pstDriver)
 	: m_pstTestLib(nullptr)
-	, m_out(output)
 {
 	m_pstDevice = new Device(pstDriver);
 }
