@@ -146,28 +146,19 @@ void TestLibEraseRange::execute() const
 	int nStartLba = m_nStartLba;
 	int nEndLba = m_nEndLba;
 	if (m_vCommandList.size() > 0) {
-		_validateArguments();
-		nStartLba = stoi(m_vCommandList[0]);
-		nEndLba = stoi(m_vCommandList[1]);
+		try {
+			nStartLba = stoi(m_vCommandList[0]);
+			nEndLba = stoi(m_vCommandList[1]);
+		}
+		catch (exception& e) {
+			LOG(e.what());
+			return;
+		}
 	}
 	try {
 		m_pstDevice.Erase({ to_string(nStartLba), to_string(nEndLba - nStartLba) });
 	}
 	catch (exception& e) {
 		LOG(e.what());
-	}
-}
-
-void TestLibEraseRange::_validateArguments() const
-{
-	if (m_vCommandList.size() < 2)
-		throw invalid_argument("invalid # of args. please check help.");
-	for (int nArgIndex = 0; nArgIndex < 2; nArgIndex++) {
-		try {
-			m_pstDevice.Erase({ m_vCommandList[nArgIndex], to_string(-1) });
-		}
-		catch (Invalid_BlockCount& e) {
-			// pass
-		}
 	}
 }

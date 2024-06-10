@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VirtualSSD", "SSD_E\SSD_E.vcxproj", "{3FF8CC0E-F94F-4463-9DB3-3E897D6A2B1D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestShellApplication", "TestShellApplication\TestShellApplication.vcxproj", "{A291A7A5-34DA-48C2-9A5C-3252CE244FDB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0CB0D296-8804-4F80-B783-9054CF41C5F1} = {0CB0D296-8804-4F80-B783-9054CF41C5F1}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VirtualSSD-Test", "VirtualSSD-Test\VirtualSSD-Test.vcxproj", "{BAF4561B-A3A5-489D-A84B-D90B0A6C3ABA}"
 EndProject

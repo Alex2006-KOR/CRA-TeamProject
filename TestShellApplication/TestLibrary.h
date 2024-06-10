@@ -76,6 +76,4 @@ public:
 	void execute() const override;
 private:
 	Device& m_pstDevice;
-	void _validateArguments() const;
-
 };
