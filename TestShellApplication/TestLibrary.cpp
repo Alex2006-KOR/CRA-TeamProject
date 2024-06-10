@@ -5,64 +5,70 @@
 TestLibWrite::TestLibWrite(Device* pstDevice)
 	:m_pstDevice(pstDevice){}
 
-void TestLibWrite::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibWrite::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	try {
 		m_pstDevice->Write(vCommandList);
 	}
 	catch (exception& e) {
 		LOG(e.what());
+		return false;
 	}
 }
 
 TestLibRead::TestLibRead(Device* pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibRead::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibRead::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	string ret;
 	try {
 		ret = m_pstDevice->Read(vCommandList);
+		LOG(ret);
 	}
 	catch (exception& e) {
-		ret = e.what();
+		LOG(e.what());
+		return false;
 	}
-	LOG(ret);
+	return true;
 }
 
 TestLibErase::TestLibErase(Device* pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibErase::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibErase::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	try {
 		m_pstDevice->Erase(vCommandList);
 	}
 	catch (exception& e) {
 		LOG(e.what());
+		return false;
 	}
+	return true;
 }
 
 TestLibFlush::TestLibFlush(Device* pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibFlush::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibFlush::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	try {
 		m_pstDevice->Flush(vCommandList);
 	}
 	catch (exception& e) {
 		LOG(e.what());
+		return false;
 	}
+	return true;
 }
 
 TestLibFullWrite::TestLibFullWrite(Device* pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibFullWrite::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibFullWrite::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	for (int nLBA = m_pstDevice->GetMinLba(); nLBA < m_pstDevice->GetMaxLba(); nLBA++) {
-
 		try {
 			int nIndex = nLBA - m_pstDevice->GetMinLba();
 
@@ -72,15 +78,16 @@ void TestLibFullWrite::execute(const vector<string>& vCommandList, int nStartLba
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 TestLibFullRead::TestLibFullRead(Device* pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibFullRead::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibFullRead::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	string ret;
 	for (int nLBA = m_pstDevice->GetMinLba(); nLBA < m_pstDevice->GetMaxLba(); nLBA++) {
@@ -97,15 +104,16 @@ void TestLibFullRead::execute(const vector<string>& vCommandList, int nStartLba,
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 TestLibWriteRange::TestLibWriteRange(Device* pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibWriteRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibWriteRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	for (int nLBA = nStartLba; nLBA <= nEndLba; nLBA++) {
 		try {
@@ -113,15 +121,16 @@ void TestLibWriteRange::execute(const vector<string>& vCommandList, int nStartLb
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 TestLibReadRange::TestLibReadRange(Device* pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibReadRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibReadRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	string ret;
 	for (int nLBA = nStartLba; nLBA <= nEndLba; nLBA++) {
@@ -133,15 +142,16 @@ void TestLibReadRange::execute(const vector<string>& vCommandList, int nStartLba
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 TestLibEraseRange::TestLibEraseRange(Device* pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibEraseRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
+bool TestLibEraseRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	if (vCommandList.size() > 0) {
 		_validateArguments(vCommandList);
@@ -153,7 +163,9 @@ void TestLibEraseRange::execute(const vector<string>& vCommandList, int nStartLb
 	}
 	catch (exception& e) {
 		LOG(e.what());
+		return false;
 	}
+	return true;
 }
 
 void TestLibEraseRange::_validateArguments(const std::vector<std::string>& vCommandList) const

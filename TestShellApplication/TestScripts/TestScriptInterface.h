@@ -8,4 +8,6 @@ public:
 
 public:
 	virtual void Run() = 0;
+	virtual string Name() = 0;
+	virtual bool Verdict() = 0;
 };

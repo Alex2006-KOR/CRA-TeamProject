@@ -48,7 +48,7 @@ public:
 	}
 
 	std::string RunSingleCommand(std::string strCommandLine) {
-		shell.handleCommand(strCommandLine);
+		shell.handleCommand(strCommandLine, false);
 
 		return output.str();
 	}

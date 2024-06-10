@@ -10,18 +10,18 @@ Shell::Shell(DriverInterface* pstDriver)
     m_pstTestScriptInvoker = new TestScriptInvoker(m_pstTestLibCommandInvoker);
 }
 
-void Shell::Run(istream& input)
+void Shell::Run(istream& input, bool isScriptMode)
 {
     string strLine;
     while (true) {
         while (getline(input, strLine)) {
-            bool bExit = handleCommand(strLine);
+            bool bExit = handleCommand(strLine, isScriptMode);
             if (bExit) return;
         }
     }
 }
 
-bool Shell::handleCommand(string strLine)
+bool Shell::handleCommand(string strLine, bool isScriptMode)
 {
     vector<string> vCommandList = _splitLine(strLine);
     if (vCommandList.size() == 0) return false;
@@ -38,8 +38,7 @@ bool Shell::handleCommand(string strLine)
 
     TestScriptInterface* targetScript = m_pstTestScriptInvoker->GetTestScript(strCommand);
     if (targetScript) {
-        m_pstTestScriptInvoker->Run(targetScript);
-        return false;
+        return !m_pstTestScriptInvoker->Run(targetScript, isScriptMode);
     }
     
     if (strCommand == "help") {
