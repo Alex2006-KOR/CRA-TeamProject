@@ -6,9 +6,8 @@
 
 Shell::Shell(DriverInterface* pstDriver)
 {
-    m_pstTestLib = TestLibrary::GetLibrary(pstDriver);
-    m_pstTestApp1 = new TestApp1(pstDriver);
-    m_pstTestApp2 = new TestApp2(pstDriver);
+    m_pstTestLibCommandInvoker = new TestLibCommandInvoker(pstDriver);
+    m_pstTestScriptInvoker = new TestScriptInvoker(m_pstTestLibCommandInvoker);
 }
 
 void Shell::Run(istream& input)
@@ -27,28 +26,23 @@ bool Shell::handleCommand(string strLine)
     vector<string> vCommandList = _splitLine(strLine);
 
     string strCommand = _trim(vCommandList[0]);
+    if (strCommand == "") return false;
+
     vCommandList.erase(vCommandList.begin());
-    if (strCommand == "") {
+
+    TestLibrary* targetFunction = m_pstTestLibCommandInvoker->GetFunction(strCommand);
+    if (targetFunction) {
+        m_pstTestLibCommandInvoker->Run(targetFunction, vCommandList);
+        return false;
     }
-    else if (strCommand == "write") {
-        m_pstTestLib->Write(vCommandList);
+
+    TestScriptBase* targetScript = m_pstTestScriptInvoker->GetTestScript(strCommand);
+    if (targetScript) {
+        m_pstTestScriptInvoker->Run(targetScript);
+        return false;
     }
-    else if (strCommand == "read") {
-        m_pstTestLib->Read(vCommandList);
-    }
-    else if (strCommand == "fullwrite") {
-        m_pstTestLib->FullWrite(vCommandList);
-    }
-    else if (strCommand == "fullread") {
-        m_pstTestLib->FullRead();
-    }
-    else if (strCommand == "testapp1") {
-        m_pstTestApp1->Run();
-    }
-    else if (strCommand == "testapp2") {
-        m_pstTestApp2->Run();
-    }
-    else if (strCommand == "help") {
+    
+    if (strCommand == "help") {
         _printHelp();
     }
     else if (strCommand == "exit") {
@@ -75,7 +69,7 @@ void Shell::_printHelp()
 [lba] : decimal only, range = [0, 99]\n\
 [data] : hexadecimal only, range = [0x00000000, 0xFFFFFFFF]\n\
 ";
-    cout << strHelp;
+    LOG(strHelp);
 }
 
 vector<string> Shell::_splitLine(std::string& strLine)
@@ -84,7 +78,8 @@ vector<string> Shell::_splitLine(std::string& strLine)
     strLine += " ";
     auto nPos = strLine.find(" ");
     while (nPos != string::npos) {
-        vCommandList.push_back(strLine.substr(0, nPos));
+        string strSubString = strLine.substr(0, nPos);
+        if (strSubString.size() > 0) vCommandList.push_back(strSubString);
         strLine = strLine.substr(nPos + 1);
         nPos = strLine.find(" ");
     }

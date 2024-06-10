@@ -138,9 +138,12 @@
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDDriver.cpp" />
     <ClCompile Include="TestLibrary.cpp" />
+    <ClCompile Include="TestLibraryCommandInvoker.cpp" />
     <ClCompile Include="TestScripts\TestApp1.cpp" />
     <ClCompile Include="TestScripts\TestApp2.cpp" />
     <ClCompile Include="TestScripts\TestScriptBase.cpp" />
+    <ClCompile Include="TestScripts\TestScriptInvoker.cpp" />
+    <ClCompile Include="TestScripts\TestScriptInvoker.h" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +158,7 @@
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDDriver.h" />
     <ClInclude Include="TestLibrary.h" />
+    <ClInclude Include="TestLibraryCommandInvoker.h" />
     <ClInclude Include="TestScripts\TestApp1.h" />
     <ClInclude Include="TestScripts\TestApp2.h" />
     <ClInclude Include="TestScripts\TestScriptBase.h" />

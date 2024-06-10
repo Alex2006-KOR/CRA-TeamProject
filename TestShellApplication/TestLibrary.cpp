@@ -1,17 +1,10 @@
+#include "Logger.h"
 #include "TestLibrary.h"
 
-#include "Logger.h"
+TestLibWrite::TestLibWrite(Device* pstDevice)
+	:m_pstDevice(pstDevice){}
 
-TestLibrary* TestLibrary::m_Instance = nullptr;
-
-TestLibrary* TestLibrary::GetLibrary(DriverInterface* pstDriver)
-{
-	if (m_Instance == nullptr) m_Instance = new TestLibrary();
-	if (pstDriver != nullptr) m_Instance->m_pstDevice = new Device(pstDriver);
-	return m_Instance;
-}
-
-void TestLibrary::Write(vector<string> vCommandList)
+void TestLibWrite::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	try {
 		m_pstDevice->Write(vCommandList);
@@ -21,7 +14,10 @@ void TestLibrary::Write(vector<string> vCommandList)
 	}
 }
 
-void TestLibrary::Read(vector<string> vCommandList)
+TestLibRead::TestLibRead(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
+
+void TestLibRead::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	string ret;
 	try {
@@ -33,14 +29,19 @@ void TestLibrary::Read(vector<string> vCommandList)
 	LOG(ret);
 }
 
-void TestLibrary::FullWrite(vector<string> vCommandList)
+TestLibFullWrite::TestLibFullWrite(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
+
+void TestLibFullWrite::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
-	vCommandList.insert(vCommandList.begin(), "DummyLBA");
 	for (int nLBA = m_pstDevice->GetMinLba(); nLBA < m_pstDevice->GetMaxLba(); nLBA++) {
 
 		try {
-			vCommandList[0] = to_string(nLBA);
-			m_pstDevice->Write(vCommandList);
+			int nIndex = nLBA - m_pstDevice->GetMinLba();
+
+			if (vCommandList.size() == 0) throw invalid_argument("check help - fullwrite [data]");
+			string strData = vCommandList[nIndex % vCommandList.size()];
+			m_pstDevice->Write({ to_string(nLBA), strData });
 		}
 		catch (exception e) {
 			LOG(e.what());
@@ -49,14 +50,22 @@ void TestLibrary::FullWrite(vector<string> vCommandList)
 	}
 }
 
-void TestLibrary::FullRead(string strExpected)
+TestLibFullRead::TestLibFullRead(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
+
+void TestLibFullRead::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	string ret;
 	for (int nLBA = m_pstDevice->GetMinLba(); nLBA < m_pstDevice->GetMaxLba(); nLBA++) {
 		try {
 			ret = m_pstDevice->Read({ to_string(nLBA) });
-			if (strExpected.size() == 10 && ret != strExpected)
-				throw runtime_error("Data Mismatch!!");
+
+			if (vCommandList.size() > 0) {
+				int nIndex = nLBA - m_pstDevice->GetMinLba();
+				string strCompareData = vCommandList[nIndex % vCommandList.size()];
+				if (strCompareData.size() == 10 && ret != strCompareData)
+					throw runtime_error("Data Mismatch!!");
+			}
 			LOG(ret);
 		}
 		catch (exception e) {
@@ -66,11 +75,14 @@ void TestLibrary::FullRead(string strExpected)
 	}
 }
 
-void TestLibrary::WriteRange(int nStartLba, int nEndLba, string strData)
+TestLibWriteRange::TestLibWriteRange(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
+
+void TestLibWriteRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	for (int nLBA = nStartLba; nLBA <= nEndLba; nLBA++) {
 		try {
-			m_pstDevice->Write({to_string(nLBA), strData});
+			m_pstDevice->Write({ to_string(nLBA), strData });
 		}
 		catch (exception e) {
 			LOG(e.what());
@@ -79,13 +91,16 @@ void TestLibrary::WriteRange(int nStartLba, int nEndLba, string strData)
 	}
 }
 
-void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected)
+TestLibReadRange::TestLibReadRange(Device* pstDevice)
+	:m_pstDevice(pstDevice) {}
+
+void TestLibReadRange::execute(const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData) const
 {
 	string ret;
 	for (int nLBA = nStartLba; nLBA <= nEndLba; nLBA++) {
 		try {
 			ret = m_pstDevice->Read({ to_string(nLBA) });
-			if (strExpected.size() == 10 && ret != strExpected)
+			if (strData.size() == 10 && ret != strData)
 				throw runtime_error("Data Mismatch!!");
 			LOG(ret);
 		}
@@ -94,13 +109,4 @@ void TestLibrary::ReadRange(int nStartLba, int nEndLba, string strExpected)
 			return;
 		}
 	}
-}
-
-TestLibrary::~TestLibrary()
-{
-}
-
-
-TestLibrary::TestLibrary()
-{
 }
