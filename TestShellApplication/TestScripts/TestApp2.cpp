@@ -14,21 +14,24 @@ void TestApp2::_setup()
 void TestApp2::_main()
 {
 	for (int cnt = 0; cnt < AGING_CNT; cnt++) {
-		m_pstTestLibCommandInvoker->Run(
-			m_pstTestLibCommandInvoker->GetFunction("write_range"),
-			{}, 0, 5, m_strDataPrev
-		);
+		m_pstTestLibCommandInvoker->GetFunction("write_range")
+			->setStartLba(0)
+			.setEndLba(5)
+			.setData(m_strDataPrev)
+			.execute();
 	}
 
-	m_pstTestLibCommandInvoker->Run(
-		m_pstTestLibCommandInvoker->GetFunction("write_range"),
-		{}, 0, 5, m_strDataNew
-	);
+	m_pstTestLibCommandInvoker->GetFunction("write_range")
+		->setStartLba(0)
+		.setEndLba(5)
+		.setData(m_strDataNew)
+		.execute();
 
-	m_pstTestLibCommandInvoker->Run(
-		m_pstTestLibCommandInvoker->GetFunction("read_range"),
-		{}, 0, 5, m_strDataNew
-	);
+	m_pstTestLibCommandInvoker->GetFunction("read_range")
+		->setStartLba(0)
+		.setEndLba(5)
+		.setData(m_strDataNew)
+		.execute();
 }
 
 void TestApp2::_cleanup()

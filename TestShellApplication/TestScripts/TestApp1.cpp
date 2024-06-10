@@ -12,14 +12,13 @@ void TestApp1::_setup()
 
 void TestApp1::_main()
 {
-	m_pstTestLibCommandInvoker->Run(
-		m_pstTestLibCommandInvoker->GetFunction("fullwrite"),
-		{ m_Data }
-	);
-	m_pstTestLibCommandInvoker->Run(
-		m_pstTestLibCommandInvoker->GetFunction("fullread"),
-		{ m_Data }
-	);
+	m_pstTestLibCommandInvoker->GetFunction("fullwrite")
+		->setCommandList({ m_Data })
+		.execute();
+
+	m_pstTestLibCommandInvoker->GetFunction("fullread")
+		->setCommandList({ m_Data })
+		.execute();
 }
 
 void TestApp1::_cleanup()

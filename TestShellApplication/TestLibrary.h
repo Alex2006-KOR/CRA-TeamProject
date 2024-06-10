@@ -8,7 +8,7 @@
 class TestLibWrite : public TestLibrary {
 public:
 	TestLibWrite(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
 
@@ -17,7 +17,7 @@ private:
 class TestLibRead : public TestLibrary {
 public:
 	TestLibRead(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
 };
@@ -25,7 +25,7 @@ private:
 class TestLibErase : public TestLibrary {
 public:
 	TestLibErase(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
 };
@@ -33,7 +33,7 @@ private:
 class TestLibFlush : public TestLibrary {
 public:
 	TestLibFlush(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
 };
@@ -41,7 +41,7 @@ private:
 class TestLibFullWrite : public TestLibrary {
 public:
 	TestLibFullWrite(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
 };
@@ -49,7 +49,7 @@ private:
 class TestLibFullRead : public TestLibrary {
 public:
 	TestLibFullRead(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
 };
@@ -57,7 +57,7 @@ private:
 class TestLibWriteRange : public TestLibrary {
 public:
 	TestLibWriteRange(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
 };
@@ -65,7 +65,7 @@ private:
 class TestLibReadRange : public TestLibrary {
 public:
 	TestLibReadRange(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
 };
@@ -73,9 +73,9 @@ private:
 class TestLibEraseRange : public TestLibrary {
 public:
 	TestLibEraseRange(Device* pstDevice);
-	void execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	void execute() const override;
 private:
 	Device* m_pstDevice;
-	void _validateArguments(const std::vector<std::string>& vCommandList) const;
+	void _validateArguments() const;
 
 };

@@ -32,7 +32,7 @@ bool Shell::handleCommand(string strLine)
 
     TestLibrary* targetFunction = m_pstTestLibCommandInvoker->GetFunction(strCommand);
     if (targetFunction) {
-        m_pstTestLibCommandInvoker->Run(targetFunction, vCommandList);
+        targetFunction->setCommandList(vCommandList).execute();
         return false;
     }
 

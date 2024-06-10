@@ -14,11 +14,6 @@ TestLibrary* TestLibCommandInvoker::GetFunction(string strCommand)
 	return iterFind->second;
 }
 
-void TestLibCommandInvoker::Run(TestLibrary* stFunction, const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData)
-{
-	stFunction->execute(vCommandList, nStartLba, nEndLba, strData);
-}
-
 void TestLibCommandInvoker::_initCommands(Device* pstDevice)
 {
 	m_mapCommand["write"] = new TestLibWrite(pstDevice);
