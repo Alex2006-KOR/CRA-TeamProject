@@ -141,6 +141,8 @@
     <ClCompile Include="TestScripts\TestApp1.cpp" />
     <ClCompile Include="TestScripts\TestApp2.cpp" />
     <ClCompile Include="TestScripts\TestScriptBase.cpp" />
+    <ClCompile Include="TestScripts\TestScriptInvoker.cpp" />
+    <ClCompile Include="TestScripts\TestScriptInvoker.h" />
     <ClCompile Include="WriteCommand.cpp" />
   </ItemGroup>
   <ItemGroup>
