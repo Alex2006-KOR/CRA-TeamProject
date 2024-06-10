@@ -9,6 +9,7 @@ using std::string;
 class SSDDriverInterfaceTestFixture : public SSDDriver, public testing::Test {
 public:
 	string expectedCommand;
+	MOCK_METHOD(void, _executeCommand, (const char* strCommand), ());
 
 	void doWriteCommandTest(int lba, int data) {
 		std::stringstream ss;
@@ -30,6 +31,8 @@ public:
 protected:
 	void SetUp() override {
 		expectedCommand = "";
+		EXPECT_CALL(*this, _executeCommand(_))
+			.WillRepeatedly(Return());
 	}
 };
 

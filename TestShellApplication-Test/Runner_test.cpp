@@ -46,8 +46,17 @@ protected:
 		EXPECT_CALL(ssd, ReadBuffer)
 			.WillRepeatedly(Return(string("0xABCD1234")));
 
+		EXPECT_CALL(ssd, Read)
+			.WillRepeatedly(Return());
+
 		EXPECT_CALL(ssd, Write)
 			.WillRepeatedly(Return());
+
+		EXPECT_CALL(ssd, GetMinLba)
+			.WillRepeatedly(Return(0));
+
+		EXPECT_CALL(ssd, GetMaxLba)
+			.WillRepeatedly(Return(100));
 	}
 
 	void TearDown() override {
