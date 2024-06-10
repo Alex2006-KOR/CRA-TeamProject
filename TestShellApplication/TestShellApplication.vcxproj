@@ -132,12 +132,14 @@
   <ItemGroup>
     <ClCompile Include="DriverInterface.h" />
     <ClCompile Include="ExitCommand.cpp" />
+    <ClCompile Include="FileLoggerPrinter.cpp" />
     <ClCompile Include="FullReadCommand.cpp" />
     <ClCompile Include="FullWriteCommand.cpp" />
     <ClCompile Include="HelpCommand.cpp" />
     <ClCompile Include="InvalidCommand.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OutstreamLoggerPrinter.cpp" />
     <ClCompile Include="ReadCommand.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="SSDCommand.cpp" />
@@ -149,11 +151,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExitCommand.h" />
+    <ClInclude Include="FileLoggerPrinter.h" />
     <ClInclude Include="FullReadCommand.h" />
     <ClInclude Include="FullWriteCommand.h" />
     <ClInclude Include="HelpCommand.h" />
     <ClInclude Include="InvalidCommand.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="LoggerPrinter.h" />
+    <ClInclude Include="OutstreamLoggerPrinter.h" />
     <ClInclude Include="ReadCommand.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="SSDCommandInvoker.h" />
