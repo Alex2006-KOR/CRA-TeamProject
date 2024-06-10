@@ -11,6 +11,7 @@ void BufferManager::ExtractWriteBufferList()
 {
 	try {
 		m_stWriteBufferFile.OpenReadStream();
+		m_vWriteBufferList.clear();
 	}
 	catch (exception e) {
 		cout << e.what() << endl;
@@ -71,7 +72,74 @@ void BufferManager::AddWriteBuffer(string sCmd, string sParam1, string sParam2) 
 }
 
 void BufferManager::OptimizeWriteBuffer() {
-	// TO DO
+	int	 nLastIndex = m_vWriteBufferList.size() - 1;
+	if (nLastIndex == 0) return;
+
+	vector<string> vSearchCommandWords = GetCmdInBuffer(nLastIndex);
+	
+	if (vSearchCommandWords[0] == "W") {
+		for (int nIndex = nLastIndex - 1; nIndex >= 0; nIndex--) {
+			vector<string> vCompareCommandWords = GetCmdInBuffer(nIndex);
+			int nSearchLba = stoi(vSearchCommandWords[1]);
+			string nCompareCmd = vCompareCommandWords[0];
+			int nCompareLba = stoi(vCompareCommandWords[1]);
+			
+			if (nCompareCmd == "W" && nCompareLba == nSearchLba) {
+				m_vWriteBufferList.erase(m_vWriteBufferList.begin() + nIndex);
+			}
+		}
+	}
+	else if (vSearchCommandWords[0] == "E") {
+		for (int nIndex = nLastIndex - 1; nIndex >= 0; nIndex--) {
+			vector<string> vCompareCommandWords = GetCmdInBuffer(nIndex);
+			int nSearchStartLba = stoi(vSearchCommandWords[1]);
+			int nSearchLbaSize = stoi(vSearchCommandWords[2]);
+			int nSearchEndLba = nSearchStartLba + nSearchLbaSize - 1;
+
+			string nCompareCmd = vCompareCommandWords[0];
+			int nCompareLba = stoi(vCompareCommandWords[1]);
+
+			if (nCompareCmd == "W" && nSearchStartLba <= nCompareLba && nSearchEndLba >= nCompareLba) {
+				m_vWriteBufferList.erase(m_vWriteBufferList.begin() + nIndex);
+				continue;
+			}
+
+			if (nIndex != nLastIndex - 1) continue;
+
+			// 제약사항. 연속된 Erase만 검사한다.
+			if (nCompareCmd == "E") {
+				int nCompareStartLba = nCompareLba;
+				int nCompareLbaSize = stoi(vSearchCommandWords[2]);
+				int nCompareEndLba = nCompareStartLba + nCompareLbaSize - 1;
+
+				if ((nCompareStartLba <= nSearchStartLba && nSearchStartLba <= nCompareEndLba) ||
+					(nSearchStartLba <= nCompareStartLba && nCompareStartLba <= nSearchEndLba)) {
+					int nNewStartLba = min(nSearchStartLba, nCompareStartLba);
+					int nNewEndLba = max(nSearchEndLba, nCompareEndLba);
+					int nNewLbaSize = nNewEndLba - nNewStartLba + 1;
+					string sInputString = "E " + to_string(nNewStartLba) + " " + to_string(nNewLbaSize);
+					m_vWriteBufferList.erase(m_vWriteBufferList.begin() + nIndex);
+					m_vWriteBufferList.pop_back();
+					m_vWriteBufferList.push_back(sInputString);
+
+				}
+			}
+		}
+	}
+
+	// 새로 write
+	try {
+		m_stWriteBufferFile.OpenWriteStream("trunc");
+	}
+	catch (exception e) {
+		cout << e.what() << endl;
+	}
+
+	for (const auto& sElement : m_vWriteBufferList) {	
+		m_stWriteBufferFile.Write(sElement);
+	}
+
+	m_stWriteBufferFile.CloseWriteStream();
 }
 
 int BufferManager::GetWriteBufferSize() {

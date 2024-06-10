@@ -52,6 +52,12 @@ bool IOManager::_CheckInvalidArgumentNumber(int argc, char* argv[]) {
 	if (string(argv[1]) == "E" && argc != ERASE_CMD_ARGUMENT_NUM) return true;
 	if (string(argv[1]) == "F" && argc != FLUSH_CMD_ARGUMENT_NUM) return true;
 
+	if (string(argv[1]) == "W" || string(argv[1]) == "R"){
+		for (const char ch : string(argv[2])) {
+			if ((ch >= '0') && (ch <= '9')) continue;
+			throw std::exception("INVALID LBA\n");
+		}
+	}
 	return false;
 }
 
