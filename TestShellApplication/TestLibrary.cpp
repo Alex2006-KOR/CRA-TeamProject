@@ -163,7 +163,7 @@ bool TestLibEraseRange::execute() const
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
 	try {
