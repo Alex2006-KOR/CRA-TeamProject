@@ -13,7 +13,7 @@ public:
 	virtual ~TestLibrary() {}
 
 public:
-	virtual void execute() const = 0;
+	virtual bool execute() const = 0;
 
 	TestLibrary& setCommandList(const std::vector<std::string>& vCommandList = {}) {
 		m_vCommandList = vCommandList;

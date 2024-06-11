@@ -14,8 +14,8 @@ public:
 	Shell(DriverInterface* pstDevice);
 
 public:
-	void Run(istream& input);
-	bool handleCommand(string lineString);
+	void Run(istream& input, bool isScriptMode = false);
+	bool handleCommand(string lineString, bool isScriptMode);
 
 private:
 	TestLibCommandInvoker* m_pstTestLibCommandInvoker;

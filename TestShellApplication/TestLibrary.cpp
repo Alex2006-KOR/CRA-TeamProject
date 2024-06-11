@@ -5,64 +5,71 @@
 TestLibWrite::TestLibWrite(Device& pstDevice)
 	:m_pstDevice(pstDevice){}
 
-void TestLibWrite::execute() const
+bool TestLibWrite::execute() const
 {
 	try {
 		m_pstDevice.Write(m_vCommandList);
+		return true;
 	}
 	catch (exception& e) {
 		LOG(e.what());
+		return false;
 	}
 }
 
 TestLibRead::TestLibRead(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibRead::execute() const
+bool TestLibRead::execute() const
 {
 	string ret;
 	try {
 		ret = m_pstDevice.Read(m_vCommandList);
+		LOG(ret);
 	}
 	catch (exception& e) {
-		ret = e.what();
+		LOG(e.what());
+		return false;
 	}
-	LOG(ret);
+	return true;
 }
 
 TestLibErase::TestLibErase(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibErase::execute() const
+bool TestLibErase::execute() const
 {
 	try {
 		m_pstDevice.Erase(m_vCommandList);
 	}
 	catch (exception& e) {
 		LOG(e.what());
+		return false;
 	}
+	return true;
 }
 
 TestLibFlush::TestLibFlush(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibFlush::execute() const
+bool TestLibFlush::execute() const
 {
 	try {
 		m_pstDevice.Flush(m_vCommandList);
 	}
 	catch (exception& e) {
 		LOG(e.what());
+		return false;
 	}
+	return true;
 }
 
 TestLibFullWrite::TestLibFullWrite(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibFullWrite::execute() const
+bool TestLibFullWrite::execute() const
 {
 	for (int nLBA = m_pstDevice.GetMinLba(); nLBA < m_pstDevice.GetMaxLba(); nLBA++) {
-
 		try {
 			int nIndex = nLBA - m_pstDevice.GetMinLba();
 
@@ -72,15 +79,16 @@ void TestLibFullWrite::execute() const
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 TestLibFullRead::TestLibFullRead(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibFullRead::execute() const
+bool TestLibFullRead::execute() const
 {
 	string ret;
 	for (int nLBA = m_pstDevice.GetMinLba(); nLBA < m_pstDevice.GetMaxLba(); nLBA++) {
@@ -97,15 +105,16 @@ void TestLibFullRead::execute() const
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 TestLibWriteRange::TestLibWriteRange(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibWriteRange::execute() const
+bool TestLibWriteRange::execute() const
 {
 	for (int nLBA = m_nStartLba; nLBA <= m_nEndLba; nLBA++) {
 		try {
@@ -113,15 +122,16 @@ void TestLibWriteRange::execute() const
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 TestLibReadRange::TestLibReadRange(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibReadRange::execute() const
+bool TestLibReadRange::execute() const
 {
 	string ret;
 	for (int nLBA = m_nStartLba; nLBA <= m_nEndLba; nLBA++) {
@@ -133,15 +143,16 @@ void TestLibReadRange::execute() const
 		}
 		catch (exception& e) {
 			LOG(e.what());
-			return;
+			return false;
 		}
 	}
+	return true;
 }
 
 TestLibEraseRange::TestLibEraseRange(Device& pstDevice)
 	:m_pstDevice(pstDevice) {}
 
-void TestLibEraseRange::execute() const
+bool TestLibEraseRange::execute() const
 {
 	int nStartLba = m_nStartLba;
 	int nEndLba = m_nEndLba;
@@ -160,5 +171,7 @@ void TestLibEraseRange::execute() const
 	}
 	catch (exception& e) {
 		LOG(e.what());
+		return false;
 	}
+	return true;
 }
