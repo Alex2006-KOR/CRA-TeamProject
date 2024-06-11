@@ -28,7 +28,10 @@ bool TestScriptInvoker::Run(TestScriptInterface* stFunction, bool isScriptMode)
 	else
 		std::cout << "Pass" << endl;
 
-	return stFunction->Verdict();
+	if (isScriptMode)
+		return stFunction->Verdict();
+	else
+		return true;
 }
 
 void TestScriptInvoker::_initCommands(TestLibCommandInvoker* pstTestLibCommandInvoker)
