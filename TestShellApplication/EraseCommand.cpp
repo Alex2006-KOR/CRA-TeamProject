@@ -21,6 +21,7 @@ EraseCommand& EraseCommand::setLBA(string strLBA)
 EraseCommand& EraseCommand::setBlkCnt(string strData)
 {
 	_checkLBAIsValid();
+	_checkBlkCntFormat(strData);
 	_updateBlkCnt(strData);
 	_checkBlkRange();
 	return *this;
