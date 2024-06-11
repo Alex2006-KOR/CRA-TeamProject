@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="..\TestShellApplication\TestLibraryCommandInvokerInterface.h" />
     <ClInclude Include="..\TestShellApplication\TestLibraryInterface.h" />
+    <ClInclude Include="..\TestShellApplication\TestScripts\FailTestApp.h" />
     <ClInclude Include="..\TestShellApplication\TestScripts\TestApp1.h" />
     <ClInclude Include="..\TestShellApplication\TestScripts\TestApp2.h" />
     <ClInclude Include="..\TestShellApplication\TestScripts\TestScriptBase.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\TestShellApplication\TestScripts\FailTestApp.cpp" />
     <ClCompile Include="..\TestShellApplication\TestScripts\TestApp1.cpp" />
     <ClCompile Include="..\TestShellApplication\TestScripts\TestApp2.cpp" />
     <ClCompile Include="..\TestShellApplication\TestScripts\TestScriptBase.cpp" />
