@@ -12,11 +12,11 @@ void TestApp1::_setup()
 
 void TestApp1::_main()
 {
-	m_pstTestLibCommandInvoker->GetFunction("fullwrite")
+	m_verdict &= m_pstTestLibCommandInvoker->GetFunction("fullwrite")
 		->setCommandList({ m_Data })
 		.execute();
 
-	m_pstTestLibCommandInvoker->GetFunction("fullread")
+	m_verdict &= m_pstTestLibCommandInvoker->GetFunction("fullread")
 		->setCommandList({ m_Data })
 		.execute();
 }
