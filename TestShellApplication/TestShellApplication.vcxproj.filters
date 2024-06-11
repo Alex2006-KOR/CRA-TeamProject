@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Logger">
+      <UniqueIdentifier>{1e26a09f-fef8-451e-9abe-5a97dd7c54ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SSDCommand.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ReadCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -36,35 +36,42 @@
     <ClCompile Include="Shell.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="FullWriteCommand.cpp">
+    <ClCompile Include="Device.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TestApp1Command.cpp">
+    <ClCompile Include="TestLibrary.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="FullReadCommand.cpp">
+    <ClCompile Include="EraseCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SSDCommandInvoker.cpp">
+    <ClCompile Include="ShellException.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ExitCommand.cpp">
+    <ClCompile Include="FlushCommand.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="HelpCommand.cpp">
+    <ClCompile Include="TestLibraryCommandInvoker.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="InvalidCommand.cpp">
+    <ClCompile Include="Runner.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TestApp2Command.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Logger</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SSDCommand.h">
+    <ClCompile Include="OutstreamLoggerPrinter.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="FileLoggerPrinter.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScripts\TestScriptInvoker.h">
       <Filter>헤더 파일</Filter>
-    </None>
+    </ClCompile>
+    <ClCompile Include="TestScripts\TestScriptInvoker.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReadCommand.h">
@@ -76,34 +83,46 @@
     <ClInclude Include="SSDDriver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Device.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandInterface.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TestLibrary.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Shell.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="FullWriteCommand.h">
+    <ClInclude Include="EraseCommand.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TestApp1Command.h">
+    <ClInclude Include="ShellException.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="FullReadCommand.h">
+    <ClInclude Include="FlushCommand.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="FullReadCommand.h">
+    <ClInclude Include="TestLibraryCommandInvoker.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SSDCommandInvoker.h">
+    <ClInclude Include="Runner.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ExitCommand.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Logger.h">
+      <Filter>Logger</Filter>
     </ClInclude>
-    <ClInclude Include="HelpCommand.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="FileLoggerPrinter.h">
+      <Filter>Logger</Filter>
     </ClInclude>
-    <ClInclude Include="InvalidCommand.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="OutstreamLoggerPrinter.h">
+      <Filter>Logger</Filter>
     </ClInclude>
-    <ClInclude Include="TestApp2Command.h">
+    <ClInclude Include="LoggerPrinter.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScripts\TestScriptInterface.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

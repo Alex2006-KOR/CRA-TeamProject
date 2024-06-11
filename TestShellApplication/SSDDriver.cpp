@@ -20,77 +20,82 @@ public:
         return *this;
     }
 
-    ExecutionCommandBuilder& setLbaIndex(int lbaIdx) {
-        command += (" " + std::to_string(lbaIdx));
+    ExecutionCommandBuilder& setLbaIndex(int nLba) {
+        command += (" " + std::to_string(nLba));
         return *this;
     }
 
-    ExecutionCommandBuilder& setWriteData(int data) {
+    ExecutionCommandBuilder& setWriteData(int nData) {
         std::stringstream ss;
         ss << "0x" << hex << std::uppercase
-            << setw(8) << setfill('0') << data;
-
+            << setw(8) << setfill('0') << nData;
         command += (" " + ss.str());
         return *this;
     }
 
-    string build() {
-        return command;
+    ExecutionCommandBuilder& setBlockCount(int nBlkCnt) {
+        command += (" " + std::to_string(nBlkCnt));
+        return *this;
+    }
+
+    const char* build() {
+        return command.c_str();
     }
 
 private:
     string command;
 };
 
-int SSDDriver::Read(int lba)
+void SSDDriver::Read(int nLba)
 {
-    int retCode = _executeCommand(
+    _executeCommand(
         ExecutionCommandBuilder()
         .setAccessType("R")
-        .setLbaIndex(lba)
+        .setLbaIndex(nLba)
         .build()
     );
-
-    if (retCode == -1)
-        return 0;
-    return _getReadResult();
 }
 
-void SSDDriver::Write(int lba, int data)
+void SSDDriver::Write(int nLba, int nData)
 {
-    int retCode = _executeCommand(
+    _executeCommand(
         ExecutionCommandBuilder()
         .setAccessType("W")
-        .setLbaIndex(lba)
-        .setWriteData(data)
+        .setLbaIndex(nLba)
+        .setWriteData(nData)
         .build()
     );
 }
 
-int SSDDriver::_executeCommand(string command)
+void SSDDriver::Erase(int nLba, int nBlkCnt)
 {
-    try {
-        int retCode = system(command.c_str());
-        return retCode;
-    }
-    catch (exception& e) {
-        cout << "Virtual SSD execution failed" << endl;
-        cout << e.what() << endl;
-        return -1;
-    }
+    _executeCommand(
+        ExecutionCommandBuilder()
+        .setAccessType("E")
+        .setLbaIndex(nLba)
+        .setBlockCount(nBlkCnt)
+        .build()
+    );
 }
 
-int SSDDriver::_getReadResult(void)
+void SSDDriver::Flush()
 {
-    try {
-        if (_getSsdExisted())
-            return _getSsdResult();
-        return 0;
-    }
-    catch (exception& e) {
-        cout << e.what() << endl;
-        return 0;
-    }
+    _executeCommand(
+        ExecutionCommandBuilder()
+        .setAccessType("F")
+        .build()
+    );
+}
+
+void SSDDriver::_executeCommand(const char* strCommand) {
+    system(strCommand);
+}
+
+std::string SSDDriver::ReadBuffer()
+{
+    if (_getSsdExisted())
+        return _getSsdResult();
+    return string();
 }
 
 bool SSDDriver::_getSsdExisted(void)
@@ -104,17 +109,30 @@ bool SSDDriver::_getSsdExisted(void)
     return ret;
 }
 
-int SSDDriver::_getSsdResult(void)
+std::string SSDDriver::_getSsdResult(void)
 {
     ifstream ifstreamRead(SSD_FILE);
     if (ifstreamRead.is_open() == false)
         throw exception("Open SSD Result file fail");
 
-    int ret = 0;
     string readData;
     getline(ifstreamRead, readData);
-    ret = stoll(readData, nullptr, 16);
     ifstreamRead.close();
 
-    return ret;
+    return readData;
+}
+
+int SSDDriver::GetMinLba()
+{
+    return MIN_LBA;
+}
+
+int SSDDriver::GetMaxLba()
+{
+    return MAX_LBA;
+}
+
+int SSDDriver::GetMaxBlkCntPerErase()
+{
+    return MAX_BLK_CNT_PER_ERASE;
 }

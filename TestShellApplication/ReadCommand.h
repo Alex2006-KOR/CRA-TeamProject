@@ -1,26 +1,28 @@
 #pragma once
-#include "SSDCommand.h"
+#include "CommandInterface.h"
 #include "DriverInterface.h"
+#include <vector>
+
+using namespace std;
 
 class ReadCommand
-	: public BaseSSDCommand
+	: public DataCommand, public LbaArgument
 {
 public:
-	ReadCommand(DriverInterface* pSSDDriver, std::ostream& output);
+	ReadCommand(DriverInterface* pstDriver);
+	ReadCommand& setLBA(string strLba) override;
+	string execute() override;
 
-protected:
-	bool _parseCommand() override;
-	bool _checkValidityLBA();
-	bool _hasEnoughArgs();
-	bool _isValidFormat();
-	void _updateLBA();
-	bool _isLBAInRange();
-	void _execute() override;
+	bool CheckArgCnt(vector<string> vArgs) const override;
 
 private:
-	DriverInterface* m_pstSSDDriver;
-
-	const int m_nExpectedArgCnt = 1;
-	
+	DriverInterface* m_pstDriver;
+	vector<string> m_vArguemnts;
 	int m_nLBA;
+
+	const int REQUIRED_COMMAND_COUNT = 1;
+
+	void _checkLBAFormat(string strLBA) override;
+	void _updateLBA(string strLBA) override;
+	void _checkLBARange() override;
 };

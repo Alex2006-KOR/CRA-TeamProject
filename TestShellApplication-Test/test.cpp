@@ -1,76 +1,112 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "SSDCommand.cpp"
+#include "Logger.cpp"
+#include "OutstreamLoggerPrinter.cpp"
+#include "FileLoggerPrinter.cpp"
+#include "TestScripts/TestScriptInvoker.cpp"
+#include "TestScripts/TestScriptBase.cpp"
+#include "TestScripts/TestApp1.cpp"
+#include "TestScripts/TestApp2.cpp"
+#include "ShellException.cpp"
 #include "ReadCommand.cpp"
 #include "WriteCommand.cpp"
-#include "FullReadCommand.cpp"
-#include "FullWriteCommand.cpp"
-#include "ExitCommand.cpp"
-#include "HelpCommand.cpp"
-#include "InvalidCommand.cpp"
-#include "SSDCommandInvoker.cpp"
+#include "EraseCommand.cpp"
+#include "FlushCommand.cpp"
+#include "Device.cpp"
+#include "TestLibrary.cpp"
+#include "TestLibraryCommandInvoker.cpp"
 #include "Shell.cpp"
 
 using namespace testing;
 
 class SsdDeviceDriverMock : public DriverInterface {
 public:
-	MOCK_METHOD(int, Read, (int lba), (override));
-	MOCK_METHOD(void, Write, (int lba, int data), (override));
+	MOCK_METHOD(void, Read, (int nLba), (override));
+	MOCK_METHOD(void, Write, (int nLba, int nData), (override));
+	MOCK_METHOD(void, Erase, (int nLba, int nBlkCnt), (override));
+	MOCK_METHOD(void, Flush, (), (override));
+	MOCK_METHOD(std::string, ReadBuffer, (), (override));
+	MOCK_METHOD(int, GetMinLba, (), (override));
+	MOCK_METHOD(int, GetMaxLba, (), (override));
+	MOCK_METHOD(int, GetMaxBlkCntPerErase, (), (override));
 };
 
-class TestShellApplicationTestFixture : public testing::Test {
+
+class ShellTestFixture : public Test {
 public:
-	SsdDeviceDriverMock ssdMock;
-	Shell shell{ &ssdMock };
+	SsdDeviceDriverMock mockDevice;
+	std::ostringstream output;
+	Shell shell{ &mockDevice };
 
-	std::string RunCommands(string strCommandLines) {
+	std::string RunCommands(std::string strCommandLines) {
 		std::istringstream input(strCommandLines);
-		std::ostringstream output;
 
-		shell.Run(input, output);
+		shell.Run(input);
 
 		return output.str();
 	}
 
-	std::string RunSingleCommand(string strCommandLine) {
-		std::ostringstream output;
-
-		shell.handleCommand(strCommandLine, output);
+	std::string RunSingleCommand(std::string strCommandLine) {
+		shell.handleCommand(strCommandLine, false);
 
 		return output.str();
 	}
 
 protected:
 	void SetUp() override {
+		Logger::getInstance().SetOutStream(output);
+
+		EXPECT_CALL(mockDevice, GetMinLba)
+			.WillRepeatedly(Return(0));
+		EXPECT_CALL(mockDevice, GetMaxLba)
+			.WillRepeatedly(Return(100));
 	}
 };
 
 // Read Command
 // Read	Success Case
 
-TEST_F(TestShellApplicationTestFixture, ReadZeroTest) {
+TEST_F(ShellTestFixture, ReadZeroTest) {
 	std::string strCommandLine = "read 10";
 	std::string strExpectedResult = "0x00000000\n";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(1);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(1)
-		.WillRepeatedly(Return(0x00000000));
+		.WillRepeatedly(Return("0x00000000"));
 
 	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
-TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
+TEST_F(ShellTestFixture, ReadZeroTest_2) {
+	std::string strCommandLine = "read 10\nread 10\nexit\n";
+	std::string strExpectedResult = "0x00000000\n0x00000000\n";
+
+	EXPECT_CALL(mockDevice, Read)
+		.Times(2);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
+		.Times(2)
+		.WillRepeatedly(Return("0x00000000"));
+
+	EXPECT_EQ(RunCommands(strCommandLine), strExpectedResult);
+}
+
+TEST_F(ShellTestFixture, ReadReturnFormat) {
 	std::string strCommandLine = "read 10";
 	std::string strExpectedResult_prefix = "0x";
 	std::string strExpectedResult_postfix = "\n";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(1);
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(1)
-		.WillRepeatedly(Return(0x00000000));
+		.WillRepeatedly(Return("0x00000000"));
 
-	string strOutput = RunSingleCommand(strCommandLine);
+	std::string strOutput = RunSingleCommand(strCommandLine);
 
 	EXPECT_EQ(strOutput.substr(0, 2), strExpectedResult_prefix);
 	EXPECT_EQ(strOutput.substr(strOutput.size() - 1), strExpectedResult_postfix);
@@ -78,58 +114,70 @@ TEST_F(TestShellApplicationTestFixture, ReadReturnFormat) {
 
 // Read	Exception Case
 
-TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase1) {
-	std::string strCommandLine = "read ABC";
-	std::string strExpectedResult = "INVALID LBA\n";
+TEST_F(ShellTestFixture, ExceptionTestInvalidCharCase1) {
+	std::string strCommandLine = "read ABC\n";
+	std::string strExpectedResult = "INVALID LBA";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(0);
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
 
-TEST_F(TestShellApplicationTestFixture, ExceptionTestInvalidCharCase2) {
-	std::string strCommandLine = "read 0ABD";
-	std::string strExpectedResult = "INVALID LBA\n";
+TEST_F(ShellTestFixture, ExceptionTestInvalidCharCase2) {
+	std::string strCommandLine = "read 0ABD\n";
+	std::string strExpectedResult = "INVALID LBA";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(0);
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, ExceptionTestLBANonInDecimal) {
-	std::string strCommandLine = "read 0x100";
-	std::string strExpectedResult = "INVALID LBA\n";
+TEST_F(ShellTestFixture, ExceptionTestLBANonInDecimal) {
+	std::string strCommandLine = "read 0x100\n";
+	std::string strExpectedResult = "INVALID LBA";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(0);
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAOverMaxLBA) {
-	std::string strCommandLine = "read -10";
-	std::string strExpectedResult = "INVALID LBA\n";
+TEST_F(ShellTestFixture, ExceptionTestLBAOverMaxLBA) {
+	std::string strCommandLine = "read -10\n";
+	std::string strExpectedResult = "INVALID LBA";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(0);
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, ExceptionTestLBAUnderMinLBA) {
-	std::string strCommandLine = "read 100";
-	std::string strExpectedResult = "INVALID LBA\n";
+TEST_F(ShellTestFixture, ExceptionTestLBAUnderMinLBA) {
+	std::string strCommandLine = "read 100\n";
+	std::string strExpectedResult = "INVALID LBA";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(0);
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
+// full read command
+
+TEST_F(ShellTestFixture, FullReadAllZero) {
 	std::string strCommandLine = "fullread";
 	std::string strExpectedResult = "0x00000000\n";
 	std::string strExpectedResultFull;
@@ -139,14 +187,18 @@ TEST_F(TestShellApplicationTestFixture, FullReadAllZero) {
 		strExpectedResultFull += strExpectedResult;
 	}
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(LBA_CNT);
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(LBA_CNT)
-		.WillRepeatedly(Return(0x00000000));
+		.WillRepeatedly(Return("0x00000000"));
 
 	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResultFull);
 }
 
-TEST_F(TestShellApplicationTestFixture, FullReadSomeValidData) {
+
+
+TEST_F(ShellTestFixture, FullReadSomeValidData) {
 	std::string strCommandLine = "fullread";
 	std::string strExpectedResult = "0x00000000\n";
 	std::string strExpectedResultFull;
@@ -159,212 +211,297 @@ TEST_F(TestShellApplicationTestFixture, FullReadSomeValidData) {
 		strExpectedResultFull += strExpectedResult;
 	}
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
+		.Times(LBA_CNT);
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(LBA_CNT)
-		.WillOnce(Return(0x00000001))
-		.WillOnce(Return(0x00000011))
-		.WillRepeatedly(Return(0x00000000));
+		.WillOnce(Return("0x00000001"))
+		.WillOnce(Return("0x00000011"))
+		.WillRepeatedly(Return("0x00000000"));
 
 	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResultFull);
 }
 
+// Write Command
+// Write Success case
 
-
-TEST_F(TestShellApplicationTestFixture, WriteAndReadOnceTest) {
+TEST_F(ShellTestFixture, WriteAndReadOnceTest) {
 	std::string strCommandLine = "write 10 0x000000AA\nread 10\nexit\n";
 	std::string strExpectedResult = "0x000000AA\n";
 
-	EXPECT_CALL(ssdMock, Write(10, 0xAA))
+	EXPECT_CALL(mockDevice, Write(10, 0xAA))
 		.Times(1);
 
-	EXPECT_CALL(ssdMock, Read(10))
+	EXPECT_CALL(mockDevice, Read(10))
+		.Times(1);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(1)
-		.WillRepeatedly(Return(0x000000AA));
+		.WillRepeatedly(Return("0x000000AA"));
 
 	EXPECT_EQ(RunCommands(strCommandLine), strExpectedResult);
 }
 
-TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterLBATest) {
+TEST_F(ShellTestFixture, WriteInvalidCharacterLBATest) {
 	std::string strCommandLine = "write 0A 0x000000AA";
-	std::string strExpectedResult = "INVALID LBA\n";
+	std::string strExpectedResult = "INVALID LBA";
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
 		.Times(0);
-
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, WriteInvalidRangeLBATest) {
+TEST_F(ShellTestFixture, WriteInvalidRangeLBATest) {
 	std::string strCommandLine = "write 101 0x000000AA";
-	std::string strExpectedResult = "INVALID LBA\n";
+	std::string strExpectedResult = "INVALID LBA";
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, WriteInvalidCharacterDataTest) {
+TEST_F(ShellTestFixture, WriteInvalidCharacterDataTest) {
 	std::string strCommandLine = "write 10 0x0000GED0";
-	std::string strExpectedResult = "INVALID DATA\n";
+	std::string strExpectedResult = "INVALID DATA";
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, WriteNotStart0xDataTest) {
+TEST_F(ShellTestFixture, WriteNotStart0xDataTest) {
 	std::string strCommandLine = "write 10 000000AA";
-	std::string strExpectedResult = "INVALID DATA\n";
+	std::string strExpectedResult = "INVALID DATA";
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, WriteNot8CharacterDataTest) {
+TEST_F(ShellTestFixture, WriteNot8CharacterDataTest) {
 	std::string strCommandLine = "write 10 0x123456";
-	std::string strExpectedResult = "INVALID DATA\n";
+	std::string strExpectedResult = "INVALID DATA";
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, FullWriteTest) {
+// fullwrite
+
+
+TEST_F(ShellTestFixture, FullWriteTest) {
 	std::string strCommandLine = "fullwrite 0xABCDFFFF";
 
-	EXPECT_CALL(ssdMock, Write(_, 0xABCDFFFF))
+	EXPECT_CALL(mockDevice, Write(_, 0xABCDFFFF))
 		.Times(100);
 
 	EXPECT_NO_THROW(RunSingleCommand(strCommandLine));
 }
 
-TEST_F(TestShellApplicationTestFixture, FullWriteInvalidCharacterDataTest) {
+TEST_F(ShellTestFixture, FullWriteInvalidCharacterDataTest) {
 	std::string strCommandLine = "fullwrite 0x0000GED0";
-	std::string strExpectedResult = "INVALID DATA\n";
+	std::string strExpectedResult = "INVALID DATA";
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, FullWriteNotStart0xDataTest) {
+TEST_F(ShellTestFixture, FullWriteNotStart0xDataTest) {
 	std::string strCommandLine = "fullwrite 000000AA";
-	std::string strExpectedResult = "INVALID DATA\n";
+	std::string strExpectedResult = "INVALID DATA";
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
-TEST_F(TestShellApplicationTestFixture, FullWriteNot8CharacterDataTest) {
+TEST_F(ShellTestFixture, FullWriteNot8CharacterDataTest) {
 	std::string strCommandLine = "fullwrite 0x123456";
-	std::string strExpectedResult = "INVALID DATA\n";
+	std::string strExpectedResult = "INVALID DATA";
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
 		.Times(0);
 
-	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
+	EXPECT_THAT(RunSingleCommand(strCommandLine), StartsWith(strExpectedResult));
 }
 
 
 // Other Commands
 
  // help
-TEST_F(TestShellApplicationTestFixture, HelpWithoutNoError) {
+TEST_F(ShellTestFixture, HelpWithoutNoError) {
 	std::string strCommandLine = "help";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
 		.Times(0);
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
+		.Times(0);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
 	EXPECT_NO_THROW(RunSingleCommand(strCommandLine));
 }
 
-TEST_F(TestShellApplicationTestFixture, HelpNoErrorReturn) {
+TEST_F(ShellTestFixture, HelpNoErrorReturn) {
 	std::string strCommandLine = "help";
 	std::string strExpectedResult = "INVALID COMMAND\n";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
 		.Times(0);
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
+		.Times(0);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
 	EXPECT_NE(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
- // exit 
-TEST_F(TestShellApplicationTestFixture, ExitWithNoError) {
+// exit 
+TEST_F(ShellTestFixture, ExitWithNoError) {
 	std::string strCommandLine = "exit";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
 		.Times(0);
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
+		.Times(0);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
 	EXPECT_NO_THROW(RunSingleCommand(strCommandLine));
 }
 
-TEST_F(TestShellApplicationTestFixture, ExitIgnoreFollowingCommands) {
+TEST_F(ShellTestFixture, ExitIgnoreFollowingCommands) {
 	std::string strCommandLines = "exit\nread 10\n";
 	std::string strExpectedResult = "";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
 		.Times(0);
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
+		.Times(0);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
 	EXPECT_EQ(RunCommands(strCommandLines), strExpectedResult);
 }
 
- // other commands
+// other commands
 
-TEST_F(TestShellApplicationTestFixture, InvalidCommand) {
+TEST_F(ShellTestFixture, InvalidCommand) {
 	std::string strCommandLine = "Read 10";
 	std::string strExpectedResult = "INVALID COMMAND\n";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
 		.Times(0);
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
+		.Times(0);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
 	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
-TEST_F(TestShellApplicationTestFixture, EmptyCommand) {
+TEST_F(ShellTestFixture, EmptyCommand) {
 	std::string strCommandLine = "";
 	std::string strExpectedResult = "";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
 		.Times(0);
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
+		.Times(0);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
 	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
 
-TEST_F(TestShellApplicationTestFixture, EmptyCommandWithSpace) {
+TEST_F(ShellTestFixture, EmptyCommandWithSpace) {
 	std::string strCommandLine = " ";
 	std::string strExpectedResult = "";
 
-	EXPECT_CALL(ssdMock, Read)
+	EXPECT_CALL(mockDevice, Read)
 		.Times(0);
 
-	EXPECT_CALL(ssdMock, Write)
+	EXPECT_CALL(mockDevice, Write)
+		.Times(0);
+
+	EXPECT_CALL(mockDevice, ReadBuffer)
 		.Times(0);
 
 	EXPECT_EQ(RunSingleCommand(strCommandLine), strExpectedResult);
 }
+
+//// TestCase
+//
+//
+//TEST_F(ShellTestFixture, TestApp1ExecuteMatchCase) {
+//	std::string strCommandLine = "testapp1";
+//	EXPECT_CALL(mockDevice, Write)
+//		.Times(100);
+//
+//	EXPECT_CALL(mockDevice, Read)
+//		.Times(100);
+//
+//	EXPECT_CALL(mockDevice, ReadBuffer)
+//		.Times(100)
+//		.WillRepeatedly(Return(0xABCD1234));
+//
+//	EXPECT_NO_THROW(RunSingleCommand(strCommandLine));
+//}
+//
+//TEST_F(ShellTestFixture, TestApp1ExecuteMisMatchCase) {
+//	EXPECT_CALL(mockDevice, Write)
+//		.Times(100);
+//
+//	EXPECT_CALL(mockDevice, Read)
+//		.Times(1);
+//
+//	EXPECT_CALL(mockDevice, ReadBuffer)
+//		.Times(1)
+//		.WillRepeatedly(Return(0xABCDFFFF));
+//
+//	EXPECT_NO_THROW(testApp1Command->Execute());
+//}
+//
+//
+//TEST_F(ShellTestFixture, TestApp2ExecuteMatchCase) {
+//	EXPECT_CALL(mockDevice, Read)
+//		.Times(6)
+//		.WillRepeatedly(Return(0x12345678));
+//
+//	EXPECT_CALL(mockDevice, Write)
+//		.Times(6 * 30 + 6);
+//
+//	EXPECT_NO_THROW(testApp2Command->Execute());
+//}
+//
+//TEST_F(ShellTestFixture, TestApp2ExecuteMisMatchCase) {
+//	EXPECT_CALL(mockDevice, Read)
+//		.Times(1)
+//		.WillRepeatedly(Return(0xAAAABBBB));
+//
+//	EXPECT_CALL(mockDevice, Write)
+//		.Times(6 * 30 + 6);
+//
+//	EXPECT_NO_THROW(testApp2Command->Execute());
+//}

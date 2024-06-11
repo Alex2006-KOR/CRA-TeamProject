@@ -1,72 +1,94 @@
 #include "Shell.h"
+#include "Logger.h"
 
-Shell::Shell(DriverInterface* pSSDDriver)
-	: m_pSSDDriver(pSSDDriver)
-    , m_pCommandInvoker(nullptr)
+#include <sstream>
+#include <vector>
+
+Shell::Shell(DriverInterface* pstDriver)
 {
+    m_pstTestLibCommandInvoker = new TestLibCommandInvoker(pstDriver);
+    m_pstTestScriptInvoker = new TestScriptInvoker(m_pstTestLibCommandInvoker);
 }
 
-Shell::~Shell()
+void Shell::Run(istream& input, bool isScriptMode)
 {
-    if (m_pCommandInvoker != nullptr) {
-        delete m_pCommandInvoker;
-        m_pCommandInvoker = nullptr;
-    }
-}
-
-void Shell::Run(istream& input, ostream& output)
-{
+    string strLine;
     while (true) {
-        string line;
-        while (getline(input, line)) {
-            bool bExit = handleCommand(line, output);
+        while (getline(input, strLine)) {
+            bool bExit = handleCommand(strLine, isScriptMode);
             if (bExit) return;
         }
     }
 }
 
-bool Shell::handleCommand(string strCommandLine, ostream& output)
+bool Shell::handleCommand(string strLine, bool isScriptMode)
 {
-    vector<string> vCommandList = SplitLine(strCommandLine);
-    
-    string strCommand = trim(vCommandList[0]);
-    vCommandList.erase(vCommandList.begin());
-    if (strCommand == "") { return false; }
+    vector<string> vCommandList = _splitLine(strLine);
+    if (vCommandList.size() == 0) return false;
+    string strCommand = _trim(vCommandList[0]);
+    if (strCommand == "") return false;
 
-    SSDComamnd* pCommand = _getCommandInvoker(output)->GetCommand(strCommand);
-    try {
-        pCommand->SetCommandList(vCommandList);
-        pCommand->Execute();
+    vCommandList.erase(vCommandList.begin());
+
+    TestLibrary* targetFunction = m_pstTestLibCommandInvoker->GetFunction(strCommand);
+    if (targetFunction) {
+        targetFunction->setCommandList(vCommandList).execute();
+        return false;
     }
-    catch (ExitShellException& e) {
+
+    TestScriptInterface* targetScript = m_pstTestScriptInvoker->GetTestScript(strCommand);
+    if (targetScript) {
+        return !m_pstTestScriptInvoker->Run(targetScript, isScriptMode);
+    }
+    
+    if (strCommand == "help") {
+        _printHelp();
+    }
+    else if (strCommand == "exit") {
         return true;
     }
-    
+    else {
+        LOG("INVALID COMMAND");
+    }
     return false;
 }
 
-SSDCommandInvoker* Shell::_getCommandInvoker(ostream& output)
+void Shell::_printHelp()
 {
-    if (m_pCommandInvoker == nullptr) {
-        m_pCommandInvoker = new SSDCommandInvoker(m_pSSDDriver, output);
-    }
-    return m_pCommandInvoker;
+    string strHelp = "\n\
+[[Shell Test Application]]\n\
+\n\
+<< Command Usage >> \n\
+- write [lba] [data]\n\
+- read [lba]\n\
+- erase [lba] [block count]\n\
+- fullwrite [data]\n\
+- fullread\n\
+- erase_range [start lba] [end lba]\n\
+- exit\n\
+\n\
+[lba] : decimal only, range = [0, 99]\n\
+[data] : hexadecimal only, range = [0x00000000, 0xFFFFFFFF]\n\
+[block count] : decimal only, range = [0, 10] (erase) \n\
+";
+    LOG(strHelp);
 }
 
-vector<string> Shell::SplitLine(string& strCommandLine)
+vector<string> Shell::_splitLine(std::string& strLine)
 {
     vector<string> vCommandList;
-    strCommandLine += " ";
-    auto nPos = strCommandLine.find(" ");
+    strLine += " ";
+    auto nPos = strLine.find(" ");
     while (nPos != string::npos) {
-        vCommandList.push_back(strCommandLine.substr(0, nPos));
-        strCommandLine = strCommandLine.substr(nPos + 1);
-        nPos = strCommandLine.find(" ");
+        string strSubString = strLine.substr(0, nPos);
+        if (strSubString.size() > 0) vCommandList.push_back(strSubString);
+        strLine = strLine.substr(nPos + 1);
+        nPos = strLine.find(" ");
     }
     return vCommandList;
 }
 
-string Shell::trim(const string& str) {
+string Shell::_trim(const string& str) {
     size_t first = str.find_first_not_of(' ');
     if (first == string::npos) {
         return "";

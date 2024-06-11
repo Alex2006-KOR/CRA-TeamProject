@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a291a7a5-34da-48c2-9a5c-3252ce244fdb}</ProjectGuid>
-    <RootNamespace>TestShellApplication</RootNamespace>
+    <ProjectGuid>{0cb0d296-8804-4f80-b783-9054cf41c5f1}</ProjectGuid>
+    <RootNamespace>TestScriptLib</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -74,12 +74,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;TESTSCRIPTLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,26 +91,32 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;TESTSCRIPTLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;TESTSCRIPTLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -116,54 +125,35 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;TESTSCRIPTLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Device.cpp" />
-    <ClCompile Include="DriverInterface.h" />
-    <ClCompile Include="EraseCommand.cpp" />
-    <ClCompile Include="FlushCommand.cpp" />
-    <ClCompile Include="FileLoggerPrinter.cpp" />
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="OutstreamLoggerPrinter.cpp" />
-    <ClCompile Include="ReadCommand.cpp" />
-    <ClCompile Include="Runner.cpp" />
-    <ClCompile Include="Shell.cpp" />
-    <ClCompile Include="ShellException.cpp" />
-    <ClCompile Include="SSDDriver.cpp" />
-    <ClCompile Include="TestLibrary.cpp" />
-    <ClCompile Include="TestLibraryCommandInvoker.cpp" />
-    <ClCompile Include="TestScripts\TestScriptInvoker.cpp" />
-    <ClCompile Include="TestScripts\TestScriptInvoker.h" />
-    <ClCompile Include="WriteCommand.cpp" />
+    <ClInclude Include="..\TestShellApplication\TestLibraryCommandInvokerInterface.h" />
+    <ClInclude Include="..\TestShellApplication\TestLibraryInterface.h" />
+    <ClInclude Include="..\TestShellApplication\TestScripts\FailTestApp.h" />
+    <ClInclude Include="..\TestShellApplication\TestScripts\TestApp1.h" />
+    <ClInclude Include="..\TestShellApplication\TestScripts\TestApp2.h" />
+    <ClInclude Include="..\TestShellApplication\TestScripts\TestScriptBase.h" />
+    <ClInclude Include="..\TestShellApplication\TestScripts\TestScriptInterface.h" />
+    <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CommandInterface.h" />
-    <ClInclude Include="Device.h" />
-    <ClInclude Include="EraseCommand.h" />
-    <ClInclude Include="FlushCommand.h" />
-    <ClInclude Include="FileLoggerPrinter.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="LoggerPrinter.h" />
-    <ClInclude Include="OutstreamLoggerPrinter.h" />
-    <ClInclude Include="ReadCommand.h" />
-    <ClInclude Include="Runner.h" />
-    <ClInclude Include="Shell.h" />
-    <ClInclude Include="ShellException.h" />
-    <ClInclude Include="SSDDriver.h" />
-    <ClInclude Include="TestLibrary.h" />
-    <ClInclude Include="TestLibraryCommandInvoker.h" />
-    <ClInclude Include="TestScripts\TestScriptInterface.h" />
-    <ClInclude Include="WriteCommand.h" />
+    <ClCompile Include="..\TestShellApplication\TestScripts\FailTestApp.cpp" />
+    <ClCompile Include="..\TestShellApplication\TestScripts\TestApp1.cpp" />
+    <ClCompile Include="..\TestShellApplication\TestScripts\TestApp2.cpp" />
+    <ClCompile Include="..\TestShellApplication\TestScripts\TestScriptBase.cpp" />
+    <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

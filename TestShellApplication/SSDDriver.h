@@ -1,14 +1,24 @@
-#pragma once
 #include "DriverInterface.h"
 
 class SSDDriver : public DriverInterface {
 public:
-	int Read(int lba) override;
-	void Write(int lba, int data) override;
+	void Read(int nLba) override;
+	void Write(int nLba, int nData) override;
+	void Erase(int nLba, int blkCnt) override;
+	void Flush() override;
+
+	std::string ReadBuffer() override;
+
+	int GetMinLba() override;
+	int GetMaxLba() override;
+	int GetMaxBlkCntPerErase() override;
 
 protected:
-	virtual int _executeCommand(std::string command);
+	const int MIN_LBA = 0;
+	const int MAX_LBA = 100;
+	const int MAX_BLK_CNT_PER_ERASE = 10;
+
+	virtual void _executeCommand(const char* strCommand);
 	virtual bool _getSsdExisted(void);
-	virtual int _getSsdResult(void);
-	virtual int _getReadResult(void);
+	virtual std::string _getSsdResult(void);
 };
