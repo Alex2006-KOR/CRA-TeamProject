@@ -42,6 +42,9 @@
     <ClInclude Include="..\TestShellApplication\TestLibraryInterface.h">
       <Filter>TestLibInvoker</Filter>
     </ClInclude>
+    <ClInclude Include="..\TestShellApplication\TestScripts\FailTestApp.h">
+      <Filter>TestScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -54,6 +57,9 @@
       <Filter>TestScript</Filter>
     </ClCompile>
     <ClCompile Include="..\TestShellApplication\TestScripts\TestScriptBase.cpp">
+      <Filter>TestScript</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TestShellApplication\TestScripts\FailTestApp.cpp">
       <Filter>TestScript</Filter>
     </ClCompile>
   </ItemGroup>
