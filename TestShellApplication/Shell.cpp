@@ -69,7 +69,7 @@ void Shell::_printHelp()
 \n\
 [lba] : decimal only, range = [0, 99]\n\
 [data] : hexadecimal only, range = [0x00000000, 0xFFFFFFFF]\n\
-[block count] : decimal only, range = [0, 10] (erase) \n\
+[block count] : decimal only, range = [1, 10] (erase) \n\
 ";
     LOG(strHelp);
 }
