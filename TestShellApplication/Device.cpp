@@ -1,8 +1,13 @@
 #include "Device.h"
 
-Device::Device(DriverInterface* pstDriver)
-	: m_pstDriver(pstDriver)
+Device* Device::m_pstIntstance = nullptr;
+
+Device& Device::GetDevice(DriverInterface* pstDevice)
 {
+	if (!m_pstIntstance && pstDevice) {
+		m_pstIntstance = new Device(pstDevice);
+	}
+	return *m_pstIntstance;
 }
 
 void Device::Write(vector<string> vCommandList)
@@ -51,3 +56,7 @@ int Device::GetMaxLba()
 {
 	return m_pstDriver->GetMaxLba();
 }
+
+
+Device::Device(DriverInterface* pstDevice)
+	: m_pstDriver(pstDevice) {}

@@ -2,7 +2,7 @@
 
 TestLibCommandInvoker::TestLibCommandInvoker(DriverInterface* pstDriver)
 {
-	_initCommands(new Device(pstDriver));
+	_initCommands(pstDriver);
 }
 
 TestLibrary* TestLibCommandInvoker::GetFunction(string strCommand)
@@ -14,13 +14,9 @@ TestLibrary* TestLibCommandInvoker::GetFunction(string strCommand)
 	return iterFind->second;
 }
 
-bool TestLibCommandInvoker::Run(TestLibrary* stFunction, const vector<string>& vCommandList, int nStartLba, int nEndLba, const string& strData)
+void TestLibCommandInvoker::_initCommands(DriverInterface* pstDriver)
 {
-	return stFunction->execute(vCommandList, nStartLba, nEndLba, strData);
-}
-
-void TestLibCommandInvoker::_initCommands(Device* pstDevice)
-{
+	Device& pstDevice = Device::GetDevice(pstDriver);
 	m_mapCommand["write"] = new TestLibWrite(pstDevice);
 	m_mapCommand["read"] = new TestLibRead(pstDevice);
 	m_mapCommand["erase"] = new TestLibErase(pstDevice);

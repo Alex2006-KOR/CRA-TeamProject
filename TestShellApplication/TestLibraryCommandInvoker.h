@@ -10,10 +10,9 @@ public:
 	TestLibCommandInvoker(DriverInterface* pstDriver);
 	
 	TestLibrary* GetFunction(string strCommand) override;
-	bool Run(TestLibrary* stFunction, const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") override;
 
 private:
 	std::map<string, TestLibrary*> m_mapCommand;
 
-	void _initCommands(Device* pstDevice);
+	void _initCommands(DriverInterface* pstDriver);
 };

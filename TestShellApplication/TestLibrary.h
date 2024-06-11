@@ -7,73 +7,73 @@
 
 class TestLibWrite : public TestLibrary {
 public:
-	TestLibWrite(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibWrite(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 
 };
 
 class TestLibRead : public TestLibrary {
 public:
-	TestLibRead(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibRead(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibErase : public TestLibrary {
 public:
-	TestLibErase(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibErase(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibFlush : public TestLibrary {
 public:
-	TestLibFlush(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibFlush(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibFullWrite : public TestLibrary {
 public:
-	TestLibFullWrite(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibFullWrite(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibFullRead : public TestLibrary {
 public:
-	TestLibFullRead(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibFullRead(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibWriteRange : public TestLibrary {
 public:
-	TestLibWriteRange(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibWriteRange(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibReadRange : public TestLibrary {
 public:
-	TestLibReadRange(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibReadRange(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
 
 class TestLibEraseRange : public TestLibrary {
 public:
-	TestLibEraseRange(Device* pstDevice);
-	bool execute(const vector<string>& vCommandList = {}, int nStartLba = -1, int nEndLba = -1, const string& strData = "") const override;
+	TestLibEraseRange(Device& pstDevice);
+	bool execute() const override;
 private:
-	Device* m_pstDevice;
+	Device& m_pstDevice;
 };
